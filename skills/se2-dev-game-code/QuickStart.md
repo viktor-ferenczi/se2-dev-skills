@@ -1,6 +1,6 @@
 # Code Search Quick Start
 
-This skill provides instant access to Space Engineers' decompiled C# source code through indexed search.
+This skill provides instant access to Space Engineers 2's decompiled C# source code through indexed search.
 
 ## Prerequisites
 
@@ -17,15 +17,15 @@ cd skills/se-dev-game-code
 ### Find a Class Definition
 
 ```bash
-uv run search_code.py class declaration MyToolbar
+uv run search_code.py class declaration MyEntity
 ```
 
-Output: `Sandbox.Game/Sandbox/Game/Gui/MyToolbar.cs:42-1250`
+Output: `Game2.Game/Game2/Game/Entities/MyEntity.cs:42-1250`
 
 ### Find Where a Class is Used
 
 ```bash
-uv run search_code.py -l 10 class usage MyToolbar
+uv run search_code.py -l 10 class usage MyEntity
 ```
 
 Shows first 10 usage locations.
@@ -47,10 +47,10 @@ Shows full method signatures including parameters and return types. See `CodeSea
 ### Find Class Hierarchy
 
 ```bash
-uv run search_code.py class parent MyGrid
+uv run search_code.py class parent MyEntity
 ```
 
-Output: `Sandbox.Game.MyGrid:VRage.Game.Entity.MyEntity`
+Output: `Game2.Game.MyEntity:VRage.Core.MyEntityBase`
 
 ## Reading Results
 
@@ -58,8 +58,8 @@ Results show: `relative_path:line` or `relative_path:start-end`
 
 To read the actual code:
 - Results are relative to the `Decompiled/` folder
-- Example: `VRage.Math/VRageMath/Vector3D.cs:13-2293`
-- Read: `Decompiled/VRage.Math/VRageMath/Vector3D.cs`
+- Example: `VRage.Core/VRage/Core/Vector3D.cs:13-2293`
+- Read: `Decompiled/VRage.Core/VRage/Core/Vector3D.cs`
 
 ## Next Steps
 

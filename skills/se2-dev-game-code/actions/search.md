@@ -24,7 +24,7 @@ For complete search documentation, see:
 
 Always check the game code when:
 - You're unsure about the game's internal APIs and how to interface with them.
-- The inner workings of Space Engineers is unclear.
+- The inner workings of Space Engineers 2 is unclear.
 
 ## Search Targets
 

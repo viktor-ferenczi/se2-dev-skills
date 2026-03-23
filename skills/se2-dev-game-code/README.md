@@ -1,12 +1,12 @@
-# Space Engineers Game Code Skill
+# Space Engineers 2 Game Code Skill
 
-This skill provides access to decompiled C# source code from Space Engineers version 1, enabling code search and analysis for mod, plugin, and script development.
+This skill provides access to decompiled C# source code from Space Engineers 2, enabling code search and analysis for mod and plugin development.
 
 ## Overview
 
 The skill maintains:
 - **Decompiled/** - Full decompiled C# source organized by assembly
-- **Content/** - Game content files (definitions, translations, blueprints)
+- **Content/** - Game content files (definitions, translations)
 - **CodeIndex/** - Pre-built CSV indexes for fast symbol lookup
 
 ## Setup
@@ -157,16 +157,16 @@ file_path:start-end|signature_text
 
 Example:
 ```
-Sandbox.Game\Sandbox\Game\MyClass.cs:100-102|[Attribute] public static void MyMethod(int param)
+Game2.Game\Game2\Game\MyClass.cs:100-102|[Attribute] public static void MyMethod(int param)
 ```
 
 The signature includes any attributes on preceding lines, normalized to a single line with whitespace collapsed. Doc comments are not included in the signature text.
 
 ### Examples
 
-Find class declarations containing "Toolbar":
+Find class declarations containing "Block":
 ```
-uv run search_code.py class declaration Toolbar
+uv run search_code.py class declaration Block
 ```
 
 Find all usages of methods matching "Get.*Position" regex:
@@ -174,9 +174,9 @@ Find all usages of methods matching "Get.*Position" regex:
 uv run search_code.py method usage "re:Get.*Position"
 ```
 
-Find enum declarations in Sandbox.Game namespace:
+Find enum declarations in VRage.Game namespace:
 ```
-uv run search_code.py -n Sandbox.Game enum declaration ""
+uv run search_code.py -n VRage.Game enum declaration ""
 ```
 
 Count struct usages containing "Vector":
@@ -190,7 +190,7 @@ uv run search_code.py -l 20 interface declaration ""
 uv run search_code.py -l 20 -o 20 interface declaration ""
 ```
 
-Find variable declarations with "Entity" in name within VRage namespace:
+Find field declarations with "Entity" in name within VRage namespace:
 ```
 uv run search_code.py -n VRage field declaration Entity
 ```
@@ -205,7 +205,7 @@ uv run search_code.py method signature GetPosition
 For simple lookups, direct grep can be faster:
 
 ```
-busybox.exe grep ",MyToolbar," CodeIndex/class_declarations.csv
+busybox.exe grep ",MyBlock," CodeIndex/class_declarations.csv
 busybox.exe grep ",GetPosition," CodeIndex/method_usages.csv
 ```
 
@@ -214,8 +214,8 @@ busybox.exe grep ",GetPosition," CodeIndex/method_usages.csv
 After finding a symbol location, read the source from `Decompiled/`:
 
 ```
-# Search result: VRage.Math/VRageMath/Vector3D.cs:13-245
-# Read: Decompiled/VRage.Math/VRageMath/Vector3D.cs
+# Search result: VRage.Core/VRage/Core/Vector3D.cs:13-245
+# Read: Decompiled/VRage.Core/VRage/Core/Vector3D.cs
 ```
 
 The first folder in the path indicates the assembly (DLL) containing the code.
@@ -224,13 +224,21 @@ The first folder in the path indicates the assembly (DLL) containing the code.
 
 | Assembly | Contains |
 |----------|----------|
-| `VRage.Math` | Math types (Vector3, Matrix, BoundingBox) |
+| `VRage.Core` | Core types, math, utilities |
+| `VRage.Core.Game` | Core game framework |
 | `VRage.Game` | Game definitions, object builders |
-| `VRage.Library` | Core utilities |
-| `Sandbox.Game` | Game logic, entities, blocks |
-| `Sandbox.Common` | Shared game code |
-| `SpaceEngineers.Game` | SE-specific game code |
-| `SpaceEngineers.ObjectBuilders` | Save data structures |
+| `VRage.Library` | Core library utilities |
+| `Game2.Game` | Game logic, entities, blocks |
+| `Game2.Simulation` | Simulation logic |
+| `Game2.Client` | Client-side game code |
+| `SpaceEngineers2` | SE2-specific game code |
+| `VRage.Physics` | Physics engine |
+| `VRage.Render` | Rendering framework |
+| `VRage.Render12` | DirectX 12 renderer |
+| `VRage.DCS` | Distributed Component System |
+| `VRage.Multiplayer` | Multiplayer networking |
+| `VRage.UI` | User interface framework |
+| `VRage.Scripting` | Scripting support |
 
 ## Windows Command Line
 

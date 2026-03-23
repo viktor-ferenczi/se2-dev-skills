@@ -24,30 +24,30 @@ The test suite exercises all game code search capabilities:
 
 | Category | Tests |
 |----------|-------|
-| Class declaration | MyPhysicsBody, MyProjectorBase |
-| Class usage | MyPhysicsBody, MyProjectorBase |
+| Class declaration | MyEntity, MyPhysicsBody |
+| Class usage | MyEntity, MyPhysicsBody |
 | Struct declaration | Vector3D, Color |
 | Struct usage | Vector3D, Color |
-| Method declaration | Activate, Build, Abs |
-| Method usage | Activate, ClampToByte |
-| Method signature | Activate, Build, Abs, GetPosition |
-| Field declaration | AngularDamping, AllowScaling, Forward |
-| Field usage | Forward, AngularDamping |
-| Interface declaration | IMyPhysics, IPhysicsMesh |
+| Method declaration | Init, Update |
+| Method usage | Init, Dispose |
+| Method signature | Init, Update, GetPosition |
+| Field declaration | Position, Forward |
+| Field usage | Forward, Position |
+| Interface declaration | IMyEntity, IDisposable |
 | Interface usage | IMyEntity |
-| Enum declaration | MyPhysicsOption, GridEffectType |
-| Enum usage | MyPhysicsOption |
-| Namespace filtering | Sandbox.Engine.Physics, VRageMath |
+| Enum declaration | Type |
+| Enum usage | Type |
+| Namespace filtering | VRage.Core, VRage |
 | Pagination | limit and offset options |
 | Count mode | counting results instead of listing |
-| Regex patterns | ^MyPhysics, Position$, Vector[23]D |
+| Regex patterns | ^My, Position$, Vector[23]D |
 | Multiple patterns | AND logic with multiple terms |
-| Hierarchy - class parent | MyGrid, MyProjectorBase |
-| Hierarchy - class children | MyEntity, MyTerminalBlock |
-| Hierarchy - interface parent | IMyTerminalBlock, IMyFunctionalBlock |
-| Hierarchy - interface children | IMyEntity, IMyCubeBlock |
-| Hierarchy - class implements | MyTerminalBlock, MyGrid |
-| Hierarchy - interface implementors | IMyEntity, IMyTerminalBlock |
+| Hierarchy - class parent | MyEntity |
+| Hierarchy - class children | MyEntity |
+| Hierarchy - interface parent | IMyEntity |
+| Hierarchy - interface children | IMyEntity |
+| Hierarchy - class implements | MyEntity |
+| Hierarchy - interface implementors | IMyEntity |
 | Non-matching examples | Verify empty results don't crash |
 
 ## Verifying Results
@@ -64,14 +64,14 @@ A successful test run should:
 Check that key searches return expected results:
 
 ```cmd
-REM Should find the MyPhysicsBody class
-uv run search_code.py class declaration MyPhysicsBody
+REM Should find the MyEntity class
+uv run search_code.py class declaration MyEntity
 
 REM Should find Vector3D struct
 uv run search_code.py struct declaration Vector3D
 
 REM Should return count > 0
-uv run search_code.py -c class usage MyPhysicsBody
+uv run search_code.py -c class usage MyEntity
 ```
 
 ## Troubleshooting
@@ -79,7 +79,7 @@ uv run search_code.py -c class usage MyPhysicsBody
 If tests fail:
 
 1. **Preparation not complete** - Run `.\Prepare.bat` first
-2. **Index not built** - Check that `CodeIndex/` folder exists and contains `.json` files
+2. **Index not built** - Check that `CodeIndex/` folder exists and contains `.csv` files
 3. **Decompiled folder missing** - Verify `Decompiled/` folder has `.cs` files
 4. **Python environment issues** - Try `uv sync` to reinstall dependencies
 

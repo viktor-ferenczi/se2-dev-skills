@@ -1,6 +1,6 @@
 # Advanced Code Search Techniques
 
-Power user techniques for efficient code exploration.
+Power user techniques for efficient code exploration in the Space Engineers 2 codebase.
 
 ## Complex Regex Patterns
 
@@ -71,19 +71,19 @@ Narrow down searches incrementally:
 
 ```bash
 # Start broad
-uv run search_code.py -c -n Sandbox class declaration ""
+uv run search_code.py -c -n Game2 class declaration ""
 # Output: 3421
 
 # Narrow to subnamespace
-uv run search_code.py -c -n Sandbox.Game class declaration ""
+uv run search_code.py -c -n Game2.Game class declaration ""
 # Output: 1856
 
 # Further narrow
-uv run search_code.py -c -n Sandbox.Game.Entities class declaration ""
+uv run search_code.py -c -n Game2.Game.Entities class declaration ""
 # Output: 247
 
 # Now fetch results
-uv run search_code.py -l 20 -n Sandbox.Game.Entities class declaration ""
+uv run search_code.py -l 20 -n Game2.Game.Entities class declaration ""
 ```
 
 ### Namespace-First Approach
@@ -92,13 +92,13 @@ When exploring unfamiliar areas:
 
 ```bash
 # 1. List all classes in namespace
-uv run search_code.py -n VRageMath class declaration ""
+uv run search_code.py -n VRage class declaration ""
 
 # 2. Pick interesting class, find its methods
-uv run search_code.py -n VRageMath method declaration "" | grep Vector3D
+uv run search_code.py -n VRage method declaration "" | grep Vector3D
 
 # 3. Find specific method details
-uv run search_code.py -n VRageMath method signature Normalize
+uv run search_code.py -n VRage method signature Normalize
 ```
 
 ## Combining Multiple Searches
@@ -107,17 +107,17 @@ uv run search_code.py -n VRageMath method signature Normalize
 
 ```bash
 # 1. Find class declaration
-uv run search_code.py class declaration MyTerminalBlock
+uv run search_code.py class declaration MyEntity
 # Read the file to understand structure
 
 # 2. Find what implements it (if interface)
-uv run search_code.py interface implementors IMyTerminalBlock
+uv run search_code.py interface implementors IMyEntity
 
 # 3. Find usages
-uv run search_code.py -l 20 class usage MyTerminalBlock
+uv run search_code.py -l 20 class usage MyEntity
 
 # 4. Find related methods
-uv run search_code.py -n Sandbox.Game method declaration Terminal
+uv run search_code.py -n Game2.Game method declaration Entity
 ```
 
 ### Understanding Method Calls
@@ -139,13 +139,13 @@ uv run search_code.py method signature "re:^Get.*Position"
 
 ```bash
 # 1. Find base class
-uv run search_code.py class parent MyFunctionalBlock
+uv run search_code.py class parent MyEntity
 
 # 2. Find siblings
-uv run search_code.py class children MyTerminalBlock
+uv run search_code.py class children MyEntity
 
 # 3. Find what they all implement
-uv run search_code.py class implements "re:^My.*Block$"
+uv run search_code.py class implements "re:^My.*Entity$"
 ```
 
 ## Signature Search Strategies
@@ -164,7 +164,7 @@ uv run search_code.py method signature "re:.*Vector3D.*"
 # Matches method names containing "Vector3D" - review signatures for actual parameters
 
 # Combine with namespace filtering for targeted search
-uv run search_code.py -n VRageMath method signature ""
+uv run search_code.py -n VRage method signature ""
 # Then filter output for "static" keyword to find static methods
 
 # Find methods with multiple pattern matches
@@ -205,14 +205,14 @@ uv run search_code.py method declaration Position Get  # Same result
 Target specific DLLs by namespace:
 
 ```bash
-# Math operations (VRage.Math)
-uv run search_code.py -n VRageMath method declaration ""
+# Core types (VRage.Core)
+uv run search_code.py -n VRage.Core method declaration ""
 
-# Game entities (Sandbox.Game)
-uv run search_code.py -n Sandbox.Game.Entities class declaration ""
+# Game entities (Game2.Game)
+uv run search_code.py -n Game2.Game class declaration ""
 
-# Object builders (SpaceEngineers.ObjectBuilders)
-uv run search_code.py -n SpaceEngineers.ObjectBuilders class declaration ""
+# Simulation (Game2.Simulation)
+uv run search_code.py -n Game2.Simulation class declaration ""
 
 # Core utilities (VRage.Library)
 uv run search_code.py -n VRage class declaration ""
@@ -253,7 +253,7 @@ Results sort by depth then alphabetically, so namespace filtering creates natura
 
 ```bash
 # Process one namespace at a time
-uv run search_code.py -n Sandbox.Game class usage MyEntity
+uv run search_code.py -n Game2.Game class usage MyEntity
 uv run search_code.py -n VRage class usage MyEntity
 uv run search_code.py -n SpaceEngineers class usage MyEntity
 ```

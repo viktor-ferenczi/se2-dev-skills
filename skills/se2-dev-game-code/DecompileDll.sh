@@ -10,7 +10,7 @@ if [ -d "Decompiled/$1" ]; then
     echo "Directory Decompiled/$1 already exists. Skipping."
 else
     # First ilspycmd execution to decompile to C# code
-    ilspycmd --project --nested-directories --referencepath Bin64 --languageversion CSharp11_0 --disable-updatecheck -o "Decompiled/$1" "$2"
+    ilspycmd --project --nested-directories --referencepath Game2 --languageversion CSharp14_0 --disable-updatecheck -o "Decompiled/$1" "$2"
     if [ $? -ne 0 ]; then
         echo "Failed during project decompilation."
         exit 1

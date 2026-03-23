@@ -7,7 +7,7 @@ This guide helps you resolve common issues when searching game code.
 ### Common Causes
 
 1. **Wrong skill**: 
-   - Game classes like `MyCubeBlock` → use `se-dev-game-code` ✅
+   - Game classes like `MyEntity` → use `se-dev-game-code` ✅
    - Mod code → use `se-dev-mod`
    - Plugin code → use `se-dev-plugin`
    - Script code → use `se-dev-script`
@@ -43,10 +43,10 @@ uv run search_code.py class usage Entity --count
 uv run search_code.py class usage "re:.*Entity.*" --count
 
 # Step 3: Check what files are available
-ls Decompiled/Sandbox.Game/Sandbox/Game/Entities/*.cs | head -10
+ls Decompiled/Game2.Game/Game2/Game/Entities/*.cs | head -10
 
 # Step 4: Try direct file search as fallback
-grep -r "class.*Entity" Decompiled/Sandbox.Game/Sandbox/Game/Entities/ | head -5
+grep -r "class.*Entity" Decompiled/Game2.Game/Game2/Game/Entities/ | head -5
 ```
 
 ## Too Many Results
@@ -75,11 +75,11 @@ Make your pattern more specific:
 # Too broad (returns 861 results)
 uv run search_code.py struct usage Vector3D --count
 
-# More specific - only in Sandbox.Game namespace
-uv run search_code.py struct usage Vector3D -n Sandbox.Game --count
+# More specific - only in Game2.Game namespace
+uv run search_code.py struct usage Vector3D -n Game2.Game --count
 
 # Even more specific - use regex for exact context
-uv run search_code.py struct usage "Vector3D" -n Sandbox.Game.Entities
+uv run search_code.py struct usage "Vector3D" -n Game2.Game.Entities
 ```
 
 ### 4. Paginate Through Results
@@ -129,7 +129,7 @@ Each skill searches different code:
 
 | What you need | Skill to use |
 |---------------|--------------|
-| Base game classes (MyCubeBlock, MyEntity, etc.) | `se-dev-game-code` |
+| Base game classes (MyEntity, MyEntity, etc.) | `se-dev-game-code` |
 | Mod code examples from Steam Workshop | `se-dev-mod` |
 | Plugin code from PluginHub | `se-dev-plugin` |
 | PB script examples from Workshop | `se-dev-script` |
@@ -146,20 +146,20 @@ If you need to understand the game's internal implementation, use `se-dev-game-c
 uv run search_code.py class declaration "re:.*Physics.*" --count
 
 # If too many, add namespace filter
-uv run search_code.py class declaration "re:.*Physics.*" -n Sandbox.Game --count
+uv run search_code.py class declaration "re:.*Physics.*" -n Game2.Game --count
 
 # View limited results
-uv run search_code.py class declaration "re:.*Physics.*" -n Sandbox.Game --limit 10
+uv run search_code.py class declaration "re:.*Physics.*" -n Game2.Game --limit 10
 ```
 
 ### 2. Use Case-Insensitive Search
 
 ```bash
 # Case-sensitive (default)
-uv run search_code.py class declaration "mycubeblock"  # Won't match MyCubeBlock
+uv run search_code.py class declaration "mycubeblock"  # Won't match MyEntity
 
 # Case-insensitive
-uv run search_code.py class declaration "mycubeblock" -i  # Matches MyCubeBlock
+uv run search_code.py class declaration "mycubeblock" -i  # Matches MyEntity
 ```
 
 ### 3. Search Multiple Patterns
@@ -174,17 +174,17 @@ uv run search_code.py method declaration "Get" "Position"
 When looking for inheritance:
 
 ```bash
-# Find what MyTerminalBlock inherits from
-uv run search_code.py class parent MyTerminalBlock
+# Find what MyEntity inherits from
+uv run search_code.py class parent MyEntity
 
-# Find what inherits from MyTerminalBlock
-uv run search_code.py class children MyTerminalBlock
+# Find what inherits from MyEntity
+uv run search_code.py class children MyEntity
 
 # Find interfaces implemented by a class
-uv run search_code.py class implements MyTerminalBlock
+uv run search_code.py class implements MyEntity
 
 # Find classes implementing an interface
-uv run search_code.py interface implementors IMyTerminalBlock
+uv run search_code.py interface implementors IMyEntity
 ```
 
 ## Still Having Issues?
@@ -203,7 +203,7 @@ If you're still getting NO-MATCHES or unexpected results:
 
 3. **Manually search to verify**:
    ```bash
-   grep -r "MyCubeBlock" Decompiled/Sandbox.Game/ | head -3
+   grep -r "MyEntity" Decompiled/Game2.Game/ | head -3
    ```
 
 4. **Check the logs**:

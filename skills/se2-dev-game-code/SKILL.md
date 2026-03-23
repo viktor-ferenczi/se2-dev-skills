@@ -1,13 +1,13 @@
 ---
 name: se-dev-game-code
-description: Allows reading the decompiled C# code of Space Engineers version 1
+description: Allows reading the decompiled C# code of Space Engineers 2
 license: MIT
 allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*test_search.bat*), Bash(*uv run search_code.py *), Bash(*uv run index_code.py *), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
 ---
 
 # SE Dev Game Code Skill
 
-Allows reading the decompiled C# code of Space Engineers version 1.
+Allows reading the decompiled C# code of Space Engineers 2.
 
 **⚠️ CRITICAL: Commands run in a UNIX shell (busybox), NOT Windows CMD. Use bash syntax!**
 
@@ -60,13 +60,13 @@ During preparation the current game version is stored into `CodeIndex/game_versi
 
 ```bash
 # Find class declarations
-uv run search_code.py class declaration MyCubeBlock
+uv run search_code.py class declaration MyEntity
 
 # Find method signatures
 uv run search_code.py method signature UpdateBeforeSimulation
 
 # Find class hierarchy
-uv run search_code.py class children MyTerminalBlock
+uv run search_code.py class children MyEntity
 
 # Count results before viewing (useful for large result sets)
 uv run search_code.py class usage MyEntity --count

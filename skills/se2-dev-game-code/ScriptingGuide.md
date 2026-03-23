@@ -13,7 +13,7 @@ A Python virtual environment in this folder was made available by the preparatio
 
 ## Windows Command Line Guidelines
 
-**IMPORTANT:** Space Engineers modding is done on Windows. All commands must work on Windows.
+**IMPORTANT:** Space Engineers 2 modding is done on Windows. All commands must work on Windows.
 
 ### Using BusyBox
 
@@ -39,7 +39,7 @@ busybox.exe sed -i 's/old/new/g' file.txt
 **Correct:**
 ```bash
 busybox.exe grep "pattern" C:/Users/name/folder
-busybox.exe find C:/Dev/SE1/Skills/se-dev-skills -name "*.cs"
+busybox.exe find C:/Dev/SE2/Skills/se2-dev-skills -name "*.cs"
 ```
 
 **Wrong:**
@@ -142,8 +142,8 @@ Files are in `Decompiled/` directory:
 ```python
 from pathlib import Path
 
-# From search result: VRage.Math/VRageMath/Vector3D.cs:13-2293
-file_path = Path("Decompiled/VRage.Math/VRageMath/Vector3D.cs")
+# From search result: VRage.Core/VRage/Core/Vector3D.cs:13-2293
+file_path = Path("Decompiled/VRage.Core/VRage/Core/Vector3D.cs")
 
 with open(file_path, "r", encoding="utf-8") as f:
     lines = f.readlines()
@@ -158,12 +158,12 @@ Game content is in `Content/` directory. See `ContentTypes.md` for structure.
 ```python
 from pathlib import Path
 
-# Search all SBC files
-for sbc_file in Path("Content/Data").rglob("*.sbc"):
-    with open(sbc_file, "r", encoding="utf-8") as f:
+# Search all definition files
+for def_file in Path("Content").rglob("*.def"):
+    with open(def_file, "r", encoding="utf-8") as f:
         content = f.read()
-        if "LargeBlockArmorBlock" in content:
-            print(f"Found in: {sbc_file}")
+        if "ArmorBlock" in content:
+            print(f"Found in: {def_file}")
 ```
 
 ## See Also
