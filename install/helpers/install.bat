@@ -38,7 +38,8 @@ if not exist "%TARGET%" (
 )
 
 :: List of skills to install
-set "SKILLS=se2-dev-game-code se2-dev-mod se2-dev-plugin se2-dev-script se2-dev-test-game se2-dev-server-code"
+rem set "SKILLS=se2-dev-game-code se2-dev-mod se2-dev-plugin se2-dev-script se2-dev-test-game se2-dev-server-code"
+set "SKILLS=se2-dev-game-code"
 
 set "SUCCESS=0"
 set "FAILED=0"
