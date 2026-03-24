@@ -1836,51 +1836,35 @@ class CSharpIndexer:
 
 
 def extract_game_version(source_root: str, output_dir: str):
-    """Extract SE2 version numbers from decompiled code and write game_version.txt"""
-    # Try to find version info in common SE2 locations
-    version_fields = ("SE_VERSION", "CLIENT_BUILD_NUMBER", "SERVER_BUILD_NUMBER")
-    fields = {}
-
-    # Search for version constants in likely assemblies
-    for assembly in ("SpaceEngineers2", "Game2.Game", "Game2.Client"):
-        assembly_dir = os.path.join(source_root, assembly)
-        if not os.path.isdir(assembly_dir):
-            continue
-        for root, dirs, files in os.walk(assembly_dir):
-            for fname in files:
-                if not fname.endswith(".cs"):
-                    continue
-                fpath = os.path.join(root, fname)
-                try:
-                    with open(fpath, "r", encoding="utf-8") as f:
-                        content = f.read()
-                except (OSError, UnicodeDecodeError):
-                    continue
-                for name in version_fields:
-                    if name not in fields:
-                        match = re.search(rf"public\s+const\s+int\s+{name}\s*=\s*(\d+)\s*;", content)
-                        if match:
-                            fields[name] = match.group(1)
-                if len(fields) == len(version_fields):
-                    break
-            if len(fields) == len(version_fields):
+    """Extract SE2 version from VRage.AI/CurrentBundle.cs and write game_version.txt"""
+    version_file = os.path.join(source_root, "VRage.AI", "CurrentBundle.cs")
+    if not os.path.isfile(version_file):
+        # Try nested path
+        for root, dirs, files in os.walk(os.path.join(source_root, "VRage.AI")):
+            if "CurrentBundle.cs" in files:
+                version_file = os.path.join(root, "CurrentBundle.cs")
                 break
-        if len(fields) == len(version_fields):
-            break
+        else:
+            print(f"Warning: CurrentBundle.cs not found in VRage.AI assembly")
+            return
 
-    if not fields:
-        print("Warning: Could not find version information in decompiled code")
+    with open(version_file, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    match = re.search(r'const\s+string\s+Version\s*=\s*"([^"]+)"', content)
+    if not match:
+        print(f"Warning: Could not find Version string in {version_file}")
         return
+
+    version = match.group(1)
 
     output_path = os.path.join(output_dir, "game_version.txt")
     os.makedirs(output_dir, exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
-        for name, value in fields.items():
-            f.write(f"{name}={value}\n")
+        f.write(f"VERSION={version}\n")
 
     print(f"Game version file written: {output_path}")
-    for name, value in fields.items():
-        print(f"  {name}={value}")
+    print(f"  VERSION={version}")
 
 
 def main():
