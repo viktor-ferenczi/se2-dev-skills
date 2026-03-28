@@ -124,4 +124,4 @@ Follow the detailed instructions in:
 
 ## Remarks
 
-The original source of this skill: https://github.com/viktor-ferenczi/se-dev-skills
+The original source of this skill: https://github.com/viktor-ferenczi/se2-dev-skills

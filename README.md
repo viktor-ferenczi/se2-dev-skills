@@ -16,7 +16,7 @@ This usually happens if the skills are linked (`mklink`) into the coding agent's
 
 ## Installation
 
-`npx skills add viktor-ferenczi/se-dev-skills`
+`npx skills add viktor-ferenczi/se2-dev-skills`
 
 Follow the wizard.
 
