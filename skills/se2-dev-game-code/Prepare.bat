@@ -1,21 +1,21 @@
 @echo off
 
-:: 1. Get the Steam Install Path from the Registry
-for /f "tokens=2*" %%A in ('reg query "HKEY_CURRENT_USER\Software\Valve\Steam" /v "SteamPath" 2^>nul') do (
-    set "STEAM_ROOT=%%B"
+:: 1. Detect game install location (env var override takes precedence)
+if defined SE2_GAME_ROOT goto have_game_root
+
+:: Try the game's registry key
+for /f "tokens=2*" %%A in ('reg query "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 1133870" /v "InstallLocation" 2^>nul') do (
+    set "SE2_GAME_ROOT=%%B"
 )
 
-:: 2. Clean up the path (Registry uses forward slashes, Batch prefers backslashes)
-set "STEAM_ROOT=%STEAM_ROOT:/=\%"
+if defined SE2_GAME_ROOT goto have_game_root
+echo ERROR: Could not detect Space Engineers 2 install location.
+echo Please set the SE2_GAME_ROOT environment variable to the game's root folder
+echo (the folder containing Game2, GameData, etc.)
+goto failed
 
-:: 3. Define your target folders
-set "WORKSHOP_PATH=%STEAM_ROOT%\steamapps\workshop\content"
-set "COMMON_PATH=%STEAM_ROOT%\steamapps\common"
-
-:: Output results to verify
-echo Steam Root:    %STEAM_ROOT%
-echo Workshop Path: %WORKSHOP_PATH%
-echo Common Path:   %COMMON_PATH%
+:have_game_root
+echo Game Root: %SE2_GAME_ROOT%
 
 echo Verifying Python
 python --version
@@ -56,11 +56,12 @@ if %ERRORLEVEL% NEQ 0 goto failed
 if exist Game2 goto skip_game2
 echo Linking the game folder as Game2
 REM It must be the folder where SpaceEngineers2.dll is located:
-mklink /J Game2 "%COMMON_PATH%\SpaceEngineers2\Game2"
+mklink /J Game2 "%SE2_GAME_ROOT%\Game2"
 if %ERRORLEVEL% EQU 0 goto skip_game2
 echo ERROR: Missing Game2 folder.
 echo Please verify that Space Engineers 2 is installed.
-echo If Space Engineers 2 is installed at custom location, then please update the absolute path to the `Game2` folder in the `mklink` command inside `Prepare.bat` accordingly and try again.
+echo If Space Engineers 2 is installed at a custom location, then set the SE2_GAME_ROOT
+echo environment variable to the game's root folder and try again.
 goto failed
 :skip_game2
 
@@ -71,12 +72,9 @@ if %ERRORLEVEL% NEQ 0 goto failed
 
 rmdir /s /q Game2
 
-:: Set environment variable for copy_content.py
-set "SE2_CONTENT_ROOT=%COMMON_PATH%\SpaceEngineers2\GameData\Vanilla\Content"
-
 if exist Content goto skip_content
 echo Copying indexable content
-uv run python -u copy_content.py
+uv run python -u copy_content.py "%SE2_GAME_ROOT%\GameData\Vanilla\Content"
 if %ERRORLEVEL% NEQ 0 goto failed
 :skip_content
 

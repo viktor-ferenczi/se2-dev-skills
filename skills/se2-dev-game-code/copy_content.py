@@ -1,26 +1,7 @@
-import os
 import shutil
+import sys
 from pathlib import Path
 from typing import Set
-
-
-def get_content_root() -> Path:
-    """Get the SE2 content root from the SE2_CONTENT_ROOT environment variable."""
-    content_root = os.environ.get('SE2_CONTENT_ROOT')
-    if content_root:
-        return Path(content_root)
-
-    # Fallback: try SE2_ROOT env var
-    se2_root = os.environ.get('SE2_ROOT')
-    if se2_root:
-        return Path(se2_root) / 'GameData' / 'Vanilla' / 'Content'
-
-    raise EnvironmentError(
-        'Neither SE2_CONTENT_ROOT nor SE2_ROOT environment variable is set. '
-        'Please set SE2_CONTENT_ROOT to the path of GameData\\Vanilla\\Content '
-        'or SE2_ROOT to the Space Engineers 2 installation root.'
-    )
-
 
 def copy_content(content_root: Path, subdir: str, allowed_extensions: Set[str], exclude: Set[str] = ()):
     src_dir = content_root / subdir
@@ -39,7 +20,7 @@ def copy_content(content_root: Path, subdir: str, allowed_extensions: Set[str], 
         if src_path_ext not in allowed_extensions:
             continue
 
-        if any(part in exclude for part in str(src_path).split(os.sep)):
+        if any(part in exclude for part in src_path.parts):
             continue
 
         dst_path = dst_dir / src_path.relative_to(src_dir)
@@ -51,7 +32,8 @@ def copy_content(content_root: Path, subdir: str, allowed_extensions: Set[str], 
 
 
 def main():
-    content_root = get_content_root()
+    content_root = Path(sys.argv[1])
+    assert content_root.is_dir()
     print(f"Content root: {content_root}")
 
     # Definition files (JSON-like format in SE2)
