@@ -1,5 +1,5 @@
 ---
-name: se-dev-mod
+name: se2-dev-mod
 description: Mod development for Space Engineers version 1. Search mod code for examples and patterns.
 license: MIT
 allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*uv run search_mods.py *), Bash(*uv run index_mods.py*), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
@@ -28,10 +28,10 @@ Check these patterns **in order** - first match wins:
 
 | Priority | Pattern | Example | Route |
 |----------|---------|---------|-------|
-| 1 | Empty or bare invocation | `se-dev-mod` | Show this help |
-| 2 | Prepare keywords | `se-dev-mod prepare`, `se-dev-mod setup`, `se-dev-mod init` | prepare |
-| 3 | Bash/shell keywords | `se-dev-mod bash`, `se-dev-mod grep`, `se-dev-mod cat` | bash |
-| 4 | Search keywords | `se-dev-mod search`, `se-dev-mod find class`, `se-dev-mod lookup` | search |
+| 1 | Empty or bare invocation | `se2-dev-mod` | Show this help |
+| 2 | Prepare keywords | `se2-dev-mod prepare`, `se2-dev-mod setup`, `se2-dev-mod init` | prepare |
+| 3 | Bash/shell keywords | `se2-dev-mod bash`, `se2-dev-mod grep`, `se2-dev-mod cat` | bash |
+| 4 | Search keywords | `se2-dev-mod search`, `se2-dev-mod find class`, `se2-dev-mod lookup` | search |
 
 ## Getting Started
 
@@ -52,7 +52,7 @@ Mods are released on the Steam Workshop or Mod.IO, mostly on the former.
 Mods are compiled by the game on world loading with a Mod API whitelist enforced,
 which is supposed to guarantee safety and security. Mods may still crash the game with an exception.
 
-Use the `se-dev-game-code` skill to search the game's decompiled code. You may need this to
+Use the `se2-dev-game-code` skill to search the game's decompiled code. You may need this to
 understand how the game's internals work and how to interface with it properly. Stick to
 game code searches corresponding to names on the Mod API whitelist for efficiency.
 
@@ -106,4 +106,4 @@ Follow the detailed instructions in:
 
 ## Remarks
 
-The original source of this skill: https://github.com/viktor-ferenczi/se-dev-skills
+The original source of this skill: https://github.com/viktor-ferenczi/se2-dev-skills

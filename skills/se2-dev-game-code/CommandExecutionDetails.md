@@ -1,6 +1,6 @@
 # Command Execution - Detailed Guide
 
-This document provides comprehensive details about command execution on Windows for the se-dev-game-code skill. For most use cases, refer to the Quick Start section in [CommandExecution.md](CommandExecution.md).
+This document provides comprehensive details about command execution on Windows for the se2-dev-game-code skill. For most use cases, refer to the Quick Start section in [CommandExecution.md](CommandExecution.md).
 
 ## Recommended Approach
 
@@ -9,7 +9,7 @@ This document provides comprehensive details about command execution on Windows 
 ```bash
 # RECOMMENDED: Use workdir parameter to run commands in the skill folder
 bash -c "./Prepare.bat" (with workdir set to the skill folder)
-uv run search_code.py class declaration MyCubeGrid (with workdir set to the skill folder)
+uv run search_code.py class declaration MyEntity (with workdir set to the skill folder)
 ```
 
 This is the most reliable approach because:
@@ -46,7 +46,7 @@ PowerShell is a native Windows shell that handles backslash paths correctly:
 # PowerShell examples
 cd C:\path\to\skill\folder
 .\Prepare.bat
-uv run search_code.py class declaration MyCubeGrid
+uv run search_code.py class declaration MyEntity
 ```
 
 PowerShell uses `;` to chain commands, not `&&`:
@@ -113,7 +113,7 @@ if (Test-Path "Prepare.DONE") { "READY" } else { "NOT_READY" }
 All Python scripts in this skill must be run via `uv run`:
 
 ```bash
-uv run search_code.py class declaration MyCubeGrid
+uv run search_code.py class declaration MyEntity
 uv run index_code.py
 ```
 
@@ -124,18 +124,18 @@ This ensures the correct Python virtual environment is used.
 ### ❌ Mistake 1: Using && in CMD
 
 ```cmd
-cd C:\skills\se-dev-game-code && Prepare.bat
+cd C:\skills\se2-dev-game-code && Prepare.bat
 ```
 **Error:** `&&` is not recognized in CMD
 
 ✅ **Solution 1:** Use `&` instead:
 ```cmd
-cd C:\skills\se-dev-game-code & Prepare.bat
+cd C:\skills\se2-dev-game-code & Prepare.bat
 ```
 
 ✅ **Solution 2:** Use separate commands:
 ```cmd
-cd C:\skills\se-dev-game-code
+cd C:\skills\se2-dev-game-code
 Prepare.bat
 ```
 
@@ -156,25 +156,25 @@ busybox.exe grep "pattern" C:/Users/name/folder
 ### ❌ Mistake 3: Running Commands from Wrong Directory
 
 ```cmd
-C:\Users\name> uv run search_code.py class declaration MyCubeGrid
+C:\Users\name> uv run search_code.py class declaration MyEntity
 ```
 **Error:** `search_code.py` not found, wrong CWD
 
 ✅ **Solution 1:** Use workdir parameter:
 ```bash
-uv run search_code.py class declaration MyCubeGrid (with workdir=C:\path\to\skill\folder)
+uv run search_code.py class declaration MyEntity (with workdir=C:\path\to\skill\folder)
 ```
 
 ✅ **Solution 2:** Change directory first:
 ```cmd
 cd C:\path\to\skill\folder
-uv run search_code.py class declaration MyCubeGrid
+uv run search_code.py class declaration MyEntity
 ```
 
 ### ❌ Mistake 4: Forgetting to Prepare
 
 ```bash
-uv run search_code.py class declaration MyCubeGrid
+uv run search_code.py class declaration MyEntity
 ```
 **Error:** Index files missing, Python environment not set up
 
@@ -200,12 +200,12 @@ test -f "Prepare.DONE" && echo "READY" || echo "NOT_READY"
 
 **Step 4:** Once prepared, run commands using the workdir parameter:
 ```bash
-uv run search_code.py class declaration MyCubeGrid (with workdir set to skill folder)
+uv run search_code.py class declaration MyEntity (with workdir set to skill folder)
 ```
 
 **Step 5:** For UNIX commands, use busybox with forward slashes:
 ```bash
-busybox.exe grep -r "MyCubeGrid" C:/path/to/Decompiled
+busybox.exe grep -r "MyEntity" C:/path/to/Decompiled
 ```
 
 ## Troubleshooting Checklist
@@ -243,12 +243,12 @@ busybox.exe grep -r "MyCubeGrid" C:/path/to/Decompiled
 # Command 1
 ./Prepare.bat (workdir: skill_folder)
 # Command 2
-uv run search_code.py class declaration MyCubeGrid (workdir: skill_folder)
+uv run search_code.py class declaration MyEntity (workdir: skill_folder)
 ```
 
 **Option B:** Use PowerShell with semicolons:
 ```powershell
-cd C:\path\to\skill; .\Prepare.bat; uv run search_code.py class declaration MyCubeGrid
+cd C:\path\to\skill; .\Prepare.bat; uv run search_code.py class declaration MyEntity
 ```
 
 **Option C:** Use a bash script wrapper (see `run_prepare.sh` if available)

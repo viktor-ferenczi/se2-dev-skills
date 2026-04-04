@@ -139,7 +139,7 @@ wheels = [
 ]
 
 [[package]]
-name = "se-dev-server-code"
+name = "se2-dev-server-code"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [

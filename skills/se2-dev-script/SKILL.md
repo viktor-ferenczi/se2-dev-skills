@@ -1,5 +1,5 @@
 ---
-name: se-dev-script
+name: se2-dev-script
 description: In-game (programmable block, aka PB) script development for Space Engineers version 1. Search script code for examples and patterns.
 license: MIT
 allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*uv run search_scripts.py *), Bash(*uv run index_scripts.py*), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
@@ -28,10 +28,10 @@ Check these patterns **in order** - first match wins:
 
 | Priority | Pattern | Example | Route |
 |----------|---------|---------|-------|
-| 1 | Empty or bare invocation | `se-dev-script` | Show this help |
-| 2 | Prepare keywords | `se-dev-script prepare`, `se-dev-script setup`, `se-dev-script init` | prepare |
-| 3 | Bash/shell keywords | `se-dev-script bash`, `se-dev-script grep`, `se-dev-script cat` | bash |
-| 4 | Search keywords | `se-dev-script search`, `se-dev-script find class`, `se-dev-script lookup` | search |
+| 1 | Empty or bare invocation | `se2-dev-script` | Show this help |
+| 2 | Prepare keywords | `se2-dev-script prepare`, `se2-dev-script setup`, `se2-dev-script init` | prepare |
+| 3 | Bash/shell keywords | `se2-dev-script bash`, `se2-dev-script grep`, `se2-dev-script cat` | bash |
+| 4 | Search keywords | `se2-dev-script search`, `se2-dev-script find class`, `se2-dev-script lookup` | search |
 
 ## Getting Started
 
@@ -58,7 +58,7 @@ The script's source code size is limited to 100,000 bytes when the player loads 
 more from local file into offline (local) games for testing purposes, therefore scripts can be tested without
 source code compression, which is useful to get fully detailed exception tracebacks.
 
-Use the `se-dev-game-code` skill to search the game's decompiled code. You may need this to
+Use the `se2-dev-game-code` skill to search the game's decompiled code. You may need this to
 understand how the game's internals work and how to script it properly. Stick to game code
 searches corresponding to names on the PB API whitelist for efficiency.
 
@@ -114,4 +114,4 @@ Follow the detailed instructions in:
 
 ## Remarks
 
-The original source of this skill: https://github.com/viktor-ferenczi/se-dev-skills
+The original source of this skill: https://github.com/viktor-ferenczi/se2-dev-skills

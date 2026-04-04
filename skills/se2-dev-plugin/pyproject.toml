@@ -1,5 +1,5 @@
 [project]
-name = "se-dev-plugin"
+name = "se2-dev-plugin"
 version = "0.1.0"
 description = "Plugin development for Space Engineers version 1"
 readme = "README.md"

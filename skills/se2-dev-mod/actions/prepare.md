@@ -1,6 +1,6 @@
 # Prepare Action
 
-> **Part of the se-dev-mod skill.** Invoked to run the one-time preparation.
+> **Part of the se2-dev-mod skill.** Invoked to run the one-time preparation.
 
 **⚠️ IMPORTANT: Read [CommandExecution.md](../CommandExecution.md) for complete guidance on running commands correctly.**
 

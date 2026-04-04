@@ -11,7 +11,7 @@ If `Prepare.DONE` is missing, run the preparation first (see `Prepare.md`).
 All commands run from this skill folder:
 
 ```bash
-cd skills/se-dev-server-code
+cd skills/se2-dev-server-code
 ```
 
 ### Find a Class Definition

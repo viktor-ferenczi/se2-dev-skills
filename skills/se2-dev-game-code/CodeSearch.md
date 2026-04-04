@@ -1,6 +1,6 @@
 # Code Search Guide
 
-Search the decompiled Space Engineers C# codebase efficiently.
+Search the decompiled Space Engineers 2 C# codebase efficiently.
 
 **IMPORTANT:** All commands run on Windows. This skill folder must be the current working directory.
 
@@ -9,8 +9,8 @@ Search the decompiled Space Engineers C# codebase efficiently.
 Always change to this skill folder first:
 
 ```bash
-cd skills/se-dev-game-code
-uv run search_code.py class declaration MyToolbar
+cd skills/se2-dev-game-code
+uv run search_code.py class declaration MyEntity
 ```
 
 ## Search Categories
@@ -37,21 +37,21 @@ uv run search_code.py <category> <declaration|usage> <pattern>
 ### Find Declarations
 
 ```bash
-uv run search_code.py class declaration MyToolbar
+uv run search_code.py class declaration MyEntity
 uv run search_code.py struct declaration Vector3D
-uv run search_code.py interface declaration IMyTerminalBlock
-uv run search_code.py enum declaration MyRelationsBetweenPlayerAndBlock
+uv run search_code.py interface declaration IMyEntity
+uv run search_code.py enum declaration BlockType
 uv run search_code.py method declaration GetPosition
-uv run search_code.py field declaration AngularDamping
+uv run search_code.py field declaration Position
 uv run search_code.py property declaration IsWorking
-uv run search_code.py event declaration IsWorkingChanged
-uv run search_code.py constructor declaration MyCubeBlock
+uv run search_code.py event declaration OnClose
+uv run search_code.py constructor declaration MyEntity
 ```
 
 ### Find Usages
 
 ```bash
-uv run search_code.py -l 10 class usage MyToolbar
+uv run search_code.py -l 10 class usage MyEntity
 uv run search_code.py -l 10 method usage GetPosition
 uv run search_code.py -l 10 struct usage Vector3D
 ```
@@ -65,18 +65,18 @@ Method signatures show the complete method declaration including modifiers, retu
 uv run search_code.py method signature GetPosition
 
 # Regex for exact match
-uv run search_code.py method signature "re:^Build$"
+uv run search_code.py method signature "re:^Update$"
 
 # Limit results
 uv run search_code.py -l 10 method signature GetPosition
 
 # Filter by namespace
-uv run search_code.py -n VRageMath method signature Normalize
+uv run search_code.py -n VRage method signature Normalize
 ```
 
 **Output Format:** Signature searches show the full method signature after a pipe separator:
 ```
-Sandbox.Game/MyClass.cs:100-102|public static void MyMethod(int param)
+Game2.Game/MyClass.cs:100-102|public static void MyMethod(int param)
 ```
 
 **Note:** Signatures are always declarations. There is no `method signature usage` - use `method usage` instead to find method call sites.
@@ -111,8 +111,8 @@ uv run search_code.py -l 20 -o 40 class usage MyEntity
 ### Filter by Namespace
 
 ```bash
-uv run search_code.py -n Sandbox.Game class declaration ""
-uv run search_code.py -n VRageMath method declaration Add
+uv run search_code.py -n Game2.Game class declaration ""
+uv run search_code.py -n VRage method declaration Add
 ```
 
 ## Pattern Syntax
@@ -130,13 +130,13 @@ Multiple patterns use AND logic (all must match).
 
 ```bash
 # Substring match (default)
-uv run search_code.py class declaration Toolbar
+uv run search_code.py class declaration Block
 
 # Explicit text match
-uv run search_code.py class declaration "text:Toolbar"
+uv run search_code.py class declaration "text:Block"
 
 # Regex for exact match
-uv run search_code.py class declaration "re:^MyToolbar$"
+uv run search_code.py class declaration "re:^MyEntity$"
 
 # Regex patterns
 uv run search_code.py class declaration "re:^My.*Block$"
@@ -174,8 +174,8 @@ Results are sorted by code depth, then alphabetically.
 The `relative_path` is relative to the `Decompiled/` folder:
 
 ```bash
-# Search result: VRage.Math/VRageMath/Vector3D.cs:13-2293
-# Read file: Decompiled/VRage.Math/VRageMath/Vector3D.cs
+# Search result: VRage.Core/VRage/Core/Vector3D.cs:13-2293
+# Read file: Decompiled/VRage.Core/VRage/Core/Vector3D.cs
 ```
 
 The first folder indicates the assembly (DLL). From the second level, folders match namespace hierarchy.
@@ -184,13 +184,14 @@ The first folder indicates the assembly (DLL). From the second level, folders ma
 
 | Assembly | Contains |
 |----------|----------|
-| `VRage.Math` | Math types: Vector3, Matrix, BoundingBox, etc. |
+| `VRage.Core` | Core types, math, utilities |
+| `VRage.Core.Game` | Core game framework |
 | `VRage.Game` | Game definitions, object builders |
-| `VRage.Library` | Core utilities |
-| `Sandbox.Game` | Game logic, entities, blocks |
-| `Sandbox.Common` | Shared game code |
-| `SpaceEngineers.Game` | SE-specific game code |
-| `SpaceEngineers.ObjectBuilders` | Save data structures |
+| `VRage.Library` | Core library utilities |
+| `Game2.Game` | Game logic, entities, blocks |
+| `Game2.Simulation` | Simulation logic |
+| `Game2.Client` | Client-side game code |
+| `SpaceEngineers2` | SE2-specific game code |
 
 ## Best Practices
 

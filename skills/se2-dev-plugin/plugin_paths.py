@@ -62,12 +62,12 @@ def resolve_plugin_sources_dir() -> Path:
     if platform.system() == "Windows":
         temp_base = os.environ.get("TEMP", os.environ.get("TMP", ""))
         if temp_base:
-            return Path(temp_base) / "se-dev-plugin" / "plugins"
+            return Path(temp_base) / "se2-dev-plugin" / "plugins"
         # Fallback for Windows without TEMP
-        return Path(os.path.expanduser("~")) / "AppData" / "Local" / "Temp" / "se-dev-plugin" / "plugins"
+        return Path(os.path.expanduser("~")) / "AppData" / "Local" / "Temp" / "se2-dev-plugin" / "plugins"
     else:
         # Linux / macOS
-        return Path("/tmp") / "se-dev-plugin" / "plugins"
+        return Path("/tmp") / "se2-dev-plugin" / "plugins"
 
 
 def resolve_all_plugin_sources_dirs() -> list:

@@ -1,13 +1,13 @@
 ---
-name: se-dev-game-code
-description: Allows reading the decompiled C# code of Space Engineers version 1
+name: se2-dev-game-code
+description: Allows reading the decompiled C# code of Space Engineers 2
 license: MIT
 allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*test_search.bat*), Bash(*uv run search_code.py *), Bash(*uv run index_code.py *), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
 ---
 
 # SE Dev Game Code Skill
 
-Allows reading the decompiled C# code of Space Engineers version 1.
+Allows reading the decompiled C# code of Space Engineers 2.
 
 **⚠️ CRITICAL: Commands run in a UNIX shell (busybox), NOT Windows CMD. Use bash syntax!**
 
@@ -29,11 +29,11 @@ Check these patterns **in order** - first match wins:
 
 | Priority | Pattern | Example | Route |
 |----------|---------|---------|-------|
-| 1 | Empty or bare invocation | `se-dev-game-code` | Show this help |
-| 2 | Prepare keywords | `se-dev-game-code prepare`, `se-dev-game-code setup`, `se-dev-game-code init` | prepare |
-| 3 | Bash/shell keywords | `se-dev-game-code bash`, `se-dev-game-code grep`, `se-dev-game-code cat` | bash |
-| 4 | Search keywords | `se-dev-game-code search`, `se-dev-game-code find class`, `se-dev-game-code lookup` | search |
-| 5 | Test keywords | `se-dev-game-code test`, `se-dev-game-code verify`, `se-dev-game-code check` | test |
+| 1 | Empty or bare invocation | `se2-dev-game-code` | Show this help |
+| 2 | Prepare keywords | `se2-dev-game-code prepare`, `se2-dev-game-code setup`, `se2-dev-game-code init` | prepare |
+| 3 | Bash/shell keywords | `se2-dev-game-code bash`, `se2-dev-game-code grep`, `se2-dev-game-code cat` | bash |
+| 4 | Search keywords | `se2-dev-game-code search`, `se2-dev-game-code find class`, `se2-dev-game-code lookup` | search |
+| 5 | Test keywords | `se2-dev-game-code test`, `se2-dev-game-code verify`, `se2-dev-game-code check` | test |
 
 ## Getting Started
 
@@ -60,13 +60,13 @@ During preparation the current game version is stored into `CodeIndex/game_versi
 
 ```bash
 # Find class declarations
-uv run search_code.py class declaration MyCubeBlock
+uv run search_code.py class declaration MyEntity
 
 # Find method signatures
 uv run search_code.py method signature UpdateBeforeSimulation
 
 # Find class hierarchy
-uv run search_code.py class children MyTerminalBlock
+uv run search_code.py class children MyEntity
 
 # Count results before viewing (useful for large result sets)
 uv run search_code.py class usage MyEntity --count
@@ -97,6 +97,15 @@ The textual part of the game's `Content` is copied into the `Content` folder for
 - Default blueprints and scenarios
 - See [ContentTypes.md](ContentTypes.md) for the full list of content types
 
+### Content Index
+
+`CodeIndex/content_index.csv` maps every textual content file to the decompiled C#
+source files that reference it. Columns: `rel_path` (path relative to `Content/`)
+and `usage` (path of a C# source file in `Decompiled/` that references it). Each
+content file appears once per usage, so you can filter and page by `rel_path` to see
+all C# code that loads or references a given content file. Files with no known usages
+have a single row with an empty `usage` column.
+
 ## General Rules
 
 - In the `Decompiled` folder search only inside the C# source files (*.cs) in general. If you work on transpiler or preloader patches, then also search in the IL code (*.il) files.
@@ -115,4 +124,4 @@ Follow the detailed instructions in:
 
 ## Remarks
 
-The original source of this skill: https://github.com/viktor-ferenczi/se-dev-skills
+The original source of this skill: https://github.com/viktor-ferenczi/se2-dev-skills

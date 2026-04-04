@@ -134,7 +134,7 @@ implementing_namespace,implementing_type,interfaces,file_path,start_line,end_lin
 
 **Example row:**
 ```csv
-Sandbox.Game,MyTerminalBlock,"VRage.Game.ModAPI.IMyTerminalBlock,Sandbox.ModAPI.IMyFunctionalBlock",Sandbox.Game/Sandbox/Game/MyTerminalBlock.cs,100,500
+Game2.Game,MyEntity,"VRage.Core.IMyEntity,VRage.Game.IMyEntity",Game2.Game/Game2/Game/MyEntity.cs,100,500
 ```
 
 ## Tree Visualization Files
@@ -148,14 +148,14 @@ Tree-style visualization of complete class hierarchy, similar to the `tree` comm
 **Format:**
 ```
 System.Object
-├── VRage.Game.Entity.MyEntityBase
-│   ├── VRage.Game.Entity.MyEntity
-│   │   ├── Sandbox.Game.MyGrid
-│   │   ├── Sandbox.Game.MyCharacter
-│   │   └── Sandbox.Game.MyProjectile
-│   └── VRage.Game.Entity.MySimpleEntity
+├── VRage.Core.MyEntityBase
+│   ├── VRage.Core.MyEntity
+│   │   ├── Game2.Game.MyGrid
+│   │   ├── Game2.Game.MyCharacter
+│   │   └── Game2.Game.MyProjectile
+│   └── VRage.Core.MySimpleEntity
 └── VRage.Collections.MyList
-    └── Sandbox.Game.MySpecializedList
+    └── Game2.Game.MySpecializedList
 ```
 
 **Features:**
@@ -173,13 +173,13 @@ Tree-style visualization of complete interface hierarchy.
 
 **Format:**
 ```
-VRage.ModAPI.IMyEntity
-├── VRage.Game.ModAPI.IMyCubeBlock
-│   ├── VRage.Game.ModAPI.IMyTerminalBlock
-│   │   ├── VRage.Game.ModAPI.IMyFunctionalBlock
-│   │   └── VRage.Game.ModAPI.IMyTextPanel
-│   └── VRage.Game.ModAPI.IMySlimBlock
-└── VRage.Game.ModAPI.IMyCubeGrid
+VRage.Core.IMyEntity
+├── VRage.Game.IMyCubeBlock
+│   ├── VRage.Game.IMyTerminalBlock
+│   │   ├── VRage.Game.IMyFunctionalBlock
+│   │   └── VRage.Game.IMyTextPanel
+│   └── VRage.Game.IMySlimBlock
+└── VRage.Game.IMyCubeGrid
 ```
 
 **Features:**
@@ -391,7 +391,7 @@ print(f"{parent_namespace}.{parent_name}|{compressed}")
 
 Standard search commands remain unchanged:
 ```bash
-uv run search_code.py class declaration MyGrid
+uv run search_code.py class declaration MyEntity
 uv run search_code.py method usage GetPosition
 ```
 

@@ -7,10 +7,10 @@ This guide helps you resolve common issues when searching mod code.
 ### Common Causes
 
 1. **Wrong skill**: 
-   - Game classes like `MyCubeBlock` → use `se-dev-game-code`
-   - Mod code examples → use `se-dev-mod` ✅
-   - Plugin code → use `se-dev-plugin`
-   - Script code → use `se-dev-script`
+   - Game classes like `MyCubeBlock` → use `se2-dev-game-code`
+   - Mod code examples → use `se2-dev-mod` ✅
+   - Plugin code → use `se2-dev-plugin`
+   - Script code → use `se2-dev-script`
 
 2. **No mods subscribed or indexed**:
    ```bash
@@ -173,7 +173,7 @@ Mods can only use names from `ModApiWhitelist.txt`. If searching for something n
 grep "MyCubeBlock" ModApiWhitelist.txt
 ```
 
-### 3. Use se-dev-game-code for Base Classes
+### 3. Use se2-dev-game-code for Base Classes
 
 To understand what you can inherit from or how classes work:
 ```bash
@@ -181,7 +181,7 @@ To understand what you can inherit from or how classes work:
 uv run search_mods.py class declaration MyGameLogicComponent
 
 # Right skill - find the actual definition
-# (switch to se-dev-game-code skill)
+# (switch to se2-dev-game-code skill)
 uv run search_code.py class declaration MyGameLogicComponent
 ```
 

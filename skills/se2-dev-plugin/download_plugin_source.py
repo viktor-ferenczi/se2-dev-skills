@@ -7,8 +7,8 @@ Downloads the source code of a plugin from its GitHub repository.
 The download folder is determined by (in priority order):
 1. SE_PLUGIN_DOWNLOAD_FOLDER environment variable
 2. plugin_download_folder setting in CLAUDE.md or AGENTS.md (in CWD)
-3. OS-specific temp folder: %TEMP%/se-dev-plugin/plugins/ (Windows)
-   or /tmp/se-dev-plugin/plugins/ (Linux)
+3. OS-specific temp folder: %TEMP%/se2-dev-plugin/plugins/ (Windows)
+   or /tmp/se2-dev-plugin/plugins/ (Linux)
 
 Usage:
     python download_plugin_source.py <plugin_id_or_name>

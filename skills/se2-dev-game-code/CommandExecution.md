@@ -18,7 +18,7 @@ This guide explains how to correctly execute commands on Windows when using this
    # Correct syntax: <category> <type> <pattern>
    uv run search_code.py class declaration MyCubeGrid
    uv run search_code.py method usage GetPosition
-   uv run search_code.py interface declaration IMyTerminalBlock
+   uv run search_code.py interface declaration IMyEntity
    ```
    (Always use workdir parameter set to the skill folder)
 

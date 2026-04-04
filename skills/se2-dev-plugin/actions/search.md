@@ -1,6 +1,6 @@
 # Search Action
 
-> **Part of the se-dev-plugin skill.** Invoked when searching plugin source code.
+> **Part of the se2-dev-plugin skill.** Invoked when searching plugin source code.
 
 Search plugin code using `uv run search_plugins.py` from this skill folder.
 
