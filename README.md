@@ -1,4 +1,12 @@
-# Space Engineers Developer Skills
+# Space Engineers 2 Developer Skills
+
+**The document below is a draft based on `se-dev-skills`, therefore most of them are not up to date yet.**
+
+**NOTE:** Currently, you must use a modified ILSpy build from [this branch](https://github.com/viktor-ferenczi/ILSpy/tree/error-bypass)
+to decompile the game with the `se2-dev-game-code` skill. Hopefully the upstream ILSpy will fix these issues eventually.
+It causes a few source files to be missing, but that's okay for now.
+
+---
 
 A [skill](https://agentskills.io) library for Space Engineers plugin, mod, and in-game script development.
 
