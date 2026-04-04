@@ -7,10 +7,10 @@ This guide helps you resolve common issues when searching game code.
 ### Common Causes
 
 1. **Wrong skill**: 
-   - Game classes like `MyEntity` → use `se-dev-game-code` ✅
-   - Mod code → use `se-dev-mod`
-   - Plugin code → use `se-dev-plugin`
-   - Script code → use `se-dev-script`
+   - Game classes like `MyEntity` → use `se2-dev-game-code` ✅
+   - Mod code → use `se2-dev-mod`
+   - Plugin code → use `se2-dev-plugin`
+   - Script code → use `se2-dev-script`
 
 2. **Exact name mismatch**: Try using regex patterns:
    ```bash
@@ -129,13 +129,13 @@ Each skill searches different code:
 
 | What you need | Skill to use |
 |---------------|--------------|
-| Base game classes (MyEntity, MyEntity, etc.) | `se-dev-game-code` |
-| Mod code examples from Steam Workshop | `se-dev-mod` |
-| Plugin code from PluginHub | `se-dev-plugin` |
-| PB script examples from Workshop | `se-dev-script` |
+| Base game classes (MyEntity, MyEntity, etc.) | `se2-dev-game-code` |
+| Mod code examples from Steam Workshop | `se2-dev-mod` |
+| Plugin code from PluginHub | `se2-dev-plugin` |
+| PB script examples from Workshop | `se2-dev-script` |
 
-If you're looking for examples of how others use game APIs, use `se-dev-mod` or `se-dev-script`.
-If you need to understand the game's internal implementation, use `se-dev-game-code`.
+If you're looking for examples of how others use game APIs, use `se2-dev-mod` or `se2-dev-script`.
+If you need to understand the game's internal implementation, use `se2-dev-game-code`.
 
 ## Search Tips
 

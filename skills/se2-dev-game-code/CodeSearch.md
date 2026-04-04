@@ -9,7 +9,7 @@ Search the decompiled Space Engineers 2 C# codebase efficiently.
 Always change to this skill folder first:
 
 ```bash
-cd skills/se-dev-game-code
+cd skills/se2-dev-game-code
 uv run search_code.py class declaration MyEntity
 ```
 

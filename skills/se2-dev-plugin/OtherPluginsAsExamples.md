@@ -58,8 +58,8 @@ then the `Id`) field will tell you the GitHub repository ID of the plugin.
 ## Plugin Storage
 
 Plugin sources are downloaded to an OS-specific temp folder by default:
-- **Windows**: `%TEMP%/se-dev-plugin/plugins/`
-- **Linux**: `/tmp/se-dev-plugin/plugins/`
+- **Windows**: `%TEMP%/se2-dev-plugin/plugins/`
+- **Linux**: `/tmp/se2-dev-plugin/plugins/`
 
 You can override this by:
 1. Setting the `SE_PLUGIN_DOWNLOAD_FOLDER` environment variable

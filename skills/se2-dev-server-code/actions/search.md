@@ -1,6 +1,6 @@
 # Search Action
 
-> **Part of the se-dev-server-code skill.** Invoked when searching the server's decompiled code.
+> **Part of the se2-dev-server-code skill.** Invoked when searching the server's decompiled code.
 
 Run searches using `uv run search_code.py` from this skill folder.
 

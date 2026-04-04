@@ -1,6 +1,6 @@
 # Search Action
 
-> **Part of the se-dev-mod skill.** Invoked when searching mod source code.
+> **Part of the se2-dev-mod skill.** Invoked when searching mod source code.
 
 Search mod code using `uv run search_mods.py` from this skill folder.
 

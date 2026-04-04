@@ -1,6 +1,6 @@
 # Test Action
 
-> **Part of the se-dev-server-code skill.** Invoked to run server code search tests and verify results.
+> **Part of the se2-dev-server-code skill.** Invoked to run server code search tests and verify results.
 
 Run `test_search.bat` to verify the server code search functionality is working correctly.
 

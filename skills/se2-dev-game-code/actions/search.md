@@ -1,6 +1,6 @@
 # Search Action
 
-> **Part of the se-dev-game-code skill.** Invoked when searching the game's decompiled code.
+> **Part of the se2-dev-game-code skill.** Invoked when searching the game's decompiled code.
 
 Run searches using `uv run search_code.py` from this skill folder.
 

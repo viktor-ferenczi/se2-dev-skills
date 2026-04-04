@@ -1,5 +1,5 @@
 ---
-name: se-dev-game-code
+name: se2-dev-game-code
 description: Allows reading the decompiled C# code of Space Engineers 2
 license: MIT
 allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*test_search.bat*), Bash(*uv run search_code.py *), Bash(*uv run index_code.py *), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
@@ -29,11 +29,11 @@ Check these patterns **in order** - first match wins:
 
 | Priority | Pattern | Example | Route |
 |----------|---------|---------|-------|
-| 1 | Empty or bare invocation | `se-dev-game-code` | Show this help |
-| 2 | Prepare keywords | `se-dev-game-code prepare`, `se-dev-game-code setup`, `se-dev-game-code init` | prepare |
-| 3 | Bash/shell keywords | `se-dev-game-code bash`, `se-dev-game-code grep`, `se-dev-game-code cat` | bash |
-| 4 | Search keywords | `se-dev-game-code search`, `se-dev-game-code find class`, `se-dev-game-code lookup` | search |
-| 5 | Test keywords | `se-dev-game-code test`, `se-dev-game-code verify`, `se-dev-game-code check` | test |
+| 1 | Empty or bare invocation | `se2-dev-game-code` | Show this help |
+| 2 | Prepare keywords | `se2-dev-game-code prepare`, `se2-dev-game-code setup`, `se2-dev-game-code init` | prepare |
+| 3 | Bash/shell keywords | `se2-dev-game-code bash`, `se2-dev-game-code grep`, `se2-dev-game-code cat` | bash |
+| 4 | Search keywords | `se2-dev-game-code search`, `se2-dev-game-code find class`, `se2-dev-game-code lookup` | search |
+| 5 | Test keywords | `se2-dev-game-code test`, `se2-dev-game-code verify`, `se2-dev-game-code check` | test |
 
 ## Getting Started
 

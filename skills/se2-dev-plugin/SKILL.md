@@ -1,5 +1,5 @@
 ---
-name: se-dev-plugin
+name: se2-dev-plugin
 description: Plugin development for Space Engineers version 1. Search plugin code from PluginHub for examples and patterns.
 license: MIT
 allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*dotnet build*), Bash(*dotnet clean*), Bash(*uv run search_plugins.py *), Bash(*uv run index_plugins.py*), Bash(*uv run list_plugins.py*), Bash(*uv run download_plugin_source.py *), Bash(*uv run download_pluginhub.py*), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
@@ -28,10 +28,10 @@ Check these patterns **in order** - first match wins:
 
 | Priority | Pattern | Example | Route |
 |----------|---------|---------|-------|
-| 1 | Empty or bare invocation | `se-dev-plugin` | Show this help |
-| 2 | Prepare keywords | `se-dev-plugin prepare`, `se-dev-plugin setup`, `se-dev-plugin init` | prepare |
-| 3 | Bash/shell keywords | `se-dev-plugin bash`, `se-dev-plugin grep`, `se-dev-plugin cat` | bash |
-| 4 | Search keywords | `se-dev-plugin search`, `se-dev-plugin find class`, `se-dev-plugin lookup` | search |
+| 1 | Empty or bare invocation | `se2-dev-plugin` | Show this help |
+| 2 | Prepare keywords | `se2-dev-plugin prepare`, `se2-dev-plugin setup`, `se2-dev-plugin init` | prepare |
+| 3 | Bash/shell keywords | `se2-dev-plugin bash`, `se2-dev-plugin grep`, `se2-dev-plugin cat` | bash |
+| 4 | Search keywords | `se2-dev-plugin search`, `se2-dev-plugin find class`, `se2-dev-plugin lookup` | search |
 
 ## Getting Started
 
@@ -71,7 +71,7 @@ the player's machine from the GitHub source revision identified by its PluginHub
 reviewed for safety and security on submission, but only on a best effort basis, without any legal guarantees.
 Plugins are running native code and can do anything.
 
-Use the `se-dev-game-code` skill to search the game's decompiled code. You will need this to
+Use the `se2-dev-game-code` skill to search the game's decompiled code. You will need this to
 understand how the game's internals work and how to interface with it and patch it properly.
 
 ## References

@@ -170,7 +170,7 @@ var instance2 = AccessTools.CreateInstance(typeof(SomeClass));
 
 ## Tips for Space Engineers Plugins
 
-1. **Use the game code search** (`se-dev-game-code` skill) to find exact field/method names before using `AccessTools`
+1. **Use the game code search** (`se2-dev-game-code` skill) to find exact field/method names before using `AccessTools`
 2. **Prefer `AccessTools` over raw reflection** - it handles edge cases and searches base types automatically
 3. **Cache reflection results** - store `MethodInfo`/`FieldInfo` in static fields, don't look them up repeatedly
 4. **Use `FieldRefAccess` for hot paths** - avoids reflection overhead in frequently called code

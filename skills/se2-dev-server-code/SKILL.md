@@ -1,5 +1,5 @@
 ---
-name: se-dev-server-code
+name: se2-dev-server-code
 description: Allows reading the decompiled C# code of the Space Engineers Dedicated Server
 license: MIT
 allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*test_search.bat*), Bash(*uv run search_code.py *), Bash(*uv run index_code.py *), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
@@ -29,11 +29,11 @@ Check these patterns **in order** - first match wins:
 
 | Priority | Pattern | Example | Route |
 |----------|---------|---------|-------|
-| 1 | Empty or bare invocation | `se-dev-server-code` | Show this help |
-| 2 | Prepare keywords | `se-dev-server-code prepare`, `se-dev-server-code setup`, `se-dev-server-code init` | prepare |
-| 3 | Bash/shell keywords | `se-dev-server-code bash`, `se-dev-server-code grep`, `se-dev-server-code cat` | bash |
-| 4 | Search keywords | `se-dev-server-code search`, `se-dev-server-code find class`, `se-dev-server-code lookup` | search |
-| 5 | Test keywords | `se-dev-server-code test`, `se-dev-server-code verify`, `se-dev-server-code check` | test |
+| 1 | Empty or bare invocation | `se2-dev-server-code` | Show this help |
+| 2 | Prepare keywords | `se2-dev-server-code prepare`, `se2-dev-server-code setup`, `se2-dev-server-code init` | prepare |
+| 3 | Bash/shell keywords | `se2-dev-server-code bash`, `se2-dev-server-code grep`, `se2-dev-server-code cat` | bash |
+| 4 | Search keywords | `se2-dev-server-code search`, `se2-dev-server-code find class`, `se2-dev-server-code lookup` | search |
+| 5 | Test keywords | `se2-dev-server-code test`, `se2-dev-server-code verify`, `se2-dev-server-code check` | test |
 
 ## Getting Started
 

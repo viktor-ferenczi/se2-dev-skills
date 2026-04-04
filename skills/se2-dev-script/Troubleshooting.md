@@ -7,10 +7,10 @@ This guide helps you resolve common issues when searching script code.
 ### Common Causes
 
 1. **Wrong skill**: 
-   - Game classes like `MyCubeBlock` → use `se-dev-game-code`
-   - Mod code examples → use `se-dev-mod`
-   - Plugin code → use `se-dev-plugin`
-   - PB script examples → use `se-dev-script` ✅
+   - Game classes like `MyCubeBlock` → use `se2-dev-game-code`
+   - Mod code examples → use `se2-dev-mod`
+   - Plugin code → use `se2-dev-plugin`
+   - PB script examples → use `se2-dev-script` ✅
 
 2. **No scripts subscribed or indexed**:
    ```bash
@@ -179,7 +179,7 @@ Scripts can only use names from `PBApiWhitelist.txt`.
 grep "IMyThrust" PBApiWhitelist.txt
 ```
 
-### 3. Use se-dev-game-code for Base Classes
+### 3. Use se2-dev-game-code for Base Classes
 
 To understand interfaces and base classes:
 ```bash
@@ -187,7 +187,7 @@ To understand interfaces and base classes:
 uv run search_scripts.py interface declaration IMyTerminalBlock
 
 # Right skill - find the actual definition
-# (switch to se-dev-game-code skill)
+# (switch to se2-dev-game-code skill)
 uv run search_code.py interface declaration IMyTerminalBlock
 ```
 

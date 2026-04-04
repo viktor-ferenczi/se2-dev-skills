@@ -1,6 +1,6 @@
 # Bash Action
 
-> **Part of the se-dev-plugin skill.** Invoked when running UNIX shell commands.
+> **Part of the se2-dev-plugin skill.** Invoked when running UNIX shell commands.
 
 **⚠️ IMPORTANT: Read [CommandExecution.md](../CommandExecution.md) for complete guidance on running commands correctly.**
 

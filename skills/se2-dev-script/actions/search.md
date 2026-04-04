@@ -1,6 +1,6 @@
 # Search Action
 
-> **Part of the se-dev-script skill.** Invoked when searching PB script source code.
+> **Part of the se2-dev-script skill.** Invoked when searching PB script source code.
 
 Search PB script code using `uv run search_scripts.py` from this skill folder.
 

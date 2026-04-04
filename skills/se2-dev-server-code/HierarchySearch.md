@@ -25,7 +25,7 @@ These files use tree-style formatting similar to the `tree` command with fully-q
 ## Search Commands
 
 ```bash
-cd skills/se-dev-server-code
+cd skills/se2-dev-server-code
 uv run search_code.py <class|interface> <subcommand> <pattern>
 ```
 

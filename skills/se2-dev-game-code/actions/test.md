@@ -1,6 +1,6 @@
 # Test Action
 
-> **Part of the se-dev-game-code skill.** Invoked to run game code search tests and verify results.
+> **Part of the se2-dev-game-code skill.** Invoked to run game code search tests and verify results.
 
 Run `test_search.bat` to verify the game code search functionality is working correctly.
 

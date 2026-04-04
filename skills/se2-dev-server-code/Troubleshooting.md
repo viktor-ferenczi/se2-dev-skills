@@ -7,10 +7,10 @@ This guide helps you resolve common issues when searching server code.
 ### Common Causes
 
 1. **Wrong skill**:
-   - Server classes like `MyCubeBlock` → use `se-dev-server-code` ✅
-   - Mod code → use `se-dev-mod`
-   - Plugin code → use `se-dev-plugin`
-   - Script code → use `se-dev-script`
+   - Server classes like `MyCubeBlock` → use `se2-dev-server-code` ✅
+   - Mod code → use `se2-dev-mod`
+   - Plugin code → use `se2-dev-plugin`
+   - Script code → use `se2-dev-script`
 
 2. **Exact name mismatch**: Try using regex patterns:
    ```bash
@@ -129,13 +129,13 @@ Each skill searches different code:
 
 | What you need | Skill to use |
 |---------------|--------------|
-| Dedicated server classes (MyCubeBlock, MyEntity, etc.) | `se-dev-server-code` |
-| Mod code examples from Steam Workshop | `se-dev-mod` |
-| Plugin code from PluginHub | `se-dev-plugin` |
-| PB script examples from Workshop | `se-dev-script` |
+| Dedicated server classes (MyCubeBlock, MyEntity, etc.) | `se2-dev-server-code` |
+| Mod code examples from Steam Workshop | `se2-dev-mod` |
+| Plugin code from PluginHub | `se2-dev-plugin` |
+| PB script examples from Workshop | `se2-dev-script` |
 
-If you're looking for examples of how others use game APIs, use `se-dev-mod` or `se-dev-script`.
-If you need to understand the server's internal implementation, use `se-dev-server-code`.
+If you're looking for examples of how others use game APIs, use `se2-dev-mod` or `se2-dev-script`.
+If you need to understand the server's internal implementation, use `se2-dev-server-code`.
 
 ## Search Tips
 
