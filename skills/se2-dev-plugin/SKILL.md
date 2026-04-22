@@ -78,7 +78,7 @@ understand how the game's internals work and how to interface with it and patch 
 
 - [Pulsar](https://github.com/SpaceGT/Pulsar) Plugin loader for Space Engineers
 - [Pulsar Installer](https://github.com/StarCpt/Pulsar-Installer) Installer for Pulsar on Windows
-- [PluginHub](https://github.com/StarCpt/PluginHub/) Public plugin registry for Pulsar
+- [PluginHub-SE2](https://github.com/StarCpt/PluginHub-SE2/) Public plugin registry for Pulsar
 
 ## Plugin Code Search
 

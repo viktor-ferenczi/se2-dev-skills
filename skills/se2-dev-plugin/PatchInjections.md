@@ -20,13 +20,13 @@ Harmony automatically injects special values into patch methods based on paramet
 For instance methods, `__instance` gives you the object the method was called on:
 
 ```csharp
-[HarmonyPatch(typeof(MyEntity), nameof(MyEntity.Update))]
-static class UpdatePatch
+[HarmonyPatch(typeof(CubeGridComponent), nameof(CubeGridComponent.OnAddedToScene))]
+static class OnAddedToScenePatch
 {
-    static void Prefix(MyEntity __instance)
+    static void Prefix(CubeGridComponent __instance)
     {
         // Access instance members
-        Log.Info($"Updating entity: {__instance.EntityId}");
+        Log.Info($"Grid added to scene: {__instance.DisplayName}");
     }
 }
 ```

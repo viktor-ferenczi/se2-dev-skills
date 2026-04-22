@@ -1,16 +1,19 @@
 # Space Engineers 2 Developer Skills
 
-**The document below is a draft based on `se-dev-skills`, therefore most of them are not up to date yet.**
+A [skill](https://agentskills.io) library for Space Engineers 2 plugin development.
 
-**NOTE:** Currently, you must use a modified ILSpy build from [this branch](https://github.com/viktor-ferenczi/ILSpy/tree/error-bypass)
-to decompile the game with the `se2-dev-game-code` skill. Hopefully the upstream ILSpy will fix these issues eventually.
-It causes a few source files to be missing, but that's okay for now.
+**This library applies only to version 2 of the game.**
 
----
+## Prerequisites
 
-A [skill](https://agentskills.io) library for Space Engineers plugin, mod, and in-game script development.
+- Space Engineers 2
+- `ilspycmd` installed as a global dotnet tool `*`
+- .NET 10 SDK
+- Python 3.13 or newer with `python.exe` on `PATH` 
 
-**This library applies only to version 1 of the game.**
+`*` Currently, you must use a modified ILSpy build from [this branch](https://github.com/viktor-ferenczi/ILSpy/tree/error-bypass), so the `se2-dev-game-code` skill
+can decompile the game's code. Hopefully upstream ILSpy will eventually fix these issues I just bypassed.
+It causes a few source files to be missing, but that's okay for general use of these skills.
 
 ## How to use
 
@@ -24,38 +27,29 @@ This usually happens if the skills are linked (`mklink`) into the coding agent's
 
 ## Installation
 
+Simplest is to use skills.sh, if you have node.js installed (that provides `npx` on `PATH`):
+
 `npx skills add viktor-ferenczi/se2-dev-skills`
 
-Follow the wizard.
+Follow the wizard. Later you can update them by: `npx skills update`
 
-Later you can update them by: `npx skills update`
-
-In case you don't want to use `skills.sh`, then please see the "Manual installation" section below. 
+If you don't want to use `skills.sh`, then just copy the skill's folder into your coding agent's `skills` folder.
 
 ## Preparation
 
 The skills will automatically prepare themselves on **first use**. It means downloading some tools and indexing code.
 If you want to prepare them ahead of time, simply run `Prepare.bat` in their respective folders.
 
-**Note:** Preparing the `se2-dev-game-code` skill may take 5–15 minutes, as it fully decompiles the game and builds
-code indexes to allow for rapid code search later. The fully prepared repository takes about **1.5 GB** of disk space
-due to the code index. If you need to save space, you can delete all `*.il` files (approx. **660 MB**), which are
-only required for working on transpiler or preloader patches.
-
-All skills install BusyBox (`busybox.exe`) into their folder for use by agentic coding tools for UNIX like commands,
-because AI models are bad at Windows commands and often fall back to the UNIX CLI tools even if told otherwise. It
-has improved efficiency a lot, therefore this is currently a requirement. 
-
-If you want to use BusyBox in your other projects, then this is also available as a separate skill:
-`npx skills add https://github.com/viktor-ferenczi/skills --skill busybox-on-windows`
+**Note:** Preparing the `se2-dev-game-code` skill may take 10–20 minutes, as it fully decompiles the game and builds
+code indexes to allow for rapid code search later. The fully prepared repository takes about **1 GB** of disk space
+due to the decompiled source code, the code index and the copied game contents.
 
 ## Skills
 
-* [se2-dev-script](skills/se2-dev-script/SKILL.md) – In-game script development
-* [se2-dev-mod](skills/se2-dev-mod/SKILL.md) – Mod development
 * [se2-dev-plugin](skills/se2-dev-plugin/SKILL.md) – Plugin development
-* [se2-dev-game-code](skills/se2-dev-game-code/SKILL.md) – Searchable decompiled C# game code (recommended companion for all the other skills)
-* [se2-dev-server-code](skills/se2-dev-server-code/SKILL.md) – Searchable decompiled C# Dedicated Server code (for server side mod and plugin development)
+* [se2-dev-game-code](skills/se2-dev-game-code/SKILL.md) – Searchable decompiled C# game code
+
+More are planned, as the game gains modding, scripting and multiplayer capability.
 
 _Enjoy!_
 
@@ -66,43 +60,12 @@ _Enjoy!_
 
 ---
 
-## Manual installation
-
-You can also install the skills manually:
-
-1. Clone this repository
-2. Run one of the installation scripts from the `install` folder:
-
-| Target Environment | Script                              |
-|--------------------|-------------------------------------|
-| Claude Code        | `claude.bat`                        |
-| Kilo Code          | `kilocode.bat`                      |
-| Cline              | `cline.bat`                         |
-| OpenCode           | `opencode.bat`                      |
-| Custom location    | `install.bat <target_skills_folder>` |
-
-The scripts create junction points (symlinks) from the target skill folders to the skill folders in this repository.
-
 ## FAQ
 
 ### How well does this work for plugin development?
 
-I am currently testing it myself. It looks promising, but there may be rough edges. Please try it out and report back or
-submit a PR!
-
-### Why do the mod development skills lack details about non-scripting parts?
-
-I haven't developed many mods involving custom art or definitions, so I lack the personal experience to add those yet.
-Contributions via PR are very welcome.
-
-### Does Claude Code know about the mod and script API whitelists?
-
-I have exported the current whitelists (as of game version 1.208.015) using [MDK2](https://github.com/malforge/mdk2).
-This may need future updates or automation during the preparation phase.
-
-If you use the suggested mod or script template projects and the **ScriptMerge** tool, there is no formal whitelist
-validation during build time. It may fail when loading into the game, but if you provide the relevant game logs to
-Claude Code, it can usually identify and fix the issue.
+I am currently testing it myself. It looks promising, but there may be rough edges. 
+Please try it out and report back or submit a PR!
 
 ### How does Claude Code load this much information into the context?
 
@@ -125,8 +88,6 @@ If you suspect something is not working in these skills, then issue the followin
 
 ```md
 Check whether you can see these skills:
-- `se2-dev-script`
-- `se2-dev-mod`
 - `se2-dev-plugin`
 - `se2-dev-game-code`
 
@@ -137,60 +98,36 @@ Once they are prepared, conduct some smoke testing on their features to make sur
 If something is missing or not working properly, then list those in a final summary.
 ```
 
-_If you need the `se2-dev-server-code` skill, then add that as well to the list._
-
 In case of permission issues you have to grant access to the folder where the skills are stored. 
 This usually happens if the skills are linked (`mklink`) into the coding agent's skills folder.
 
-Example of a successful self-test result (generated by Claude Sonnet 4.5):
+### Example output
 
-## Skills Verification Complete ✓
+Tested with Claude Code and Opus 4.7:
 
-All four Space Engineers development skills are **visible, prepared, and working correctly**:
+---
+I can see both skills. Let me invoke them to prepare for first use.
 
-### Skills Status:
-1. ✅ **se2-dev-script** - Ready for PB (Programmable Block) script development
-2. ✅ **se2-dev-mod** - Ready for mod development
-3. ✅ **se2-dev-plugin** - Ready for plugin development
-4. ✅ **se2-dev-game-code** - Ready for game code exploration
+Both are prepared. Now let me read the CommandExecution docs and then smoke test features.
 
-### Smoke Test Results:
+Now let me run smoke tests on both skills in parallel.
 
-#### se2-dev-game-code (Extensive Testing):
-- ✅ **Class declaration search**: Found MyCubeGrid and related classes
-- ✅ **Method declaration search**: Found GetCubeBlock in multiple locations
-- ✅ **Field declaration search**: Found m_colorMaskHSV in MySlimBlock
-- ✅ **Method usage search**: Found UpdateBeforeSimulation usage locations
-- ✅ **Method signature search**: Displayed full method signatures with parameters
-- ✅ **Hierarchy parent search**: Successfully found MyCubeGrid inherits from MyEntity
-- ✅ **Hierarchy children search**: Successfully found MyEntity children with compressed namespace output
-- ✅ **Content folder**: Accessible with game data (CubeBlocks, Blueprints, Localization, etc.)
-- ✅ **Content data search**: Successfully found block definitions in .sbc files
+Both skills are visible, prepared, and functional.
 
-#### se2-dev-script:
-- ✅ **PB API Whitelist**: Accessible and contains 600+ whitelisted types/members
-- ✅ **Preparation**: Complete with Python virtual environment ready
+## Smoke Test Results
 
-#### se2-dev-mod:
-- ✅ **Mod API Whitelist**: Accessible and contains extensive mod API permissions
-- ✅ **Preparation**: Complete with Python virtual environment ready
+**`se2-dev-game-code`** — all features working
+- `Prepare.DONE` present; game version `2.2.0.2002`
+- `class declaration CubeGridComponent` → returns correct hits
+- `method signature OnAddedToScene` → returns 3+ hits
+- `class children GameComponent` → hierarchy resolves correctly
+- `CodeIndex/content_index.csv` present (21,879 rows)
 
-#### se2-dev-plugin:
-- ✅ **Documentation**: All guides accessible (Plugin.md, ClientPlugin.md, etc.)
-- ✅ **Preparation**: Complete with Python virtual environment ready
-
-### All Features Working:
-- Code search with declarations and usages
-- Class/interface hierarchy traversal
-- Method signature inspection
-- Field and property searching
-- Content data exploration
-- Namespace filtering and pagination
-- Regex pattern matching
-- Count and limit operations
-
-**No issues found!** All skills are fully operational and ready for Space Engineers development tasks.
-
+**`se2-dev-plugin`** — all features working
+- `Prepare.DONE` present
+- `list_plugins.py` returns 1 plugin (`No Forced Camera Zoom`)
+- `list_plugins.py --search camera` filter works
+- `search_plugins.py class declaration Plugin` returns hits across indexed plugins (`SE2-NoForcedCameraZoom`)
 ---
 
 ## Credits

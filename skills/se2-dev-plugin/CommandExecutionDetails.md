@@ -113,7 +113,7 @@ if (Test-Path "Prepare.DONE") { "READY" } else { "NOT_READY" }
 All Python scripts in this skill must be run via `uv run`:
 
 ```bash
-uv run search_code.py --class-decl "MyCubeGrid"
+uv run search_code.py --class-decl "CubeGridComponent"
 uv run index_code.py
 ```
 
@@ -174,7 +174,7 @@ uv run search_code.py --help
 ### ❌ Mistake 4: Forgetting to Prepare
 
 ```bash
-uv run search_code.py --class-decl "MyCubeGrid"
+uv run search_code.py --class-decl "CubeGridComponent"
 ```
 **Error:** Index files missing, Python environment not set up
 
@@ -205,7 +205,7 @@ uv run search_code.py --help (with workdir set to skill folder)
 
 **Step 5:** For UNIX commands, use busybox with forward slashes:
 ```bash
-busybox.exe grep -r "MyCubeGrid" C:/path/to/Decompiled
+busybox.exe grep -r "CubeGridComponent" C:/path/to/Decompiled
 ```
 
 ## Troubleshooting Checklist

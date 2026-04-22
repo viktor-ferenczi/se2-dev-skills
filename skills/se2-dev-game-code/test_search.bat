@@ -5,21 +5,21 @@ cd /d "%~dp0"
 echo ============================================================
 echo CLASS DECLARATION
 echo ============================================================
-echo --- MyEntity class declaration ---
-uv run search_code.py class declaration MyEntity
+echo --- Entity class declaration ---
+uv run search_code.py class declaration Entity
 echo.
-echo --- MyPhysicsBody class declaration ---
-uv run search_code.py class declaration MyPhysicsBody
+echo --- GameApp class declaration ---
+uv run search_code.py class declaration GameApp
 echo.
 
 echo ============================================================
 echo CLASS USAGE
 echo ============================================================
-echo --- MyEntity class usage (limit 5) ---
-uv run search_code.py -l 5 class usage MyEntity
+echo --- Entity class usage (limit 5) ---
+uv run search_code.py -l 5 class usage Entity
 echo.
-echo --- MyPhysicsBody class usage (limit 5) ---
-uv run search_code.py -l 5 class usage MyPhysicsBody
+echo --- GameApp class usage (limit 5) ---
+uv run search_code.py -l 5 class usage GameApp
 echo.
 
 echo ============================================================
@@ -28,8 +28,8 @@ echo ============================================================
 echo --- Vector3D struct declaration ---
 uv run search_code.py struct declaration Vector3D
 echo.
-echo --- Color struct declaration ---
-uv run search_code.py struct declaration "re:^Color$"
+echo --- ColorHSV struct declaration ---
+uv run search_code.py struct declaration "re:^ColorHSV$"
 echo.
 
 echo ============================================================
@@ -38,8 +38,8 @@ echo ============================================================
 echo --- Vector3D struct usage (limit 5) ---
 uv run search_code.py -l 5 struct usage Vector3D
 echo.
-echo --- Color struct usage (limit 5) ---
-uv run search_code.py -l 5 struct usage "re:^Color$"
+echo --- ColorHSV struct usage (limit 5) ---
+uv run search_code.py -l 5 struct usage "re:^ColorHSV$"
 echo.
 
 echo ============================================================
@@ -75,8 +75,8 @@ echo.
 echo ============================================================
 echo FIELD USAGE
 echo ============================================================
-echo --- Forward field usage (limit 5) ---
-uv run search_code.py -l 5 field usage "re:^Forward$"
+echo --- Field usage in Update methods (limit 5) ---
+uv run search_code.py -l 5 field usage "re:^Update$"
 echo.
 echo --- Position field usage (limit 5) ---
 uv run search_code.py -l 5 field usage Position
@@ -85,18 +85,18 @@ echo.
 echo ============================================================
 echo INTERFACE DECLARATION
 echo ============================================================
-echo --- IMyEntity interface declaration ---
-uv run search_code.py interface declaration IMyEntity
+echo --- IEntityContainer interface declaration ---
+uv run search_code.py interface declaration IEntityContainer
 echo.
-echo --- IDisposable interface declaration ---
-uv run search_code.py interface declaration IDisposable
+echo --- IEntityLifetime interface declaration ---
+uv run search_code.py interface declaration IEntityLifetime
 echo.
 
 echo ============================================================
 echo INTERFACE USAGE
 echo ============================================================
-echo --- IMyEntity interface usage (limit 5) ---
-uv run search_code.py -l 5 interface usage IMyEntity
+echo --- IEntityContainer interface usage (limit 5) ---
+uv run search_code.py -l 5 interface usage IEntityContainer
 echo.
 
 echo ============================================================
@@ -116,11 +116,11 @@ echo.
 echo ============================================================
 echo NAMESPACE FILTERING
 echo ============================================================
-echo --- Classes in VRage.Core namespace (limit 5) ---
-uv run search_code.py -n VRage.Core -l 5 class declaration ""
+echo --- Classes in Keen.Game2 namespace (limit 5) ---
+uv run search_code.py -n Keen.Game2 -l 5 class declaration ""
 echo.
-echo --- Methods in VRage namespace containing "Get" (limit 5) ---
-uv run search_code.py -n VRage -l 5 method declaration Get
+echo --- Methods in Keen.Game2 namespace containing "Update" (limit 5) ---
+uv run search_code.py -n Keen.Game2 -l 5 method declaration Update
 echo.
 
 echo ============================================================
@@ -139,8 +139,8 @@ echo.
 echo ============================================================
 echo COUNT MODE
 echo ============================================================
-echo --- Count of MyEntity usages ---
-uv run search_code.py -c class usage MyEntity
+echo --- Count of Entity usages ---
+uv run search_code.py -c class usage Entity
 echo.
 echo --- Count of Vector3D usages ---
 uv run search_code.py -c struct usage Vector3D
@@ -152,8 +152,8 @@ echo.
 echo ============================================================
 echo REGEX PATTERNS
 echo ============================================================
-echo --- Classes starting with "My" (limit 5) ---
-uv run search_code.py -l 5 class declaration "re:^My"
+echo --- Classes starting with "Grid" (limit 5) ---
+uv run search_code.py -l 5 class declaration "re:^Grid"
 echo.
 echo --- Methods ending with "Position" (limit 5) ---
 uv run search_code.py -l 5 method declaration "re:Position$"
@@ -201,60 +201,60 @@ echo.
 echo ============================================================
 echo HIERARCHY SEARCH - CLASS PARENT
 echo ============================================================
-echo --- Find parent of MyEntity ---
-uv run search_code.py class parent MyEntity
+echo --- Find parent of Entity ---
+uv run search_code.py -l 5 class parent Entity
 echo.
 
 echo ============================================================
 echo HIERARCHY SEARCH - CLASS CHILDREN
 echo ============================================================
-echo --- Find children of MyEntity (limit 5) ---
-uv run search_code.py -l 5 class children MyEntity
+echo --- Find children of Entity (limit 5) ---
+uv run search_code.py -l 5 class children Entity
 echo.
 
 echo ============================================================
 echo HIERARCHY SEARCH - INTERFACE PARENT
 echo ============================================================
-echo --- Find parent of IMyEntity ---
-uv run search_code.py interface parent IMyEntity
+echo --- Find parent of IEntityContainer ---
+uv run search_code.py interface parent IEntityContainer
 echo.
 
 echo ============================================================
 echo HIERARCHY SEARCH - INTERFACE CHILDREN
 echo ============================================================
-echo --- Find children of IMyEntity (limit 5) ---
-uv run search_code.py -l 5 interface children IMyEntity
+echo --- Find children of IEntityContainer (limit 5) ---
+uv run search_code.py -l 5 interface children IEntityContainer
 echo.
 
 echo ============================================================
 echo HIERARCHY SEARCH - CLASS IMPLEMENTS
 echo ============================================================
-echo --- Find interfaces implemented by MyEntity ---
-uv run search_code.py class implements MyEntity
+echo --- Find interfaces implemented by Entity (limit 5) ---
+uv run search_code.py -l 5 class implements Entity
 echo.
 
 echo ============================================================
 echo HIERARCHY SEARCH - INTERFACE IMPLEMENTORS
 echo ============================================================
-echo --- Find implementors of IMyEntity (limit 5) ---
-uv run search_code.py -l 5 interface implementors IMyEntity
+echo --- Find implementors of IEntityContainer (limit 5) ---
+uv run search_code.py -l 5 interface implementors IEntityContainer
 echo.
 
 echo ============================================================
 echo HIERARCHY SEARCH - COUNT MODE
 echo ============================================================
-echo --- Count children of MyEntity ---
-uv run search_code.py -c class children MyEntity
+echo --- Count children of Entity ---
+uv run search_code.py -c class children Entity
 echo.
-echo --- Count implementors of IMyEntity ---
-uv run search_code.py -c interface implementors IMyEntity
+echo --- Count implementors of IEntityContainer ---
+uv run search_code.py -c interface implementors IEntityContainer
 echo.
 
 echo ============================================================
 echo HIERARCHY SEARCH - WITH NAMESPACE FILTER
 echo ============================================================
-echo --- Find children of MyEntity in VRage namespace (limit 5) ---
-uv run search_code.py -n VRage -l 5 class children MyEntity
+echo --- Find children of Entity in Keen.Game2 namespace (limit 5) ---
+uv run search_code.py -n Keen.Game2 -l 5 class children Entity
 echo.
 
 echo ============================================================

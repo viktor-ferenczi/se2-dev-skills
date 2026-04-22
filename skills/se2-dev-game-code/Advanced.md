@@ -25,8 +25,8 @@ uv run search_code.py struct declaration "re:^Vector[23]D$"
 # Match methods starting with Get or Set
 uv run search_code.py method declaration "re:^(Get|Set)"
 
-# Match any My*Block class
-uv run search_code.py class declaration "re:^My.*Block$"
+# Match any *BlockComponent class
+uv run search_code.py class declaration "re:.*BlockComponent$"
 ```
 
 ### Common Patterns
@@ -53,16 +53,16 @@ Always count before fetching large result sets:
 
 ```bash
 # Step 1: Count
-uv run search_code.py -c class usage MyEntity
-# Output: 1247
+uv run search_code.py -c class usage CubeGridComponent
+# Output: 103
 
 # Step 2: Decide on pagination
-# At 10-20 results per query: 1247 / 20 = ~62 queries needed
+# At 10-20 results per query: 103 / 20 = ~5 queries needed
 
 # Step 3: Sample strategically
-uv run search_code.py -l 10 class usage MyEntity           # First 10
-uv run search_code.py -l 10 -o 100 class usage MyEntity    # Mid-range sample
-uv run search_code.py -l 10 -o 1200 class usage MyEntity   # End sample
+uv run search_code.py -l 10 class usage CubeGridComponent          # First 10
+uv run search_code.py -l 10 -o 50 class usage CubeGridComponent    # Mid-range sample
+uv run search_code.py -l 10 -o 90 class usage CubeGridComponent    # End sample
 ```
 
 ### Progressive Refinement
@@ -71,19 +71,19 @@ Narrow down searches incrementally:
 
 ```bash
 # Start broad
-uv run search_code.py -c -n Game2 class declaration ""
+uv run search_code.py -c -n Keen.Game2 class declaration ""
 # Output: 3421
 
 # Narrow to subnamespace
-uv run search_code.py -c -n Game2.Game class declaration ""
+uv run search_code.py -c -n Keen.Game2.Simulation class declaration ""
 # Output: 1856
 
 # Further narrow
-uv run search_code.py -c -n Game2.Game.Entities class declaration ""
+uv run search_code.py -c -n Keen.Game2.Simulation.WorldObjects.CubeGrids class declaration ""
 # Output: 247
 
 # Now fetch results
-uv run search_code.py -l 20 -n Game2.Game.Entities class declaration ""
+uv run search_code.py -l 20 -n Keen.Game2.Simulation.WorldObjects.CubeGrids class declaration ""
 ```
 
 ### Namespace-First Approach
@@ -92,13 +92,13 @@ When exploring unfamiliar areas:
 
 ```bash
 # 1. List all classes in namespace
-uv run search_code.py -n VRage class declaration ""
+uv run search_code.py -n Keen.VRage class declaration ""
 
 # 2. Pick interesting class, find its methods
-uv run search_code.py -n VRage method declaration "" | grep Vector3D
+uv run search_code.py -n Keen.VRage method declaration "" | grep Vector3D
 
 # 3. Find specific method details
-uv run search_code.py -n VRage method signature Normalize
+uv run search_code.py -n Keen.VRage method signature Normalize
 ```
 
 ## Combining Multiple Searches
@@ -107,17 +107,17 @@ uv run search_code.py -n VRage method signature Normalize
 
 ```bash
 # 1. Find class declaration
-uv run search_code.py class declaration MyEntity
+uv run search_code.py class declaration CubeGridComponent
 # Read the file to understand structure
 
 # 2. Find what implements it (if interface)
-uv run search_code.py interface implementors IMyEntity
+uv run search_code.py interface implementors IInSceneListener
 
 # 3. Find usages
-uv run search_code.py -l 20 class usage MyEntity
+uv run search_code.py -l 20 class usage CubeGridComponent
 
 # 4. Find related methods
-uv run search_code.py -n Game2.Game method declaration Entity
+uv run search_code.py -n Keen.Game2.Simulation method declaration Grid
 ```
 
 ### Understanding Method Calls
@@ -139,13 +139,13 @@ uv run search_code.py method signature "re:^Get.*Position"
 
 ```bash
 # 1. Find base class
-uv run search_code.py class parent MyEntity
+uv run search_code.py class parent CubeGridComponent
 
 # 2. Find siblings
-uv run search_code.py class children MyEntity
+uv run search_code.py class children GameComponent
 
 # 3. Find what they all implement
-uv run search_code.py class implements "re:^My.*Entity$"
+uv run search_code.py class implements "re:.*GridComponent$"
 ```
 
 ## Signature Search Strategies
@@ -206,16 +206,16 @@ Target specific DLLs by namespace:
 
 ```bash
 # Core types (VRage.Core)
-uv run search_code.py -n VRage.Core method declaration ""
+uv run search_code.py -n Keen.VRage.Core method declaration ""
 
 # Game entities (Game2.Game)
-uv run search_code.py -n Game2.Game class declaration ""
+uv run search_code.py -n Keen.Game2.Game class declaration ""
 
 # Simulation (Game2.Simulation)
-uv run search_code.py -n Game2.Simulation class declaration ""
+uv run search_code.py -n Keen.Game2.Simulation class declaration ""
 
 # Core utilities (VRage.Library)
-uv run search_code.py -n VRage class declaration ""
+uv run search_code.py -n Keen.VRage class declaration ""
 ```
 
 ## Pagination Strategies
@@ -225,10 +225,10 @@ uv run search_code.py -n VRage class declaration ""
 Sample windows throughout results:
 
 ```bash
-uv run search_code.py -l 10 -o 0 class usage MyEntity      # Window 1
-uv run search_code.py -l 10 -o 200 class usage MyEntity    # Window 2
-uv run search_code.py -l 10 -o 400 class usage MyEntity    # Window 3
-uv run search_code.py -l 10 -o 600 class usage MyEntity    # Window 4
+uv run search_code.py -l 10 -o 0 class usage CubeGridComponent      # Window 1
+uv run search_code.py -l 10 -o 30 class usage CubeGridComponent     # Window 2
+uv run search_code.py -l 10 -o 60 class usage CubeGridComponent     # Window 3
+uv run search_code.py -l 10 -o 90 class usage CubeGridComponent     # Window 4
 ```
 
 ### Binary Search Pattern
@@ -253,9 +253,9 @@ Results sort by depth then alphabetically, so namespace filtering creates natura
 
 ```bash
 # Process one namespace at a time
-uv run search_code.py -n Game2.Game class usage MyEntity
-uv run search_code.py -n VRage class usage MyEntity
-uv run search_code.py -n SpaceEngineers class usage MyEntity
+uv run search_code.py -n Keen.Game2.Simulation class usage CubeGridComponent
+uv run search_code.py -n Keen.Game2.Client class usage CubeGridComponent
+uv run search_code.py -n Keen.VRage class usage CubeGridComponent
 ```
 
 ## Context Management Tips

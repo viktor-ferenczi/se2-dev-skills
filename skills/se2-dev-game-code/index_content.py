@@ -15,14 +15,13 @@ Example:
 
 import csv
 import os
+import re
 import sys
+from collections import defaultdict
 from pathlib import Path
 
 # Text file extensions to index (skip binary assets like .dds, .mwm, .wav, etc.)
-TEXT_EXTENSIONS = {
-    ".sbc", ".hlsl", ".hlsli", ".resx", ".vs", ".scf", ".xml", ".sbl",
-    ".txt", ".ini", ".cfg", ".json", ".fx", ".fxh",
-}
+TEXT_EXTENSIONS = {".def", ".loc-texts", ".json"}
 
 
 def collect_content_files(content_dir):
@@ -54,20 +53,42 @@ def build_source_text_cache(decompiled_dir):
     return cache
 
 
-def find_usages(filename_stem, filename_full, source_cache):
-    """Find C# source files that reference this content filename."""
-    matches = set()
-    # Search for the full filename (e.g., "CubeBlocks_Armor.sbc")
-    # and for the stem if it's specific enough (>= 6 chars to avoid false positives)
-    patterns = [filename_full]
-    if len(filename_stem) >= 6:
-        patterns.append(filename_stem)
+# Tokens we extract from source: identifier-like names, optionally followed by
+# one of our known content extensions (to catch filenames like "Foo.def" as a
+# single token). The hyphen in ".loc-texts" is matched literally.
+_TOKEN_RE = re.compile(r"[A-Za-z_][A-Za-z0-9_]*(?:\.(?:def|loc-texts|json))?")
 
+
+def build_token_index(source_cache):
+    """Map every token seen in any source file -> set of source files.
+
+    For a token like "Foo.def" we also record the bare stem "Foo" so stem-only
+    patterns resolve with a single dict lookup.
+    """
+    token_index = defaultdict(set)
     for rel_path, text in source_cache.items():
-        for pat in patterns:
-            if pat in text:
-                matches.add(rel_path)
-                break
+        seen = set()
+        for m in _TOKEN_RE.finditer(text):
+            tok = m.group(0)
+            if tok in seen:
+                continue
+            seen.add(tok)
+            token_index[tok].add(rel_path)
+            dot = tok.find(".")
+            if dot > 0:
+                stem = tok[:dot]
+                if stem not in seen:
+                    seen.add(stem)
+                    token_index[stem].add(rel_path)
+    return token_index
+
+
+def find_usages(filename_stem, filename_full, token_index):
+    """Look up source files that reference this content filename or stem."""
+    matches = set(token_index.get(filename_full, ()))
+    # Stem fallback only when distinctive enough (matches original heuristic).
+    if len(filename_stem) >= 6:
+        matches.update(token_index.get(filename_stem, ()))
     return sorted(matches)
 
 
@@ -89,13 +110,17 @@ def main():
     source_cache = build_source_text_cache(decompiled_dir)
     print(f"  Loaded {len(source_cache)} source files")
 
+    print("Building token index...")
+    token_index = build_token_index(source_cache)
+    print(f"  Indexed {len(token_index)} distinct tokens")
+
     print("Searching for usages...")
     rows = []
     usage_count = 0
     for rel_path in files:
         fname = Path(rel_path).name
         stem = Path(rel_path).stem
-        usages = find_usages(stem, fname, source_cache)
+        usages = find_usages(stem, fname, token_index)
         usage_count += len(usages)
         if usages:
             for usage in usages:

@@ -35,6 +35,7 @@ def parse_plugin_xml(xml_file: Path) -> dict:
 
         plugin_info = {
             "id": "",
+            "repo_id": "",
             "name": "",
             "author": "",
             "tooltip": "",
@@ -50,6 +51,14 @@ def parse_plugin_xml(xml_file: Path) -> dict:
         id_elem = root.find("Id")
         if id_elem is not None and id_elem.text:
             plugin_info["id"] = id_elem.text.strip()
+
+        # New-format SE2 plugins store owner/repo in <RepoId>; old-format plugins
+        # store it in <Id>. Fall back to <Id> when it looks like owner/repo.
+        repo_id_elem = root.find("RepoId")
+        if repo_id_elem is not None and repo_id_elem.text:
+            plugin_info["repo_id"] = repo_id_elem.text.strip()
+        elif "/" in plugin_info["id"]:
+            plugin_info["repo_id"] = plugin_info["id"]
 
         name_elem = root.find("FriendlyName")
         if name_elem is not None and name_elem.text:
@@ -109,9 +118,11 @@ def load_all_plugins() -> list:
     for xml_file in PLUGINS_DIR.glob("*.xml"):
         plugin = parse_plugin_xml(xml_file)
         if plugin:
-            # Check if source is available locally in any source directory
-            if plugin["id"]:
-                repo_name = plugin["id"].split("/")[-1] if "/" in plugin["id"] else plugin["id"]
+            # Check if source is available locally in any source directory.
+            # Use repo_id (owner/repo) to locate the repo folder; fall back to id.
+            identifier = plugin["repo_id"] or plugin["id"]
+            if identifier:
+                repo_name = identifier.split("/")[-1] if "/" in identifier else identifier
                 plugin["local"] = False
                 plugin["local_path"] = ""
                 for src_dir in source_dirs:
@@ -151,7 +162,8 @@ def main():
                    search_term in p["name"].lower() or
                    search_term in p["description"].lower() or
                    search_term in p["tooltip"].lower() or
-                   search_term in p["id"].lower()]
+                   search_term in p["id"].lower() or
+                   search_term in p["repo_id"].lower()]
 
     # Output
     if args.json:
@@ -165,6 +177,8 @@ def main():
             status = "[LOCAL]" if plugin["local"] else "[REMOTE]"
             print(f"{status} {plugin['name']}")
             print(f"  ID: {plugin['id']}")
+            if plugin["repo_id"] and plugin["repo_id"] != plugin["id"]:
+                print(f"  RepoId: {plugin['repo_id']}")
             print(f"  Author: {plugin['author']}")
             if args.verbose:
                 if plugin["tooltip"]:

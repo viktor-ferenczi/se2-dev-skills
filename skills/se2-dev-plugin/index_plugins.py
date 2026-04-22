@@ -1469,17 +1469,19 @@ def main():
 
     if plugin_sources_dir:
         print(f"Plugin sources directory: {plugin_sources_dir}")
-    print(f"Output directory: {OUTPUT_DIR}")
-    print()
-
-    if plugin_sources_dir is None:
+    else:
         print("Warning: No plugin source directories found.")
         print("Download plugin sources with: uv run download_plugin_source.py <plugin_name>")
         print("List available plugins with: uv run list_plugins.py")
-        return
+    print(f"Output directory: {OUTPUT_DIR}")
+    print()
 
-    indexer = PluginCodeIndexer(plugin_sources_dir)
-    cs_files, plugins = indexer.collect_files()
+    indexer = PluginCodeIndexer(plugin_sources_dir if plugin_sources_dir else SCRIPT_DIR)
+
+    if plugin_sources_dir:
+        cs_files, plugins = indexer.collect_files()
+    else:
+        cs_files, plugins = [], []
 
     print(f"Found {len(plugins)} plugins with source code:")
     for plugin in plugins:
@@ -1487,10 +1489,10 @@ def main():
     print()
 
     if not plugins:
-        print("No plugins to index. Download some plugin sources first.")
+        print("No plugins to index. Writing empty index files.")
         print("  List available: uv run list_plugins.py")
         print("  Download: uv run download_plugin_source.py <plugin_name>")
-        return
+        print()
 
     indexer.index_files(cs_files)
     indexer.write_indices(OUTPUT_DIR, plugins)

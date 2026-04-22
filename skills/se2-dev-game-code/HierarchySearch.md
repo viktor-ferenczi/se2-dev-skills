@@ -34,30 +34,30 @@ uv run search_code.py <class|interface> <subcommand> <pattern>
 #### Find Parent Class
 
 ```bash
-uv run search_code.py class parent MyEntity
+uv run search_code.py class parent CubeGridComponent
 ```
 
-Output: `Game2.Game.MyEntity:VRage.Core.MyEntityBase`
+Output: `Keen.Game2.Simulation.WorldObjects.CubeGrids.CubeGridComponent:Keen.VRage.Core.Game.Components.GameComponent`
 
 Shows the direct base class. Classes with no explicit parent (inherit from `System.Object`) won't appear.
 
 #### Find Child Classes
 
 ```bash
-uv run search_code.py class children MyEntity
+uv run search_code.py class children GameComponent
 ```
 
-Output: `VRage.Core.MyEntity|Game2.Game.(Entities.(MyGrid,MyCharacter),MyProjectile)`
+Output: `Keen.VRage.Core.Game.Components.GameComponent|Keen.Game2.Simulation.WorldObjects.(CubeGrids.(CubeGridComponent,CubeGridSplitterComponent),Characters.CharacterComponent)`
 
 Shows all direct children in compressed namespace format.
 
 #### Find Implemented Interfaces
 
 ```bash
-uv run search_code.py class implements MyEntity
+uv run search_code.py class implements CubeGridComponent
 ```
 
-Output: `Game2.Game.MyEntity:VRage.Core.IMyEntity,VRage.Game.IMyEntity`
+Output: `Keen.Game2.Simulation.WorldObjects.CubeGrids.CubeGridComponent:Keen.VRage.Core.Game.Systems.IInSceneListener,Keen.Game2.Simulation.WorldObjects.Shared.IDisplayNameProvider`
 
 Shows all interfaces implemented by the class.
 
@@ -66,7 +66,7 @@ Shows all interfaces implemented by the class.
 #### Find Parent Interface
 
 ```bash
-uv run search_code.py interface parent IMyEntity
+uv run search_code.py interface parent IInSceneListener
 ```
 
 Shows which interface this one extends.
@@ -74,7 +74,7 @@ Shows which interface this one extends.
 #### Find Child Interfaces
 
 ```bash
-uv run search_code.py interface children IMyEntity
+uv run search_code.py interface children IInSceneListener
 ```
 
 Shows all interfaces that extend this one.
@@ -82,7 +82,7 @@ Shows all interfaces that extend this one.
 #### Find Implementors
 
 ```bash
-uv run search_code.py interface implementors IMyEntity
+uv run search_code.py interface implementors IInSceneListener
 ```
 
 Shows all classes/structs implementing the interface.
@@ -120,7 +120,7 @@ All hierarchy commands support standard options:
 ### Count Matches
 
 ```bash
-uv run search_code.py -c interface implementors IMyEntity
+uv run search_code.py -c interface implementors IInSceneListener
 # Output: 47
 ```
 
@@ -130,15 +130,15 @@ For `children` and `implementors`: counts matching parent types (not total child
 ### Paginate Results
 
 ```bash
-uv run search_code.py -l 10 interface implementors IMyEntity
-uv run search_code.py -l 10 -o 10 interface implementors IMyEntity
+uv run search_code.py -l 10 interface implementors IInSceneListener
+uv run search_code.py -l 10 -o 10 interface implementors IInSceneListener
 ```
 
 ### Filter by Namespace
 
 ```bash
-uv run search_code.py -n Game2.Game class parent ""
-uv run search_code.py -n VRage interface children IMyEntity
+uv run search_code.py -n Keen.Game2 class parent ""
+uv run search_code.py -n Keen.VRage interface children IInSceneListener
 ```
 
 ## Pattern Syntax
@@ -156,13 +156,13 @@ Multiple patterns use AND logic.
 
 ```bash
 # Find parent of any class matching pattern
-uv run search_code.py class parent "re:^My.*Block$"
+uv run search_code.py class parent "re:.*BlockComponent$"
 
-# Find children of classes starting with "My"
-uv run search_code.py class children "re:^My"
+# Find children of classes ending with "Component"
+uv run search_code.py class children "re:Component$"
 
 # Find implementors of interfaces matching pattern
-uv run search_code.py interface implementors "re:^IMy.*Block$"
+uv run search_code.py interface implementors "re:^I.*Listener$"
 ```
 
 ## Walking Hierarchies
@@ -173,32 +173,32 @@ To traverse deep hierarchies, chain multiple queries:
 
 ```bash
 # Start with a class
-uv run search_code.py class parent MyEntity
-# Output: Game2.Game.MyEntity:VRage.Core.MyEntityBase
+uv run search_code.py class parent CubeGridComponent
+# Output: Keen.Game2.Simulation.WorldObjects.CubeGrids.CubeGridComponent:Keen.VRage.Core.Game.Components.GameComponent
 
 # Find its parent
-uv run search_code.py class parent MyEntityBase
-# Output: VRage.Core.MyEntityBase:System.Object
+uv run search_code.py class parent GameComponent
+# Output: (no result — GameComponent inherits from System.Object)
 ```
 
 ### Walk Down the Inheritance Chain
 
 ```bash
 # Find direct children
-uv run search_code.py class children MyEntity
+uv run search_code.py class children GameComponent
 
 # Then query each child for their children
-uv run search_code.py class children MyGrid
+uv run search_code.py class children CubeGridComponent
 ```
 
 ### Explore Interface Hierarchies
 
 ```bash
 # Walk up interface hierarchy
-uv run search_code.py interface parent IMyEntity
+uv run search_code.py interface parent IInSceneListener
 
 # Walk down interface hierarchy
-uv run search_code.py interface children IMyEntity
+uv run search_code.py interface children IInSceneListener
 ```
 
 ## Best Practices

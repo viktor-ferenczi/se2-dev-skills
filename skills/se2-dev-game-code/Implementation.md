@@ -134,7 +134,7 @@ implementing_namespace,implementing_type,interfaces,file_path,start_line,end_lin
 
 **Example row:**
 ```csv
-Game2.Game,MyEntity,"VRage.Core.IMyEntity,VRage.Game.IMyEntity",Game2.Game/Game2/Game/MyEntity.cs,100,500
+Keen.Game2.Simulation.WorldObjects.CubeGrids,CubeGridComponent,"Keen.VRage.Core.Game.Systems.IInSceneListener,Keen.Game2.Simulation.WorldObjects.Shared.IDisplayNameProvider",Game2.Simulation/Keen/Game2/Simulation/WorldObjects/CubeGrids/CubeGridComponent.cs,59,1754
 ```
 
 ## Tree Visualization Files
@@ -148,14 +148,13 @@ Tree-style visualization of complete class hierarchy, similar to the `tree` comm
 **Format:**
 ```
 System.Object
-├── VRage.Core.MyEntityBase
-│   ├── VRage.Core.MyEntity
-│   │   ├── Game2.Game.MyGrid
-│   │   ├── Game2.Game.MyCharacter
-│   │   └── Game2.Game.MyProjectile
-│   └── VRage.Core.MySimpleEntity
-└── VRage.Collections.MyList
-    └── Game2.Game.MySpecializedList
+├── Keen.VRage.Core.Game.Components.GameComponent
+│   ├── Keen.Game2.Simulation.WorldObjects.CubeGrids.CubeGridComponent
+│   ├── Keen.Game2.Simulation.WorldObjects.CubeGrids.CubeGridSplitterComponent
+│   ├── Keen.Game2.Simulation.WorldObjects.Characters.CharacterComponent
+│   └── Keen.VRage.Core.Game.Components.HierarchyComponent
+└── Keen.VRage.DCS.Components.Component
+    └── Keen.VRage.DCS.Samples.CubeGridComponent
 ```
 
 **Features:**
@@ -173,13 +172,13 @@ Tree-style visualization of complete interface hierarchy.
 
 **Format:**
 ```
-VRage.Core.IMyEntity
-├── VRage.Game.IMyCubeBlock
-│   ├── VRage.Game.IMyTerminalBlock
-│   │   ├── VRage.Game.IMyFunctionalBlock
-│   │   └── VRage.Game.IMyTextPanel
-│   └── VRage.Game.IMySlimBlock
-└── VRage.Game.IMyCubeGrid
+Keen.VRage.Library.Utils.IKeyedService
+└── Keen.VRage.Library.Utils.ISingleKeyService
+Keen.VRage.UI.Shared.Search.ISearchService
+├── Keen.VRage.UI.Shared.Search.IMultiWordSearchService
+└── Keen.VRage.UI.Shared.Search.IPreciseSearchService
+Keen.VRage.Core.Services.IUGCService
+└── Keen.VRage.Core.EngineComponents.IFakeUGCService
 ```
 
 **Features:**
@@ -391,7 +390,7 @@ print(f"{parent_namespace}.{parent_name}|{compressed}")
 
 Standard search commands remain unchanged:
 ```bash
-uv run search_code.py class declaration MyEntity
+uv run search_code.py class declaration CubeGridComponent
 uv run search_code.py method usage GetPosition
 ```
 

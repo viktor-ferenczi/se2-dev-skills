@@ -17,15 +17,15 @@ cd skills/se2-dev-game-code
 ### Find a Class Definition
 
 ```bash
-uv run search_code.py class declaration MyEntity
+uv run search_code.py class declaration CubeGridComponent
 ```
 
-Output: `Game2.Game/Game2/Game/Entities/MyEntity.cs:42-1250`
+Output: `Game2.Simulation/Keen/Game2/Simulation/WorldObjects/CubeGrids/CubeGridComponent.cs:59-1754`
 
 ### Find Where a Class is Used
 
 ```bash
-uv run search_code.py -l 10 class usage MyEntity
+uv run search_code.py -l 10 class usage CubeGridComponent
 ```
 
 Shows first 10 usage locations.
@@ -47,10 +47,10 @@ Shows full method signatures including parameters and return types. See `CodeSea
 ### Find Class Hierarchy
 
 ```bash
-uv run search_code.py class parent MyEntity
+uv run search_code.py class parent CubeGridComponent
 ```
 
-Output: `Game2.Game.MyEntity:VRage.Core.MyEntityBase`
+Output: `Keen.Game2.Simulation.WorldObjects.CubeGrids.CubeGridComponent:Keen.VRage.Core.Game.Components.GameComponent`
 
 ## Reading Results
 

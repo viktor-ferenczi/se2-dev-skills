@@ -43,6 +43,7 @@ def parse_plugin_xml(xml_file: Path) -> dict:
 
         plugin_info = {
             "id": "",
+            "repo_id": "",
             "name": "",
             "commit": "",
             "source_dirs": [],
@@ -51,6 +52,14 @@ def parse_plugin_xml(xml_file: Path) -> dict:
         id_elem = root.find("Id")
         if id_elem is not None and id_elem.text:
             plugin_info["id"] = id_elem.text.strip()
+
+        # New-format SE2 plugins store owner/repo in <RepoId>; old-format plugins
+        # store it in <Id>. Fall back to <Id> when it looks like owner/repo.
+        repo_id_elem = root.find("RepoId")
+        if repo_id_elem is not None and repo_id_elem.text:
+            plugin_info["repo_id"] = repo_id_elem.text.strip()
+        elif "/" in plugin_info["id"]:
+            plugin_info["repo_id"] = plugin_info["id"]
 
         name_elem = root.find("FriendlyName")
         if name_elem is not None and name_elem.text:
@@ -85,8 +94,12 @@ def find_plugin(search_term: str) -> dict:
     for xml_file in PLUGINS_DIR.glob("*.xml"):
         plugin = parse_plugin_xml(xml_file)
         if plugin:
-            # Exact ID match
+            # Exact ID match (accepts the raw <Id> value — GUID or owner/repo)
             if plugin["id"].lower() == search_lower:
+                return plugin
+
+            # Exact RepoId match (owner/repo)
+            if plugin["repo_id"] and plugin["repo_id"].lower() == search_lower:
                 return plugin
 
             # Exact name match
@@ -94,12 +107,14 @@ def find_plugin(search_term: str) -> dict:
                 return plugin
 
             # Repo name match (e.g., "ToolSwitcherPlugin" matches "austinvaness/ToolSwitcherPlugin")
-            repo_name = plugin["id"].split("/")[-1] if "/" in plugin["id"] else plugin["id"]
+            repo_id = plugin["repo_id"] or plugin["id"]
+            repo_name = repo_id.split("/")[-1] if "/" in repo_id else repo_id
             if repo_name.lower() == search_lower:
                 return plugin
 
             # Partial matches
             if (search_lower in plugin["id"].lower() or
+                search_lower in plugin["repo_id"].lower() or
                 search_lower in plugin["name"].lower() or
                 search_lower in repo_name.lower()):
                 matches.append(plugin)
@@ -119,18 +134,23 @@ def find_plugin(search_term: str) -> dict:
 
 def download_plugin(plugin: dict) -> bool:
     """Download a plugin's source code from GitHub."""
-    if not plugin["id"]:
-        print("Plugin has no GitHub ID", file=sys.stderr)
-        return False
-
     # Resolve and create the plugin sources directory
     plugin_sources_dir = ensure_plugin_sources_dir()
     print(f"Plugin sources directory: {plugin_sources_dir}")
 
-    # Extract repo info
-    parts = plugin["id"].split("/")
-    if len(parts) != 2:
-        print(f"Invalid plugin ID format: {plugin['id']}", file=sys.stderr)
+    # Prefer <RepoId> (new format); fall back to <Id> when it holds owner/repo.
+    repo_id = plugin["repo_id"] or plugin["id"]
+    if not repo_id:
+        print("Plugin has no GitHub repo reference (<RepoId> or owner/repo <Id>)", file=sys.stderr)
+        return False
+
+    parts = repo_id.split("/")
+    if len(parts) != 2 or not parts[0] or not parts[1]:
+        print(
+            f"Plugin repo reference is not in 'owner/repo' form: {repo_id}. "
+            f"Add a <RepoId>owner/repo</RepoId> element to the plugin XML.",
+            file=sys.stderr,
+        )
         return False
 
     owner, repo = parts

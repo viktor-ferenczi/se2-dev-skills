@@ -60,23 +60,23 @@ During preparation the current game version is stored into `CodeIndex/game_versi
 
 ```bash
 # Find class declarations
-uv run search_code.py class declaration MyEntity
+uv run search_code.py class declaration CubeGridComponent
 
 # Find method signatures
-uv run search_code.py method signature UpdateBeforeSimulation
+uv run search_code.py method signature OnAddedToScene
 
 # Find class hierarchy
-uv run search_code.py class children MyEntity
+uv run search_code.py class children GameComponent
 
 # Count results before viewing (useful for large result sets)
-uv run search_code.py class usage MyEntity --count
+uv run search_code.py class usage CubeGridComponent --count
 
 # Limit number of results
-uv run search_code.py class usage MyEntity --limit 10
+uv run search_code.py class usage CubeGridComponent --limit 10
 
 # Paginate through results
-uv run search_code.py class usage MyEntity --limit 10 --offset 0
-uv run search_code.py class usage MyEntity --limit 10 --offset 20
+uv run search_code.py class usage CubeGridComponent --limit 10 --offset 0
+uv run search_code.py class usage CubeGridComponent --limit 10 --offset 20
 ```
 
 Always check the game code when:
