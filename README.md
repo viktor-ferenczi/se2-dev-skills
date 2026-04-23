@@ -9,35 +9,35 @@ A [skill](https://agentskills.io) library for Space Engineers 2 plugin developme
 - Space Engineers 2
 - `ilspycmd` installed as a global dotnet tool `*`
 - .NET 10 SDK
-- Python 3.13 or newer with `python.exe` on `PATH` 
+- Python 3.13 or newer with `python.exe` on `PATH`
 
-`*` Currently, you must use a modified ILSpy build from [this branch](https://github.com/viktor-ferenczi/ILSpy/tree/error-bypass), so the `se2-dev-game-code` skill
-can decompile the game's code. Hopefully upstream ILSpy will eventually fix these issues I just bypassed.
-It causes a few source files to be missing, but that's okay for general use of these skills.
+`*` Currently, you must use a modified ILSpy build from [this branch](https://github.com/viktor-ferenczi/ILSpy/tree/error-bypass) so the `se2-dev-game-code` skill
+can decompile the game's code. Hopefully upstream ILSpy will eventually fix the issues I've bypassed.
+The bypass causes a few source files to be missing, but that's okay for general use of these skills.
 
 ## How to use
 
-You must have a "skills" compatible agentic coding environment. 
+You must have a "skills"-compatible agentic coding environment.
 See [agentskills.io](https://agentskills.io) or [skills.sh](https://skills.sh) for details.
 
-**After installing the skills make sure they work and the agent can actually access the files.**
+**After installing the skills, make sure they work and the agent can actually access the files.**
 
-In case of permission issues you have to grant access to the folder where the skills are stored. 
-This usually happens if the skills are linked (`mklink`) into the coding agent's skills folder.
+In case of permission issues, you have to grant access to the folder where the skills are stored.
+This usually happens if the skills are linked (via `mklink`) into the coding agent's skills folder.
 
 ## Installation
 
-Simplest is to use skills.sh, if you have node.js installed (that provides `npx` on `PATH`):
+The simplest option is to use skills.sh, if you have Node.js installed (which provides `npx` on `PATH`):
 
 `npx skills add viktor-ferenczi/se2-dev-skills`
 
-Follow the wizard. Later you can update them by: `npx skills update`
+Follow the wizard. Later you can update them with: `npx skills update`
 
-If you don't want to use `skills.sh`, then just copy the skill's folder into your coding agent's `skills` folder.
+If you don't want to use `skills.sh`, just copy the skill folders into your coding agent's `skills` folder.
 
 ## Preparation
 
-The skills will automatically prepare themselves on **first use**. It means downloading some tools and indexing code.
+The skills will automatically prepare themselves on **first use**. This involves downloading some tools and indexing code.
 If you want to prepare them ahead of time, simply run `Prepare.bat` in their respective folders.
 
 **Note:** Preparing the `se2-dev-game-code` skill may take 10–20 minutes, as it fully decompiles the game and builds
@@ -49,7 +49,7 @@ due to the decompiled source code, the code index and the copied game contents.
 * [se2-dev-plugin](skills/se2-dev-plugin/SKILL.md) – Plugin development
 * [se2-dev-game-code](skills/se2-dev-game-code/SKILL.md) – Searchable decompiled C# game code
 
-More are planned, as the game gains modding, scripting and multiplayer capability.
+More are planned as the game gains modding, scripting, and multiplayer capabilities.
 
 _Enjoy!_
 
@@ -64,27 +64,27 @@ _Enjoy!_
 
 ### How well does this work for plugin development?
 
-I am currently testing it myself. It looks promising, but there may be rough edges. 
-Please try it out and report back or submit a PR!
+I am currently testing it myself. It looks promising, but there may be rough edges.
+Please try it out and report back, or submit a PR!
 
 ### How does Claude Code load this much information into the context?
 
 It doesn't! Skills work on the principle of **progressive disclosure**. Claude Code initially sees only the top-level
 skill names and descriptions. It then gradually "discovers" more information as needed for the task. It has been given
-specific instructions on how to search the SE codebase efficiently so it doesn't get overwhelmed.
+specific instructions on how to search the SE codebase efficiently, so it doesn't get overwhelmed.
 
 Ideally, it performs research using sub-agents and clears irrelevant data before passing the results back to the parent
 agent. Agent hierarchies are a fascinating and fast-evolving topic, definitely worth looking into!
 
 ### How much of this was "vibe-coded"?
 
-The code indexing and search scripts were written entirely by Claude Code with zero human intervention, other than 
-repeated prompting and some extra testing and review. The indexing logic is based on my previous work using 
+The code indexing and search scripts were written entirely by Claude Code with zero human intervention, other than
+repeated prompting and some extra testing and review. The indexing logic is based on my previous work using
 Tree-sitter's C# parser, originally developed for the (now defunct) *Ask Your Code* ChatGPT plugin and GPT.
 
 ## Troubleshooting
 
-If you suspect something is not working in these skills, then issue the following test prompt in an empty project:
+If you suspect something is not working in these skills, issue the following test prompt in an empty project:
 
 ```md
 Check whether you can see these skills:
@@ -98,8 +98,8 @@ Once they are prepared, conduct some smoke testing on their features to make sur
 If something is missing or not working properly, then list those in a final summary.
 ```
 
-In case of permission issues you have to grant access to the folder where the skills are stored. 
-This usually happens if the skills are linked (`mklink`) into the coding agent's skills folder.
+In case of permission issues, you have to grant access to the folder where the skills are stored.
+This usually happens if the skills are linked (via `mklink`) into the coding agent's skills folder.
 
 ### Example output
 
@@ -174,4 +174,4 @@ _in alphabetical order_
 
 ### Legal
 
-Space Engineers is trademark of Keen Software House s.r.o.
+Space Engineers 2 is a trademark of Keen Software House s.r.o.
