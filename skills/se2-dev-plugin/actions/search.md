@@ -30,9 +30,9 @@ uv run list_plugins.py -v                 # Verbose output with descriptions
 ### 3. Download Plugin Source
 
 ```cmd
-uv run download_plugin_source.py "Tool Switcher"
-uv run download_plugin_source.py austinvaness/ToolSwitcherPlugin
-uv run download_plugin_source.py ToolSwitcherPlugin
+uv run download_plugin_source.py "Plugin Name"
+uv run download_plugin_source.py author-github-username/PluginName
+uv run download_plugin_source.py PluginName
 ```
 
 Plugin sources are downloaded to `Data\PluginSources\<RepoName>` within the

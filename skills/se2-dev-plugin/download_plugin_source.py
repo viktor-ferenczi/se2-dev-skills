@@ -22,9 +22,9 @@ Usage:
     python download_plugin_source.py <plugin_id_or_name>
 
 Examples:
-    python download_plugin_source.py austinvaness/ToolSwitcherPlugin
-    python download_plugin_source.py "Tool Switcher"
-    python download_plugin_source.py ToolSwitcherPlugin
+    python download_plugin_source.py author-github-username/PluginName
+    python download_plugin_source.py "Plugin Name"
+    python download_plugin_source.py PluginName
 """
 
 import shutil
@@ -119,7 +119,7 @@ def find_plugin(search_term: str) -> dict:
             if plugin["name"].lower() == search_lower:
                 return plugin
 
-            # Repo name match (e.g., "ToolSwitcherPlugin" matches "austinvaness/ToolSwitcherPlugin")
+            # Repo name match (e.g., "PluginName" matches "author-github-username/PluginName")
             repo_id = plugin["repo_id"] or plugin["id"]
             repo_name = repo_id.split("/")[-1] if "/" in repo_id else repo_id
             if repo_name.lower() == search_lower:
@@ -297,9 +297,9 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: python download_plugin_source.py <plugin_id_or_name>")
         print("\nExamples:")
-        print("  python download_plugin_source.py austinvaness/ToolSwitcherPlugin")
-        print("  python download_plugin_source.py \"Tool Switcher\"")
-        print("  python download_plugin_source.py ToolSwitcherPlugin")
+        print("  python download_plugin_source.py author-github-username/PluginName")
+        print("  python download_plugin_source.py \"Plugin Name\"")
+        print("  python download_plugin_source.py PluginName")
         print("\nTo list available plugins, run: uv run list_plugins.py")
         sys.exit(1)
 

@@ -23,7 +23,7 @@ uv run list_plugins.py --search "tool"
 ```bash
 # ✅ CORRECT - exact name with proper capitalization and spacing
 uv run download_plugin_source.py "Paint Replacer"
-uv run download_plugin_source.py "Tool Switcher"
+uv run download_plugin_source.py "Plugin Name"
 
 # ❌ WRONG - these will fail
 uv run download_plugin_source.py "paint replacer"  # wrong case
@@ -97,16 +97,12 @@ $ uv run download_plugin_source.py "Camera Panning"
 $ uv run list_plugins.py --search "tool"
 Found 116 plugins (3 matching search 'tool')
 
-[REMOTE] Tool Switcher
-  ID: austinvaness/ToolSwitcherPlugin
-  Author: austinvaness
-
-[REMOTE] Server Tools  
-  ID: rexxar-tc/ServerTools
-  Author: Rexxar
+[REMOTE] Plugin Name
+  ID: author-github-username/PluginName
+  Author: Author
 
 # Download the one you want (use EXACT name)
-$ uv run download_plugin_source.py "Tool Switcher"
+$ uv run download_plugin_source.py "Plugin Name"
 ```
 
 ## Re-indexing
