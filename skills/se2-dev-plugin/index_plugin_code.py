@@ -11,7 +11,8 @@ Usage:
 The script searches for plugins in the resolved plugin sources directory
 (see plugin_paths.py for resolution logic).
 
-Output is written to PluginCodeIndex/ directory.
+Output is written to `Data/PluginCodeIndex/` within the skill directory,
+alongside the PluginHub-SE2 clone and PluginSources folder.
 """
 
 import csv
@@ -28,12 +29,14 @@ from typing import Dict, List, Optional, Set, Tuple
 from tree_sitter import Language, Parser, Node
 from tree_sitter_c_sharp import language
 
-from plugin_paths import resolve_all_plugin_sources_dirs
+from plugin_paths import (
+    resolve_all_plugin_sources_dirs,
+    resolve_plugin_code_index_dir,
+    resolve_pluginhub_dir,
+)
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-PLUGINHUB_DIR = SCRIPT_DIR / "PluginHub-SE2"
-PLUGINS_DIR = PLUGINHUB_DIR / "Plugins"
-OUTPUT_DIR = SCRIPT_DIR / "PluginCodeIndex"
+OUTPUT_DIR = resolve_plugin_code_index_dir()
 PLUGIN_LIST_FILE = OUTPUT_DIR / "plugins.json"
 
 
@@ -223,7 +226,7 @@ class FileProcessor:
     """Processes a single C# file"""
 
     def __init__(self, root_path: str):
-        self.root_path = Path(root_path).resolve()
+        self.root_path = Path(root_path)
         self.parser = Parser()
         self.parser.language = Language(language())
 
@@ -1076,6 +1079,7 @@ def find_local_plugins(plugin_sources_dir: Path) -> List[Dict]:
     if not plugin_sources_dir.exists():
         return plugins
 
+    plugins_dir = resolve_pluginhub_dir() / "Plugins"
     for item in plugin_sources_dir.iterdir():
         if item.is_dir() and not item.name.startswith('.'):
             if any(item.rglob("*.cs")):
@@ -1087,8 +1091,8 @@ def find_local_plugins(plugin_sources_dir: Path) -> List[Dict]:
                 }
 
                 # Try to find matching PluginHub-SE2 entry
-                if PLUGINS_DIR.exists():
-                    for xml_file in PLUGINS_DIR.glob("*.xml"):
+                if plugins_dir.exists():
+                    for xml_file in plugins_dir.glob("*.xml"):
                         try:
                             tree = ET.parse(xml_file)
                             root = tree.getroot()
@@ -1112,10 +1116,11 @@ def find_local_plugins(plugin_sources_dir: Path) -> List[Dict]:
 def get_available_plugins() -> List[Dict]:
     """Get all available plugins from PluginHub-SE2 (for reference)"""
     available = []
-    if not PLUGINS_DIR.exists():
+    plugins_dir = resolve_pluginhub_dir() / "Plugins"
+    if not plugins_dir.exists():
         return available
 
-    for xml_file in PLUGINS_DIR.glob("*.xml"):
+    for xml_file in plugins_dir.glob("*.xml"):
         try:
             tree = ET.parse(xml_file)
             root = tree.getroot()

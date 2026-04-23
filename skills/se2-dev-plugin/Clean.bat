@@ -1,9 +1,7 @@
 @echo off
 rmdir /s /q __pycache__
-rmdir /s /q PluginSources
-rmdir /s /q PluginCodeIndex
-rmdir /s /q PluginHub-SE2
 rmdir /s /q .venv
+if exist Data rmdir Data
 del busybox.exe
 del Prepare.log
 del Prepare.DONE

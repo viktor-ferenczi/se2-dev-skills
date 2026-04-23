@@ -20,8 +20,10 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
+from plugin_paths import resolve_plugin_code_index_dir
+
 SCRIPT_DIR = Path(__file__).parent.resolve()
-INDEX_DIR = SCRIPT_DIR / "PluginCodeIndex"
+INDEX_DIR = resolve_plugin_code_index_dir()
 
 CATEGORY_FILES = {
     "class": ("class_declarations.csv", "class_usages.csv"),

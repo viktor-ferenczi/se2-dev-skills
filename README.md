@@ -106,12 +106,24 @@ This usually happens if the skills are linked (`mklink`) into the coding agent's
 Tested with Claude Code and Opus 4.7:
 
 ---
-| Skill | Status | Smoke test |
-|-------|--------|------------|
-| `se2-dev-plugin` | ✅ Prepared | `list_plugins.py` returned 1 remote plugin; `download_plugin_source.py` downloaded "No Forced Camera Zoom"; `search_plugin_code.py` found `Plugin.cs:8-22` |
-| `se2-dev-game-code` | ✅ Prepared, game version 2.2.0.2116 | `search_game_code.py class declaration CubeGridComponent` and `method signature OnAddedToScene` both returned valid hits |
+Both skills are visible. Let me prepare and smoke-test them.
 
-Nothing missing or broken.
+Python 3.13 is available. Running the one-time plugin preparation.
+
+Both skills are prepared. Now running smoke tests in parallel.
+
+Both skills are working. Summary:
+
+**se2-dev-plugin**:
+- `list_plugins.py`: found 1 registry plugin (No Forced Camera Zoom)
+- `download_plugin_source.py`: successfully cloned source via git
+- `search_plugin_code.py`: found `Plugin.cs` declaration
+
+**se2-dev-game-code**:
+- Class declaration search: found `CubeGridComponent` in 3 files
+- Method signature search: found `OnAddedToScene` across many components
+
+No issues detected — both skills are ready for use.
 ---
 
 ## Credits

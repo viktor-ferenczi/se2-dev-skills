@@ -45,10 +45,12 @@ uv run search_plugin_code.py method signature Patch
 
 ## Manual Plugin Discovery (Alternative Method)
 
-Look into the `PluginHub-SE2` folder at the same directory level as this skill file. It should have a `Plugins` 
-subdirectory with XML files in it.
+Look into the `PluginHub-SE2` folder that `download_pluginhub.py` created at
+`Data\PluginHub-SE2` within the skill directory. It has a `Plugins` subdirectory
+with XML files in it.
 
-You can find the right plugins to look into by searching in the XML files in the `PluginHub-SE2\Plugins` folder.
+You can find the right plugins to look into by searching in the XML files in the
+`PluginHub-SE2/Plugins` folder.
 They have `FriendlyName` and `Description` which should be enough to identify what they are about in most cases.
 The `DotNetCompat` plugin is special (internal plugin), only use it if you want good examples for preloader patches.
 
@@ -57,15 +59,19 @@ then the `Id`) field will tell you the GitHub repository ID of the plugin.
 
 ## Plugin Storage
 
-Plugin sources are downloaded to an OS-specific temp folder by default:
-- **Windows**: `%TEMP%/se2-dev-plugin/plugins/`
-- **Linux**: `/tmp/se2-dev-plugin/plugins/`
+Plugin sources are downloaded to `Data\PluginSources\` within the skill directory
+by default.
 
 You can override this by:
 1. Setting the `SE_PLUGIN_DOWNLOAD_FOLDER` environment variable
 2. Adding `plugin_download_folder: /path/to/folder` to `CLAUDE.md` or `AGENTS.md` in your project
 
 The `download_plugin_source.py` script handles this automatically.
+
+When `git` is available on PATH, plugins are cloned with `git clone` at the commit
+recorded in the PluginHub XML, so they can be updated in place later. Otherwise the
+script falls back to a ZIP download of that commit. Both the listed and downloaded
+commit hashes are recorded in `Data\plugins.json` for later comparison.
 
 ## Examples of Finding Plugins
 

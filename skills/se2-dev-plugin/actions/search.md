@@ -12,7 +12,11 @@ Search plugin code using `uv run search_plugin_code.py` from this skill folder.
 uv run download_pluginhub.py
 ```
 
-This downloads/updates the PluginHub-SE2 registry with all available plugins.
+This downloads (or updates) the PluginHub-SE2 registry into
+`Data\PluginHub-SE2` within the skill directory. When `git` is available on PATH
+the registry is cloned with `git clone` and refreshed with `git fetch`/`git reset`
+on subsequent runs; otherwise the script falls back to downloading a ZIP snapshot.
+Either way, the current commit hash is recorded in `plugins.json` (see below).
 
 ### 2. List Available Plugins
 
@@ -30,6 +34,17 @@ uv run download_plugin_source.py "Tool Switcher"
 uv run download_plugin_source.py austinvaness/ToolSwitcherPlugin
 uv run download_plugin_source.py ToolSwitcherPlugin
 ```
+
+Plugin sources are downloaded to `Data\PluginSources\<RepoName>` within the
+skill directory. The destination can be overridden via the
+`SE_PLUGIN_DOWNLOAD_FOLDER` environment variable or a `plugin_download_folder:`
+entry in `CLAUDE.md` / `AGENTS.md` in the current working directory.
+
+When `git` is available on PATH each plugin is cloned with `git clone` at the
+commit recorded in its PluginHub XML, so the local copy can later be updated
+in place. Without `git`, the script falls back to downloading the commit's ZIP
+archive. Both the commit registered in PluginHub and the commit actually
+checked out locally are recorded in `plugins.json`.
 
 ### 4. Index Downloaded Plugins
 
@@ -114,9 +129,20 @@ uv run search_plugin_code.py -i class declaration config
 
 ## Plugin List
 
-After indexing, `PluginCodeIndex/plugins.json` contains:
-- `indexed_plugins` - Plugins with downloaded source code
-- `available_plugins` - All plugins from PluginHub-SE2 (for downloading)
+Two files keep track of plugins:
+
+- `Data\plugins.json` — the **version registry**, recording:
+  - `pluginhub` — the upstream commit currently cloned locally (so the copy
+    can be refreshed when the upstream repo changes).
+  - `downloaded_plugins.<repo>.registered_commit` — the commit the PluginHub XML currently
+    points at.
+  - `downloaded_plugins.<repo>.downloaded_commit` — the commit that is actually checked
+    out in `PluginSources/<repo>`. If the two differ, the local copy is out of
+    date and can be re-fetched with `download_plugin_source.py`.
+  - `downloaded_plugins.<repo>.method` — `git` (clone) or `zip` (snapshot).
+- `Data\PluginCodeIndex\plugins.json` — the **indexing companion file**, listing:
+  - `indexed_plugins` — plugins whose sources were found and indexed.
+  - `available_plugins` — everything PluginHub-SE2 knows about.
 
 ## Workflow
 

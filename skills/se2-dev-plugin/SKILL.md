@@ -109,6 +109,27 @@ uv run search_plugin_code.py class usage IPlugin --limit 20
 The PluginHub-SE2 contains descriptions of all available plugins. Download sources for plugins
 that may help with your task, then index and search them.
 
+### Storage layout
+
+Downloaded data lives under `Data\` within this skill directory:
+
+- `Data\PluginHub-SE2\` — the local clone of the PluginHub-SE2 registry
+- `Data\PluginSources\<RepoName>\` — downloaded plugin sources
+  (overridable via `SE_PLUGIN_DOWNLOAD_FOLDER` or `plugin_download_folder:` in
+  `CLAUDE.md`/`AGENTS.md`)
+- `Data\PluginCodeIndex\` — CSV indexes produced by
+  `index_plugin_code.py` and consumed by `search_plugin_code.py`
+- `Data\plugins.json` — **version registry**: records the upstream
+  commit of the PluginHub clone plus, for each downloaded plugin, both the commit
+  registered in the PluginHub XML (`registered_commit`) and the commit actually
+  checked out locally (`downloaded_commit`). Comparing them tells you whether a
+  local copy is out of date.
+
+When `git` is available on PATH, `download_pluginhub.py` and
+`download_plugin_source.py` use `git clone` (and `git fetch`/`git checkout` on
+re-runs) so local copies can be updated incrementally; otherwise they fall back
+to ZIP downloads. Either way, the commit hashes above are recorded.
+
 See [search action](./actions/search.md) for complete documentation.
 
 ## Action References
