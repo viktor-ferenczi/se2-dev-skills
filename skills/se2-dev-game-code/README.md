@@ -91,7 +91,7 @@ namespace,declaring_type,method_name,signature,file_path,start_line,end_line,des
 
 The signature index includes all method types: abstract methods (no body), inline `=>` methods, and block `{...}` methods. Property getters/setters are NOT indexed as signatures; they appear in the field index.
 
-### Indexer: index_code.py
+### Indexer: index_game_code.py
 
 Builds the code index using Tree-sitter for C# parsing. Uses parallel processing with two passes:
 
@@ -100,17 +100,17 @@ Builds the code index using Tree-sitter for C# parsing. Uses parallel processing
 
 Usage:
 ```
-uv run index_code.py <source_root_path> <output_directory>
+uv run index_game_code.py <source_root_path> <output_directory>
 ```
 
 ## Code Search
 
-### search_code.py
+### search_game_code.py
 
 Search the code index for symbols by category and type.
 
 ```
-uv run search_code.py [options] <category> <symbol_type> <patterns...>
+uv run search_game_code.py [options] <category> <symbol_type> <patterns...>
 ```
 
 #### Positional Arguments
@@ -166,38 +166,38 @@ The signature includes any attributes on preceding lines, normalized to a single
 
 Find class declarations containing "Block":
 ```
-uv run search_code.py class declaration Block
+uv run search_game_code.py class declaration Block
 ```
 
 Find all usages of methods matching "Get.*Position" regex:
 ```
-uv run search_code.py method usage "re:Get.*Position"
+uv run search_game_code.py method usage "re:Get.*Position"
 ```
 
 Find enum declarations in VRage.Game namespace:
 ```
-uv run search_code.py -n VRage.Game enum declaration ""
+uv run search_game_code.py -n VRage.Game enum declaration ""
 ```
 
 Count struct usages containing "Vector":
 ```
-uv run search_code.py -c struct usage Vector
+uv run search_game_code.py -c struct usage Vector
 ```
 
 Paginate through interface declarations (first 20, then next 20):
 ```
-uv run search_code.py -l 20 interface declaration ""
-uv run search_code.py -l 20 -o 20 interface declaration ""
+uv run search_game_code.py -l 20 interface declaration ""
+uv run search_game_code.py -l 20 -o 20 interface declaration ""
 ```
 
 Find field declarations with "Entity" in name within VRage namespace:
 ```
-uv run search_code.py -n VRage field declaration Entity
+uv run search_game_code.py -n VRage field declaration Entity
 ```
 
 Find method signatures containing "GetPosition":
 ```
-uv run search_code.py method signature GetPosition
+uv run search_game_code.py method signature GetPosition
 ```
 
 ## Direct grep Search

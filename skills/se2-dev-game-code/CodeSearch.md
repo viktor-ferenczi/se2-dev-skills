@@ -10,7 +10,7 @@ Always change to this skill folder first:
 
 ```bash
 cd skills/se2-dev-game-code
-uv run search_code.py class declaration CubeGridComponent
+uv run search_game_code.py class declaration CubeGridComponent
 ```
 
 ## Search Categories
@@ -31,29 +31,29 @@ uv run search_code.py class declaration CubeGridComponent
 ## Basic Usage
 
 ```bash
-uv run search_code.py <category> <declaration|usage> <pattern>
+uv run search_game_code.py <category> <declaration|usage> <pattern>
 ```
 
 ### Find Declarations
 
 ```bash
-uv run search_code.py class declaration CubeGridComponent
-uv run search_code.py struct declaration Vector3D
-uv run search_code.py interface declaration IInSceneListener
-uv run search_code.py enum declaration BlockType
-uv run search_code.py method declaration GetPosition
-uv run search_code.py field declaration Position
-uv run search_code.py property declaration IsWorking
-uv run search_code.py event declaration OnClose
-uv run search_code.py constructor declaration CubeGridComponent
+uv run search_game_code.py class declaration CubeGridComponent
+uv run search_game_code.py struct declaration Vector3D
+uv run search_game_code.py interface declaration IInSceneListener
+uv run search_game_code.py enum declaration BlockType
+uv run search_game_code.py method declaration GetPosition
+uv run search_game_code.py field declaration Position
+uv run search_game_code.py property declaration IsWorking
+uv run search_game_code.py event declaration OnClose
+uv run search_game_code.py constructor declaration CubeGridComponent
 ```
 
 ### Find Usages
 
 ```bash
-uv run search_code.py -l 10 class usage CubeGridComponent
-uv run search_code.py -l 10 method usage GetPosition
-uv run search_code.py -l 10 struct usage Vector3D
+uv run search_game_code.py -l 10 class usage CubeGridComponent
+uv run search_game_code.py -l 10 method usage GetPosition
+uv run search_game_code.py -l 10 struct usage Vector3D
 ```
 
 ### Search Method Signatures
@@ -62,16 +62,16 @@ Method signatures show the complete method declaration including modifiers, retu
 
 ```bash
 # Find signatures by method name
-uv run search_code.py method signature GetPosition
+uv run search_game_code.py method signature GetPosition
 
 # Regex for exact match
-uv run search_code.py method signature "re:^Update$"
+uv run search_game_code.py method signature "re:^Update$"
 
 # Limit results
-uv run search_code.py -l 10 method signature GetPosition
+uv run search_game_code.py -l 10 method signature GetPosition
 
 # Filter by namespace
-uv run search_code.py -n Keen.VRage method signature Normalize
+uv run search_game_code.py -n Keen.VRage method signature Normalize
 ```
 
 **Output Format:** Signature searches show the full method signature after a pipe separator:
@@ -94,25 +94,25 @@ Game2.Simulation/Keen/Game2/Simulation/WorldObjects/CubeGrids/CubeGridComponent.
 ### Count Before Fetching
 
 ```bash
-uv run search_code.py -c class usage CubeGridComponent
+uv run search_game_code.py -c class usage CubeGridComponent
 # Output: 103
 
-uv run search_code.py -l 20 class usage CubeGridComponent
+uv run search_game_code.py -l 20 class usage CubeGridComponent
 ```
 
 ### Paginate Large Results
 
 ```bash
-uv run search_code.py -l 20 class usage CubeGridComponent
-uv run search_code.py -l 20 -o 20 class usage CubeGridComponent
-uv run search_code.py -l 20 -o 40 class usage CubeGridComponent
+uv run search_game_code.py -l 20 class usage CubeGridComponent
+uv run search_game_code.py -l 20 -o 20 class usage CubeGridComponent
+uv run search_game_code.py -l 20 -o 40 class usage CubeGridComponent
 ```
 
 ### Filter by Namespace
 
 ```bash
-uv run search_code.py -n Keen.Game2.Simulation class declaration ""
-uv run search_code.py -n Keen.VRage method declaration Add
+uv run search_game_code.py -n Keen.Game2.Simulation class declaration ""
+uv run search_game_code.py -n Keen.VRage method declaration Add
 ```
 
 ## Pattern Syntax
@@ -130,24 +130,24 @@ Multiple patterns use AND logic (all must match).
 
 ```bash
 # Substring match (default)
-uv run search_code.py class declaration Block
+uv run search_game_code.py class declaration Block
 
 # Explicit text match
-uv run search_code.py class declaration "text:Block"
+uv run search_game_code.py class declaration "text:Block"
 
 # Regex for exact match
-uv run search_code.py class declaration "re:^CubeGridComponent$"
+uv run search_game_code.py class declaration "re:^CubeGridComponent$"
 
 # Regex patterns
-uv run search_code.py class declaration "re:.*BlockComponent$"
-uv run search_code.py method declaration "re:^Get.*Position$"
-uv run search_code.py struct declaration "re:^Vector[23]D$"
+uv run search_game_code.py class declaration "re:.*BlockComponent$"
+uv run search_game_code.py method declaration "re:^Get.*Position$"
+uv run search_game_code.py struct declaration "re:^Vector[23]D$"
 ```
 
 ### Multiple Patterns
 
 ```bash
-uv run search_code.py method declaration Get Position
+uv run search_game_code.py method declaration Get Position
 ```
 
 Both "Get" AND "Position" must appear in the name.

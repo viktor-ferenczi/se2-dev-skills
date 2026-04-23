@@ -1,7 +1,7 @@
 """
 Shared path resolution for plugin source downloads.
 
-Both download_plugin_source.py and index_plugins.py use this module to
+Both download_plugin_source.py and index_plugin_code.py use this module to
 determine where plugin sources are stored.
 """
 

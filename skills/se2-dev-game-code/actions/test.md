@@ -2,20 +2,20 @@
 
 > **Part of the se2-dev-game-code skill.** Invoked to run game code search tests and verify results.
 
-Run `test_search.bat` to verify the game code search functionality is working correctly.
+Run `test_search_game_code.bat` to verify the game code search functionality is working correctly.
 
 ## Running Tests
 
 From this skill folder, run:
 
 ```cmd
-.\test_search.bat
+.\test_search_game_code.bat
 ```
 
 Or redirect output to a file for review:
 
 ```cmd
-.\test_search.bat > test_results.txt 2>&1
+.\test_search_game_code.bat > test_results.txt 2>&1
 ```
 
 ## What the Tests Cover
@@ -65,13 +65,13 @@ Check that key searches return expected results:
 
 ```cmd
 REM Should find the Entity class
-uv run search_code.py class declaration Entity
+uv run search_game_code.py class declaration Entity
 
 REM Should find Vector3D struct
-uv run search_code.py struct declaration Vector3D
+uv run search_game_code.py struct declaration Vector3D
 
 REM Should return count > 0
-uv run search_code.py -c class usage Entity
+uv run search_game_code.py -c class usage Entity
 ```
 
 ## Troubleshooting

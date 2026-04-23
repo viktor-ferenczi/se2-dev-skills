@@ -2,17 +2,17 @@
 
 > **Part of the se2-dev-plugin skill.** Invoked when searching plugin source code.
 
-Search plugin code using `uv run search_plugins.py` from this skill folder.
+Search plugin code using `uv run search_plugin_code.py` from this skill folder.
 
 ## Prerequisites
 
-### 1. Update PluginHub (optional but recommended)
+### 1. Update PluginHub-SE2 (optional but recommended)
 
 ```cmd
 uv run download_pluginhub.py
 ```
 
-This downloads/updates the PluginHub registry with all available plugins.
+This downloads/updates the PluginHub-SE2 registry with all available plugins.
 
 ### 2. List Available Plugins
 
@@ -34,7 +34,7 @@ uv run download_plugin_source.py ToolSwitcherPlugin
 ### 4. Index Downloaded Plugins
 
 ```cmd
-uv run index_plugins.py
+uv run index_plugin_code.py
 ```
 
 This indexes all downloaded plugin source code.
@@ -42,13 +42,13 @@ This indexes all downloaded plugin source code.
 ## Quick Reference
 
 ```cmd
-uv run search_plugins.py --help
+uv run search_plugin_code.py --help
 ```
 
 ## Search Syntax
 
 ```cmd
-uv run search_plugins.py <category> <symbol_type> <pattern> [options]
+uv run search_plugin_code.py <category> <symbol_type> <pattern> [options]
 ```
 
 ### Categories
@@ -87,43 +87,43 @@ uv run search_plugins.py <category> <symbol_type> <pattern> [options]
 
 ### Find class declarations
 ```cmd
-uv run search_plugins.py class declaration Plugin
+uv run search_plugin_code.py class declaration Plugin
 ```
 
 ### Find Harmony patch methods
 ```cmd
-uv run search_plugins.py method declaration Patch
-uv run search_plugins.py method signature Prefix
-uv run search_plugins.py method signature Postfix
+uv run search_plugin_code.py method declaration Patch
+uv run search_plugin_code.py method signature Prefix
+uv run search_plugin_code.py method signature Postfix
 ```
 
 ### Find method usages
 ```cmd
-uv run search_plugins.py method usage Harmony
+uv run search_plugin_code.py method usage Harmony
 ```
 
 ### Find children of a base class
 ```cmd
-uv run search_plugins.py class children PluginBase
+uv run search_plugin_code.py class children PluginBase
 ```
 
 ### Case-insensitive search
 ```cmd
-uv run search_plugins.py -i class declaration config
+uv run search_plugin_code.py -i class declaration config
 ```
 
 ## Plugin List
 
 After indexing, `PluginCodeIndex/plugins.json` contains:
 - `indexed_plugins` - Plugins with downloaded source code
-- `available_plugins` - All plugins from PluginHub (for downloading)
+- `available_plugins` - All plugins from PluginHub-SE2 (for downloading)
 
 ## Workflow
 
 1. **Find relevant plugins**: Use `list_plugins.py --search` to find plugins with features you want to learn from
 2. **Download sources**: Use `download_plugin_source.py` to get the source code
-3. **Index**: Run `index_plugins.py` to build the search index
-4. **Search**: Use `search_plugins.py` to find code patterns
+3. **Index**: Run `index_plugin_code.py` to build the search index
+4. **Search**: Use `search_plugin_code.py` to find code patterns
 
 ## When to Search
 

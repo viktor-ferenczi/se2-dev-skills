@@ -7,7 +7,7 @@ import shutil
 # Constants
 REPO_URL = "https://github.com/StarCpt/PluginHub-SE2"
 ZIP_URL = f"{REPO_URL}/archive/refs/heads/main.zip"
-SUBDIR_NAME = "PluginHub"
+SUBDIR_NAME = "PluginHub-SE2"
 
 
 def should_update(subdir_path):
@@ -45,7 +45,7 @@ def download_and_extract():
     with zipfile.ZipFile(zip_path, "r") as zip_ref:
         zip_ref.extractall()
 
-    # The extracted directory name is PluginHub-main
+    # The extracted directory name is PluginHub-SE2-main
     extracted_dir = "PluginHub-SE2-main"
     if os.path.exists(extracted_dir):
         # Remove destination if it exists (handles Windows permission issues)

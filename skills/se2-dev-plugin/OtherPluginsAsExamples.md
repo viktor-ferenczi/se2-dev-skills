@@ -1,6 +1,6 @@
 # Looking at Other Plugins as Examples
 
-You can look into the source code of any other plugin registered on the `PluginHub` as examples, they are all open source.
+You can look into the source code of any other plugin registered on the `PluginHub-SE2` as examples, they are all open source.
 
 ## Finding and Downloading Plugins
 
@@ -39,20 +39,20 @@ After downloading, the plugin is automatically indexed and ready to search:
 
 ```bash
 # Search across all downloaded plugins
-uv run search_plugins.py class declaration Plugin
-uv run search_plugins.py method signature Patch
+uv run search_plugin_code.py class declaration Plugin
+uv run search_plugin_code.py method signature Patch
 ```
 
 ## Manual Plugin Discovery (Alternative Method)
 
-Look into the `PluginHub` folder at the same directory level as this skill file. It should have a `Plugins` 
+Look into the `PluginHub-SE2` folder at the same directory level as this skill file. It should have a `Plugins` 
 subdirectory with XML files in it.
 
-You can find the right plugins to look into by searching in the XML files in the `PluginHub\Plugins` folder.
+You can find the right plugins to look into by searching in the XML files in the `PluginHub-SE2\Plugins` folder.
 They have `FriendlyName` and `Description` which should be enough to identify what they are about in most cases.
 The `DotNetCompat` plugin is special (internal plugin), only use it if you want good examples for preloader patches.
 
-Each XML file corresponds to a plugin registered on the PluginHub. The `<RepoId>` (or if it is not present
+Each XML file corresponds to a plugin registered on the PluginHub-SE2. The `<RepoId>` (or if it is not present
 then the `Id`) field will tell you the GitHub repository ID of the plugin. 
 
 ## Plugin Storage
@@ -109,5 +109,5 @@ The `download_plugin_source.py` script automatically re-indexes all downloaded p
 
 If you manually add/remove plugin sources, re-index with:
 ```bash
-uv run index_plugins.py
+uv run index_plugin_code.py
 ```

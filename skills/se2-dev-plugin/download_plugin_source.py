@@ -31,7 +31,7 @@ import requests
 from plugin_paths import ensure_plugin_sources_dir
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-PLUGINHUB_DIR = SCRIPT_DIR / "PluginHub"
+PLUGINHUB_DIR = SCRIPT_DIR / "PluginHub-SE2"
 PLUGINS_DIR = PLUGINHUB_DIR / "Plugins"
 
 
@@ -84,7 +84,7 @@ def parse_plugin_xml(xml_file: Path) -> dict:
 def find_plugin(search_term: str) -> dict:
     """Find a plugin by ID, name, or partial match."""
     if not PLUGINS_DIR.exists():
-        print(f"PluginHub not found at {PLUGINHUB_DIR}", file=sys.stderr)
+        print(f"PluginHub-SE2 not found at {PLUGINHUB_DIR}", file=sys.stderr)
         print("Run: uv run download_pluginhub.py", file=sys.stderr)
         return None
 
@@ -207,7 +207,7 @@ def download_plugin(plugin: dict) -> bool:
 
     # Run indexing
     print("\nIndexing plugin code...")
-    index_script = SCRIPT_DIR / "index_plugins.py"
+    index_script = SCRIPT_DIR / "index_plugin_code.py"
     result = subprocess.run(["uv", "run", str(index_script)], cwd=SCRIPT_DIR)
     if result.returncode != 0:
         print("Warning: Indexing failed", file=sys.stderr)

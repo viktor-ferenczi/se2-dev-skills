@@ -190,7 +190,7 @@ Keen.VRage.Core.Services.IUGCService
 
 **Note:** Interface implementations are NOT shown in tree files. Use hierarchy search commands instead.
 
-## Indexer Implementation (`index_code.py`)
+## Indexer Implementation (`index_game_code.py`)
 
 ### Data Structures
 
@@ -322,7 +322,7 @@ After building CSV files:
    - `interface_hierarchy.txt`
    - Sort children alphabetically at each level
 
-## Search Tool Implementation (`search_code.py`)
+## Search Tool Implementation (`search_game_code.py`)
 
 ### Argument Parsing
 
@@ -390,8 +390,8 @@ print(f"{parent_namespace}.{parent_name}|{compressed}")
 
 Standard search commands remain unchanged:
 ```bash
-uv run search_code.py class declaration CubeGridComponent
-uv run search_code.py method usage GetPosition
+uv run search_game_code.py class declaration CubeGridComponent
+uv run search_game_code.py method usage GetPosition
 ```
 
 Hierarchy subcommands are additions that don't affect existing functionality.

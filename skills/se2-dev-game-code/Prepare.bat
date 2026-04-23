@@ -74,20 +74,20 @@ rmdir /s /q Game2
 
 if exist Content goto skip_content
 echo Copying indexable content
-uv run python -u copy_content.py "%SE2_GAME_ROOT%\GameData\Vanilla\Content"
+uv run python -u copy_game_content.py "%SE2_GAME_ROOT%\GameData\Vanilla\Content"
 if %ERRORLEVEL% NEQ 0 goto failed
 :skip_content
 
 if exist CodeIndex\game_version.txt goto skip_code_index
 echo Indexing decompiled code
 mkdir CodeIndex 2>NUL
-uv run python -OO -u index_code.py Decompiled CodeIndex
+uv run python -OO -u index_game_code.py Decompiled CodeIndex
 if %ERRORLEVEL% NEQ 0 goto failed
 :skip_code_index
 
 if exist CodeIndex\content_index.csv goto skip_content_index
 echo Indexing content files
-uv run python -u index_content.py Content Decompiled CodeIndex
+uv run python -u index_game_content.py Content Decompiled CodeIndex
 if %ERRORLEVEL% NEQ 0 goto failed
 :skip_content_index
 

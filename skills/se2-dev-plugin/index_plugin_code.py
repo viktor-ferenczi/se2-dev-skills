@@ -6,7 +6,7 @@ This script indexes C# source files from downloaded plugin sources, creating CSV
 with declarations and usages of namespaces, interfaces, classes, methods, and member variables.
 
 Usage:
-    python index_plugins.py
+    python index_plugin_code.py
 
 The script searches for plugins in the resolved plugin sources directory
 (see plugin_paths.py for resolution logic).
@@ -31,7 +31,7 @@ from tree_sitter_c_sharp import language
 from plugin_paths import resolve_all_plugin_sources_dirs
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-PLUGINHUB_DIR = SCRIPT_DIR / "PluginHub"
+PLUGINHUB_DIR = SCRIPT_DIR / "PluginHub-SE2"
 PLUGINS_DIR = PLUGINHUB_DIR / "Plugins"
 OUTPUT_DIR = SCRIPT_DIR / "PluginCodeIndex"
 PLUGIN_LIST_FILE = OUTPUT_DIR / "plugins.json"
@@ -1086,7 +1086,7 @@ def find_local_plugins(plugin_sources_dir: Path) -> List[Dict]:
                     "path": str(item)
                 }
 
-                # Try to find matching PluginHub entry
+                # Try to find matching PluginHub-SE2 entry
                 if PLUGINS_DIR.exists():
                     for xml_file in PLUGINS_DIR.glob("*.xml"):
                         try:
@@ -1110,7 +1110,7 @@ def find_local_plugins(plugin_sources_dir: Path) -> List[Dict]:
 
 
 def get_available_plugins() -> List[Dict]:
-    """Get all available plugins from PluginHub (for reference)"""
+    """Get all available plugins from PluginHub-SE2 (for reference)"""
     available = []
     if not PLUGINS_DIR.exists():
         return available
@@ -1311,7 +1311,7 @@ class PluginCodeIndexer:
     def write_indices(self, output_dir: Path, plugins: List[Dict]):
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        # Also get available plugins from PluginHub
+        # Also get available plugins from PluginHub-SE2
         available = get_available_plugins()
 
         with open(PLUGIN_LIST_FILE, 'w', encoding='utf-8') as f:

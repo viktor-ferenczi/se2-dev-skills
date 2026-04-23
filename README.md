@@ -106,28 +106,12 @@ This usually happens if the skills are linked (`mklink`) into the coding agent's
 Tested with Claude Code and Opus 4.7:
 
 ---
-I can see both skills. Let me invoke them to prepare for first use.
+| Skill | Status | Smoke test |
+|-------|--------|------------|
+| `se2-dev-plugin` | ✅ Prepared | `list_plugins.py` returned 1 remote plugin; `download_plugin_source.py` downloaded "No Forced Camera Zoom"; `search_plugin_code.py` found `Plugin.cs:8-22` |
+| `se2-dev-game-code` | ✅ Prepared, game version 2.2.0.2116 | `search_game_code.py class declaration CubeGridComponent` and `method signature OnAddedToScene` both returned valid hits |
 
-Both are prepared. Now let me read the CommandExecution docs and then smoke test features.
-
-Now let me run smoke tests on both skills in parallel.
-
-Both skills are visible, prepared, and functional.
-
-## Smoke Test Results
-
-**`se2-dev-game-code`** — all features working
-- `Prepare.DONE` present; game version `2.2.0.2002`
-- `class declaration CubeGridComponent` → returns correct hits
-- `method signature OnAddedToScene` → returns 3+ hits
-- `class children GameComponent` → hierarchy resolves correctly
-- `CodeIndex/content_index.csv` present (21,879 rows)
-
-**`se2-dev-plugin`** — all features working
-- `Prepare.DONE` present
-- `list_plugins.py` returns 1 plugin (`No Forced Camera Zoom`)
-- `list_plugins.py --search camera` filter works
-- `search_plugins.py class declaration Plugin` returns hits across indexed plugins (`SE2-NoForcedCameraZoom`)
+Nothing missing or broken.
 ---
 
 ## Credits

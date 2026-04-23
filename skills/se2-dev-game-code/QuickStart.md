@@ -17,7 +17,7 @@ cd skills/se2-dev-game-code
 ### Find a Class Definition
 
 ```bash
-uv run search_code.py class declaration CubeGridComponent
+uv run search_game_code.py class declaration CubeGridComponent
 ```
 
 Output: `Game2.Simulation/Keen/Game2/Simulation/WorldObjects/CubeGrids/CubeGridComponent.cs:59-1754`
@@ -25,7 +25,7 @@ Output: `Game2.Simulation/Keen/Game2/Simulation/WorldObjects/CubeGrids/CubeGridC
 ### Find Where a Class is Used
 
 ```bash
-uv run search_code.py -l 10 class usage CubeGridComponent
+uv run search_game_code.py -l 10 class usage CubeGridComponent
 ```
 
 Shows first 10 usage locations.
@@ -33,13 +33,13 @@ Shows first 10 usage locations.
 ### Find a Method Definition
 
 ```bash
-uv run search_code.py method declaration GetPosition
+uv run search_game_code.py method declaration GetPosition
 ```
 
 ### Find Method Signatures
 
 ```bash
-uv run search_code.py method signature GetPosition
+uv run search_game_code.py method signature GetPosition
 ```
 
 Shows full method signatures including parameters and return types. See `CodeSearch.md` for more details.
@@ -47,7 +47,7 @@ Shows full method signatures including parameters and return types. See `CodeSea
 ### Find Class Hierarchy
 
 ```bash
-uv run search_code.py class parent CubeGridComponent
+uv run search_game_code.py class parent CubeGridComponent
 ```
 
 Output: `Keen.Game2.Simulation.WorldObjects.CubeGrids.CubeGridComponent:Keen.VRage.Core.Game.Components.GameComponent`

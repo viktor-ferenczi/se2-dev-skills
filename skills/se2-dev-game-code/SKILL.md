@@ -2,10 +2,10 @@
 name: se2-dev-game-code
 description: Allows reading the decompiled C# code of Space Engineers 2
 license: MIT
-allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*test_search.bat*), Bash(*uv run search_code.py *), Bash(*uv run index_code.py *), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
+allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*test_search_game_code.bat*), Bash(*uv run search_game_code.py *), Bash(*uv run index_game_code.py *), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
 ---
 
-# SE Dev Game Code Skill
+# SE2 Game Code Search Skill
 
 Allows reading the decompiled C# code of Space Engineers 2.
 
@@ -20,8 +20,8 @@ Examples:
 
 - **prepare**: Run the one-time preparation (Prepare.bat)
 - **bash**: Run UNIX shell commands via busybox
-- **search**: Run code searches using `search_code.py`
-- **test**: Test this skill by running `test_search.bat`
+- **search**: Run code searches using `search_game_code.py`
+- **test**: Test this skill by running `test_search_game_code.bat`
 
 ## Routing Decision
 
@@ -60,23 +60,23 @@ During preparation the current game version is stored into `CodeIndex/game_versi
 
 ```bash
 # Find class declarations
-uv run search_code.py class declaration CubeGridComponent
+uv run search_game_code.py class declaration CubeGridComponent
 
 # Find method signatures
-uv run search_code.py method signature OnAddedToScene
+uv run search_game_code.py method signature OnAddedToScene
 
 # Find class hierarchy
-uv run search_code.py class children GameComponent
+uv run search_game_code.py class children GameComponent
 
 # Count results before viewing (useful for large result sets)
-uv run search_code.py class usage CubeGridComponent --count
+uv run search_game_code.py class usage CubeGridComponent --count
 
 # Limit number of results
-uv run search_code.py class usage CubeGridComponent --limit 10
+uv run search_game_code.py class usage CubeGridComponent --limit 10
 
 # Paginate through results
-uv run search_code.py class usage CubeGridComponent --limit 10 --offset 0
-uv run search_code.py class usage CubeGridComponent --limit 10 --offset 20
+uv run search_game_code.py class usage CubeGridComponent --limit 10 --offset 0
+uv run search_game_code.py class usage CubeGridComponent --limit 10 --offset 20
 ```
 
 Always check the game code when:

@@ -30,12 +30,12 @@ if %ERRORLEVEL% NEQ 0 goto failed
 
 mkdir PluginSources 2>NUL
 
-echo Downloading PluginHub registry
+echo Downloading PluginHub-SE2 registry
 uv run download_pluginhub.py
 if %ERRORLEVEL% NEQ 0 goto failed
 
 echo Indexing plugin code (skipped if no sources downloaded yet)
-uv run index_plugins.py
+uv run index_plugin_code.py
 if %ERRORLEVEL% NEQ 0 goto failed
 
 echo DONE

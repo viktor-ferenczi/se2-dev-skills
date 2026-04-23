@@ -7,10 +7,10 @@ For each content file, emits one row per C# source file that references it.
 Content files with no usages get a single row with an empty usage column.
 
 Usage:
-    python index_content.py <content_dir> <decompiled_dir> <output_dir>
+    python index_game_content.py <content_dir> <decompiled_dir> <output_dir>
 
 Example:
-    python index_content.py Content Decompiled CodeIndex
+    python index_game_content.py Content Decompiled CodeIndex
 """
 
 import csv

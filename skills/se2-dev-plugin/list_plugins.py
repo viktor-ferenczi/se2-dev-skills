@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-List Plugins from PluginHub
+List Plugins from PluginHub-SE2
 
-Lists all available plugins from the PluginHub registry, showing which ones
+Lists all available plugins from the PluginHub-SE2 registry, showing which ones
 have their source code downloaded locally.
 
 Usage:
@@ -23,7 +23,7 @@ from pathlib import Path
 from plugin_paths import resolve_all_plugin_sources_dirs
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-PLUGINHUB_DIR = SCRIPT_DIR / "PluginHub"
+PLUGINHUB_DIR = SCRIPT_DIR / "PluginHub-SE2"
 PLUGINS_DIR = PLUGINHUB_DIR / "Plugins"
 
 
@@ -100,15 +100,15 @@ def parse_plugin_xml(xml_file: Path) -> dict:
 
 def get_local_plugin_id(plugin_dir: Path) -> str:
     """Get plugin ID from a local plugin source directory."""
-    # The directory name is typically the repo name (e.g., "ToolSwitcherPlugin")
-    # We need to match it with the PluginHub ID format (e.g., "austinvaness/ToolSwitcherPlugin")
+    # The directory name is typically the repo name (e.g., "SomePluginName")
+    # We need to match it with the PluginHub-SE2 ID format (e.g., "author-github-username/SomePluginName" or a GUID)
     return plugin_dir.name
 
 
 def load_all_plugins() -> list:
-    """Load all plugins from PluginHub."""
+    """Load all plugins from PluginHub-SE2."""
     if not PLUGINS_DIR.exists():
-        print(f"PluginHub not found at {PLUGINHUB_DIR}", file=sys.stderr)
+        print(f"PluginHub-SE2 not found at {PLUGINHUB_DIR}", file=sys.stderr)
         print("Run: uv run download_pluginhub.py", file=sys.stderr)
         return []
 
@@ -137,7 +137,7 @@ def load_all_plugins() -> list:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="List plugins from PluginHub")
+    parser = argparse.ArgumentParser(description="List plugins from PluginHub-SE2")
     parser.add_argument("--local", action="store_true", help="Show only locally available plugins")
     parser.add_argument("--remote", action="store_true", help="Show only plugins not downloaded locally")
     parser.add_argument("--search", "-s", type=str, help="Search plugins by name or description")

@@ -5,12 +5,12 @@ Plugin Code Search Tool
 Search the plugin code index for classes, methods, fields, interfaces, etc.
 
 Usage:
-    python search_plugins.py <category> <symbol_type> <pattern> [options]
+    python search_plugin_code.py <category> <symbol_type> <pattern> [options]
 
 Examples:
-    python search_plugins.py class declaration Plugin
-    python search_plugins.py method usage Patch
-    python search_plugins.py class children PluginBase
+    python search_plugin_code.py class declaration Plugin
+    python search_plugin_code.py method usage Patch
+    python search_plugin_code.py class children PluginBase
 """
 
 import argparse
@@ -323,10 +323,10 @@ def main():
     args = parse_args()
 
     if not INDEX_DIR.exists():
-        print("ERROR: PluginCodeIndex not found. Run index_plugins.py first.", file=sys.stderr)
+        print("ERROR: PluginCodeIndex not found. Run index_plugin_code.py first.", file=sys.stderr)
         print("  List available plugins: uv run list_plugins.py", file=sys.stderr)
         print("  Download plugin source: uv run download_plugin_source.py <name>", file=sys.stderr)
-        print("  Index plugins: uv run index_plugins.py", file=sys.stderr)
+        print("  Index plugins: uv run index_plugin_code.py", file=sys.stderr)
         sys.exit(1)
 
     if args.category == "method" and args.symbol_type in METHOD_SUBCOMMANDS:
