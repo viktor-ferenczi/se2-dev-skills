@@ -20,8 +20,8 @@ This guide explains how to correctly execute commands on Windows when using this
    ```
 4. **Search plugin code:**
    ```bash
-   uv run search_plugins.py class declaration Plugin
-   uv run search_plugins.py method usage Patch
+   uv run search_plugin_code.py class declaration Plugin
+   uv run search_plugin_code.py method usage Patch
    ```
    (Always use workdir parameter set to the skill folder)
 

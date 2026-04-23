@@ -1,13 +1,13 @@
 ---
 name: se2-dev-plugin
-description: Plugin development for Space Engineers version 1. Search plugin code from PluginHub for examples and patterns.
+description: Plugin development for Space Engineers 2. Search plugin code from PluginHub-SE2 for examples and patterns.
 license: MIT
-allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*dotnet build*), Bash(*dotnet clean*), Bash(*uv run search_plugins.py *), Bash(*uv run index_plugins.py*), Bash(*uv run list_plugins.py*), Bash(*uv run download_plugin_source.py *), Bash(*uv run download_pluginhub.py*), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
+allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*dotnet build*), Bash(*dotnet clean*), Bash(*uv run search_plugin_code.py *), Bash(*uv run index_plugin_code.py*), Bash(*uv run list_plugins.py*), Bash(*uv run download_plugin_source.py *), Bash(*uv run download_pluginhub.py*), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
 ---
 
-# SE Dev Plugin Skill
+# SE2 Plugin Development Skill
 
-Plugin development for Space Engineers version 1.
+Plugin development for Space Engineers 2.
 
 **⚠️ CRITICAL: Commands run in a UNIX shell (busybox), NOT Windows CMD. Use bash syntax!**
 
@@ -20,7 +20,7 @@ Examples:
 
 - **prepare**: Run the one-time preparation (Prepare.bat)
 - **bash**: Run UNIX shell commands via busybox
-- **search**: Search plugin code using `search_plugins.py`
+- **search**: Search plugin code using `search_plugin_code.py`
 
 ## Routing Decision
 
@@ -66,8 +66,8 @@ Progressive documentation for Harmony patching (start with basics, then read adv
 
 ## Plugin Distribution
 
-Plugins are released exclusively on the PluginHub. All plugins must be open source, since they are compiled on
-the player's machine from the GitHub source revision identified by its PluginHub registration. Plugins are
+Plugins are released exclusively on the PluginHub-SE2. All plugins must be open source, since they are compiled on
+the player's machine from the GitHub source revision identified by its PluginHub-SE2 registration. Plugins are
 reviewed for safety and security on submission, but only on a best effort basis, without any legal guarantees.
 Plugins are running native code and can do anything.
 
@@ -78,11 +78,11 @@ understand how the game's internals work and how to interface with it and patch 
 
 - [Pulsar](https://github.com/SpaceGT/Pulsar) Plugin loader for Space Engineers
 - [Pulsar Installer](https://github.com/StarCpt/Pulsar-Installer) Installer for Pulsar on Windows
-- [PluginHub](https://github.com/StarCpt/PluginHub/) Public plugin registry for Pulsar
+- [PluginHub-SE2](https://github.com/StarCpt/PluginHub-SE2/) Public plugin registry for Pulsar
 
 ## Plugin Code Search
 
-Search the source code of plugins from PluginHub for examples and patterns:
+Search the source code of plugins from PluginHub-SE2 for examples and patterns:
 
 ```bash
 # List available plugins
@@ -93,21 +93,42 @@ uv run list_plugins.py --search "camera"
 uv run download_plugin_source.py "Tool Switcher"
 
 # Index downloaded plugins (automatic after download)
-uv run index_plugins.py
+uv run index_plugin_code.py
 
 # Search plugin code
-uv run search_plugins.py class declaration Plugin
-uv run search_plugins.py method signature Patch
+uv run search_plugin_code.py class declaration Plugin
+uv run search_plugin_code.py method signature Patch
 
 # Count results before viewing (useful for large result sets)
-uv run search_plugins.py class usage Plugin --count
+uv run search_plugin_code.py class usage Plugin --count
 
 # Limit number of results
-uv run search_plugins.py class usage IPlugin --limit 20
+uv run search_plugin_code.py class usage IPlugin --limit 20
 ```
 
-The PluginHub contains descriptions of all available plugins. Download sources for plugins
+The PluginHub-SE2 contains descriptions of all available plugins. Download sources for plugins
 that may help with your task, then index and search them.
+
+### Storage layout
+
+Downloaded data lives under `Data\` within this skill directory:
+
+- `Data\PluginHub-SE2\` — the local clone of the PluginHub-SE2 registry
+- `Data\PluginSources\<RepoName>\` — downloaded plugin sources
+  (overridable via `SE_PLUGIN_DOWNLOAD_FOLDER` or `plugin_download_folder:` in
+  `CLAUDE.md`/`AGENTS.md`)
+- `Data\PluginCodeIndex\` — CSV indexes produced by
+  `index_plugin_code.py` and consumed by `search_plugin_code.py`
+- `Data\plugins.json` — **version registry**: records the upstream
+  commit of the PluginHub clone plus, for each downloaded plugin, both the commit
+  registered in the PluginHub XML (`registered_commit`) and the commit actually
+  checked out locally (`downloaded_commit`). Comparing them tells you whether a
+  local copy is out of date.
+
+When `git` is available on PATH, `download_pluginhub.py` and
+`download_plugin_source.py` use `git clone` (and `git fetch`/`git checkout` on
+re-runs) so local copies can be updated incrementally; otherwise they fall back
+to ZIP downloads. Either way, the commit hashes above are recorded.
 
 See [search action](./actions/search.md) for complete documentation.
 

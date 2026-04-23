@@ -1,17 +1,28 @@
 """
-Shared path resolution for plugin source downloads.
+Shared path resolution for plugin source downloads and the PluginHub-SE2 registry.
 
-Both download_plugin_source.py and index_plugins.py use this module to
-determine where plugin sources are stored.
+Layout (relative to the skill directory):
+
+    Data/                            # base directory
+        PluginHub-SE2/               # local clone of the plugin registry
+        PluginSources/               # downloaded plugin source repositories
+        plugins.json                 # registry of versions (see plugin_registry.py)
+
+`PluginSources/` can be relocated by configuration; `PluginHub-SE2/` and
+`plugins.json` always live next to each other in the base directory.
 """
 
 import os
-import platform
 import re
 import sys
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
+
+DATA_DIR_NAME = "Data"
+PLUGIN_SOURCES_SUBDIR = "PluginSources"
+PLUGINHUB_SUBDIR = "PluginHub-SE2"
+PLUGIN_CODE_INDEX_SUBDIR = "PluginCodeIndex"
 
 
 def _read_config_from_file(file_path: Path) -> str:
@@ -35,22 +46,27 @@ def _read_config_from_file(file_path: Path) -> str:
     return ""
 
 
+def resolve_base_dir() -> Path:
+    """
+    Return the base directory where the skill keeps its downloaded data.
+
+    This is always `{skill_dir}/Data/`.
+    """
+    return SCRIPT_DIR / DATA_DIR_NAME
+
+
 def resolve_plugin_sources_dir() -> Path:
     """
     Resolve the plugin sources directory using this priority:
 
     1. Environment variable SE_PLUGIN_DOWNLOAD_FOLDER
     2. CLAUDE.md or AGENTS.md in the current working directory
-    3. OS-specific temp folder (default)
-
-    Returns the resolved Path.
+    3. `{base}/PluginSources/` (default)
     """
-    # 1. Environment variable
     env_folder = os.environ.get("SE_PLUGIN_DOWNLOAD_FOLDER", "").strip()
     if env_folder:
         return Path(env_folder)
 
-    # 2. Check CLAUDE.md and AGENTS.md in CWD
     cwd = Path.cwd()
     for config_name in ("CLAUDE.md", "AGENTS.md"):
         config_path = cwd / config_name
@@ -58,36 +74,42 @@ def resolve_plugin_sources_dir() -> Path:
         if folder:
             return Path(folder)
 
-    # 3. OS-specific temp folder
-    if platform.system() == "Windows":
-        temp_base = os.environ.get("TEMP", os.environ.get("TMP", ""))
-        if temp_base:
-            return Path(temp_base) / "se2-dev-plugin" / "plugins"
-        # Fallback for Windows without TEMP
-        return Path(os.path.expanduser("~")) / "AppData" / "Local" / "Temp" / "se2-dev-plugin" / "plugins"
-    else:
-        # Linux / macOS
-        return Path("/tmp") / "se2-dev-plugin" / "plugins"
+    return resolve_base_dir() / PLUGIN_SOURCES_SUBDIR
+
+
+def resolve_pluginhub_dir() -> Path:
+    """
+    Return the directory that holds the local PluginHub-SE2 clone.
+
+    This is always `{base}/PluginHub-SE2/` — it is not user-configurable so
+    that the skill always knows where to find the registry regardless of
+    any override applied to the plugin sources folder.
+    """
+    return resolve_base_dir() / PLUGINHUB_SUBDIR
+
+
+def resolve_registry_path() -> Path:
+    """Return the path to `plugins.json` (sibling of PluginSources/ and PluginHub-SE2/)."""
+    return resolve_base_dir() / "plugins.json"
+
+
+def resolve_plugin_code_index_dir() -> Path:
+    """Return the directory that holds CSV index files produced by index_plugin_code.py."""
+    return resolve_base_dir() / PLUGIN_CODE_INDEX_SUBDIR
 
 
 def resolve_all_plugin_sources_dirs() -> list:
     """
     Return all directories that may contain plugin sources.
 
-    Used by the indexer to find sources from both the download location
-    and the skill-local PluginSources/ directory (populated during preparation).
-
-    Returns a list of existing Paths.
+    Currently this is just the configured/temp sources directory; kept as a
+    list to keep call sites stable in case additional fallback locations
+    are reintroduced later.
     """
     dirs = []
-    # Primary: the configured/temp download directory
-    download_dir = resolve_plugin_sources_dir()
-    if download_dir.exists():
-        dirs.append(download_dir)
-    # Secondary: skill-local PluginSources/ (from preparation)
-    local_dir = SCRIPT_DIR / "PluginSources"
-    if local_dir.exists() and local_dir != download_dir:
-        dirs.append(local_dir)
+    sources_dir = resolve_plugin_sources_dir()
+    if sources_dir.exists():
+        dirs.append(sources_dir)
     return dirs
 
 
@@ -112,3 +134,10 @@ def ensure_plugin_sources_dir() -> Path:
             file=sys.stderr,
         )
         sys.exit(1)
+
+
+def ensure_base_dir() -> Path:
+    """Resolve and create the base directory."""
+    base = resolve_base_dir()
+    base.mkdir(parents=True, exist_ok=True)
+    return base

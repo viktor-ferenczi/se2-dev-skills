@@ -35,11 +35,14 @@ Building the project:
 - If you need to build the code, then invoke `dotnet build`.
 - Never run verbose builds because they give too much output. Use `Echo` instead print variable values from the build process as/if required.
 
-You can search existing plugins in the [PluginHub/Plugins](PluginHub/Plugins) folder. Each plugin is registered with an XML file.
-Before searching the XML files, run `uv run download_pluginhub.py` with this same folder as CWD to create or update the `PluginHub` folder.
-The plugin's GitHub repository ID is defined in `<RepoId>` or if that's not present then in `<Id>`. You can use that ID to download
-the ZIP archive of the plugin's source code, extract it and look into the plugin's source code. Select similar plugins to download
-to the task as hand to find good ideas. You may also use GitHub's search functionality to search in the plugins without downloading them.
+You can search existing plugins in the `Plugins` subfolder of the PluginHub-SE2 clone.
+`download_pluginhub.py` puts that clone at `Data\PluginHub-SE2` within the skill
+directory — run it first to create or update the clone. Each plugin is registered
+with an XML file. The plugin's GitHub repository ID is defined in `<RepoId>`
+(falling back to `<Id>`); you can use that ID with `download_plugin_source.py` to
+fetch the sources (via `git clone` when `git` is on PATH, or a ZIP archive
+otherwise). You may also use GitHub's search functionality to search in the
+plugins without downloading them.
 
 NEVER use the very old and [outdated Space Engineers public archive](https://github.com/KeenSoftwareHouse/SpaceEngineers).
 

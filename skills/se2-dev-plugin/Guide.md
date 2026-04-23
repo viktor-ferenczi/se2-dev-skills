@@ -5,8 +5,7 @@ This guide was made for human plugin developers.
 ## Start with a template
 Choose one of these templates and click on the green "Use this template" button on GitHub to make your own repo, then clone that repo.
 
-- Client only plugin template: https://github.com/viktor-ferenczi/se-client-plugin-template
-- Client and server plugin template: https://github.com/viktor-ferenczi/se-server-plugin-template
+- Client plugin template: https://github.com/viktor-ferenczi/se2-client-plugin-template
 
 **Please follow the `README` after cloning your plugin project locally.**
 
@@ -28,18 +27,21 @@ There are two ways to build and debug your client plugin locally:
 - **Set up a "dev" folder in Pulsar's Sources dialog** for the plugin. You must pass the `-sources` option to Pulsar to access this dialog. This setup is essential for pre-release testing to make sure Pulsar can also build your plugin, because it may happen that the IDE can build it, but Pulsar fails with an error. You can make Debug or Release builds inside a plugin dev folder. A Debug build should allow your IDE to connect the debugger to the `Legacy.exe` process (the game running in Pulsar). A Release build allows for testing the exact same build which players will have on their machines when they install your plugin. Once a dev folder is added in the Sources dialog, you can add that dev folder to the regular plugin list (and save in profiles). Make sure to assign the plugin's XML "info" file in the dialog you open by double clicking on your dev folder added to the Plugins list. *(BUG: Currently this association is not saved. There is a PR to fix this.)*
 
 ## Release your plugin
-- Fill in the fields of the `YourPluginName.xml` file you can find in your project's folder.  (This file came with the plugin template. If you haven't used the template, then you can find one in the [PluginHub](https://github.com/StarCpt/PluginHub/) repository.)
-- Fork the [PluginHub](https://github.com/StarCpt/PluginHub/) repository and make a PR adding your XML file to the `Plugins` folder, where all the plugins are defined.
+- Fill in the fields of the `YourPluginName.xml` file you can find in your project's folder.  (This file came with the plugin template. If you haven't used the template, then you can find one in the [PluginHub-SE2](https://github.com/StarCpt/PluginHub-SE2/) repository.)
+- Fork the [PluginHub-SE2](https://github.com/StarCpt/PluginHub-SE2/) repository and make a PR adding your XML file to the `Plugins` folder, where all the plugins are defined.
 - Wait for the PR to be merged. It will involve a human reviewing the source code of your plugin, so please be patient.
 
-Updating your plugin is the same workflow by changing your XML in the [PluginHub](https://github.com/StarCpt/PluginHub/).
+Updating your plugin is the same workflow by changing your XML in the [PluginHub-SE2](https://github.com/StarCpt/PluginHub-SE2/).
 
 ## Pusar
+
+Pulsar is a plugin loader for Space Engineers.
+
 ### Paths 
 - Main installation folder: `%AppData%\Pulsar`
-- SE1 executable: `%AppData%\Pulsar\Legacy.exe`
-- SE1 data files: `%AppData%\Pulsar\Legacy\`
-- SE1 loader log file: `%AppData%\Pulsar\Legacy\info.log`
+- Executable: `%AppData%\Pulsar\Modern.exe`
+- Data files: `%AppData%\Pulsar\Modern\`
+- Pulsar log file: `%AppData%\Pulsar\Modern\info.log`
 ### Options
 
 Copy: `-skipintro -nosplash -sources`
@@ -50,7 +52,7 @@ Copy: `-skipintro -nosplash -sources`
 - Use **Profiles** to save separate `Development`, `Test` and `Production` plugin lists.
   - `Development`: Loads your plugins from DLL files.
   - `Test`: Loads your plugins from "dev" folders. Use before each release.
-  - `Production`: Loads your plugins from the publicly visible source (PluginHub registered).
+  - `Production`: Loads your plugins from the publicly visible source (PluginHub-SE2 registered).
 
 You can add your usual plugins made by other developers to all the saved profile above if you wish.
 
@@ -76,13 +78,13 @@ If you have an older plugin, then make sure to rebuild it based on the current t
 Mods running only on client side (not requiring a server side mod being present) may be registered to Pulsar:
 
 - First, check whether the mod is already present on Pulsar.
-- Fork the [PluginHub](https://github.com/StarCpt/PluginHub/) and clone it using Git
+- Fork the [PluginHub-SE2](https://github.com/StarCpt/PluginHub-SE2/) and clone it using Git
 - Double check whether the mod is already present by searching for the mod's workshop ID in the XML files under `Plugins/Mods`
 - Make a new branch from `main`
 - Copy `SampleMod.xml` from the repository root into `Plugins/Mods` and rename to match the mod's name
 - Carefully fill in the fields of the XML file carefully. You can use the other XML files in that folder as examples
 - Commit the new file into your branch and push it
-- Open a PR from your branch to add the file to the PluginHub
+- Open a PR from your branch to add the file to the PluginHub-SE2
 - We will review the PR and merge it if the mod is acceptable
 
 The mod will be updated by the game, therefore the XML file does not need to be changed anymore unless you need to fix some field in it.

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-List Plugins from PluginHub
+List Plugins from PluginHub-SE2
 
-Lists all available plugins from the PluginHub registry, showing which ones
+Lists all available plugins from the PluginHub-SE2 registry, showing which ones
 have their source code downloaded locally.
 
 Usage:
@@ -20,11 +20,10 @@ import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-from plugin_paths import resolve_all_plugin_sources_dirs
+from plugin_paths import resolve_all_plugin_sources_dirs, resolve_pluginhub_dir
+from plugin_registry import load_registry
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-PLUGINHUB_DIR = SCRIPT_DIR / "PluginHub"
-PLUGINS_DIR = PLUGINHUB_DIR / "Plugins"
 
 
 def parse_plugin_xml(xml_file: Path) -> dict:
@@ -35,6 +34,7 @@ def parse_plugin_xml(xml_file: Path) -> dict:
 
         plugin_info = {
             "id": "",
+            "repo_id": "",
             "name": "",
             "author": "",
             "tooltip": "",
@@ -50,6 +50,14 @@ def parse_plugin_xml(xml_file: Path) -> dict:
         id_elem = root.find("Id")
         if id_elem is not None and id_elem.text:
             plugin_info["id"] = id_elem.text.strip()
+
+        # New-format SE2 plugins store owner/repo in <RepoId>; old-format plugins
+        # store it in <Id>. Fall back to <Id> when it looks like owner/repo.
+        repo_id_elem = root.find("RepoId")
+        if repo_id_elem is not None and repo_id_elem.text:
+            plugin_info["repo_id"] = repo_id_elem.text.strip()
+        elif "/" in plugin_info["id"]:
+            plugin_info["repo_id"] = plugin_info["id"]
 
         name_elem = root.find("FriendlyName")
         if name_elem is not None and name_elem.text:
@@ -91,42 +99,51 @@ def parse_plugin_xml(xml_file: Path) -> dict:
 
 def get_local_plugin_id(plugin_dir: Path) -> str:
     """Get plugin ID from a local plugin source directory."""
-    # The directory name is typically the repo name (e.g., "ToolSwitcherPlugin")
-    # We need to match it with the PluginHub ID format (e.g., "austinvaness/ToolSwitcherPlugin")
+    # The directory name is typically the repo name (e.g., "SomePluginName")
+    # We need to match it with the PluginHub-SE2 ID format (e.g., "author-github-username/SomePluginName" or a GUID)
     return plugin_dir.name
 
 
 def load_all_plugins() -> list:
-    """Load all plugins from PluginHub."""
-    if not PLUGINS_DIR.exists():
-        print(f"PluginHub not found at {PLUGINHUB_DIR}", file=sys.stderr)
+    """Load all plugins from PluginHub-SE2."""
+    pluginhub_dir = resolve_pluginhub_dir()
+    plugins_dir = pluginhub_dir / "Plugins"
+    if not plugins_dir.exists():
+        print(f"PluginHub-SE2 not found at {pluginhub_dir}", file=sys.stderr)
         print("Run: uv run download_pluginhub.py", file=sys.stderr)
         return []
 
     source_dirs = resolve_all_plugin_sources_dirs()
+    registry = load_registry()
 
     plugins = []
-    for xml_file in PLUGINS_DIR.glob("*.xml"):
+    for xml_file in plugins_dir.glob("*.xml"):
         plugin = parse_plugin_xml(xml_file)
         if plugin:
-            # Check if source is available locally in any source directory
-            if plugin["id"]:
-                repo_name = plugin["id"].split("/")[-1] if "/" in plugin["id"] else plugin["id"]
-                plugin["local"] = False
-                plugin["local_path"] = ""
+            # Check if source is available locally in any source directory.
+            # Use repo_id (owner/repo) to locate the repo folder; fall back to id.
+            identifier = plugin["repo_id"] or plugin["id"]
+            plugin["local"] = False
+            plugin["local_path"] = ""
+            plugin["downloaded_commit"] = ""
+            if identifier:
+                repo_name = identifier.split("/")[-1] if "/" in identifier else identifier
                 for src_dir in source_dirs:
                     local_path = src_dir / repo_name
                     if local_path.exists():
                         plugin["local"] = True
                         plugin["local_path"] = str(local_path)
                         break
+                entry = registry["downloaded_plugins"].get(repo_name)
+                if entry:
+                    plugin["downloaded_commit"] = entry.get("downloaded_commit", "")
             plugins.append(plugin)
 
     return sorted(plugins, key=lambda p: p["name"].lower())
 
 
 def main():
-    parser = argparse.ArgumentParser(description="List plugins from PluginHub")
+    parser = argparse.ArgumentParser(description="List plugins from PluginHub-SE2")
     parser.add_argument("--local", action="store_true", help="Show only locally available plugins")
     parser.add_argument("--remote", action="store_true", help="Show only plugins not downloaded locally")
     parser.add_argument("--search", "-s", type=str, help="Search plugins by name or description")
@@ -151,7 +168,8 @@ def main():
                    search_term in p["name"].lower() or
                    search_term in p["description"].lower() or
                    search_term in p["tooltip"].lower() or
-                   search_term in p["id"].lower()]
+                   search_term in p["id"].lower() or
+                   search_term in p["repo_id"].lower()]
 
     # Output
     if args.json:
@@ -165,7 +183,18 @@ def main():
             status = "[LOCAL]" if plugin["local"] else "[REMOTE]"
             print(f"{status} {plugin['name']}")
             print(f"  ID: {plugin['id']}")
+            if plugin["repo_id"] and plugin["repo_id"] != plugin["id"]:
+                print(f"  RepoId: {plugin['repo_id']}")
             print(f"  Author: {plugin['author']}")
+            if plugin["commit"]:
+                registered_short = plugin["commit"][:12]
+                downloaded_short = plugin.get("downloaded_commit", "")[:12]
+                if downloaded_short and downloaded_short != registered_short:
+                    print(f"  Commit: registered={registered_short} downloaded={downloaded_short} (stale)")
+                elif downloaded_short:
+                    print(f"  Commit: {registered_short}")
+                else:
+                    print(f"  Commit (registered): {registered_short}")
             if args.verbose:
                 if plugin["tooltip"]:
                     print(f"  Tooltip: {plugin['tooltip']}")

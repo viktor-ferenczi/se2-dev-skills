@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-PB Script Code Indexer
+Plugin Code Indexer
 
-This script indexes C# source files from Steam and local PB scripts, creating CSV files
+This script indexes C# source files from downloaded plugin sources, creating CSV files
 with declarations and usages of namespaces, interfaces, classes, methods, and member variables.
 
 Usage:
-    python index_scripts.py
+    python index_plugin_code.py
 
-The script searches for scripts in:
-- SteamScripts/ - Downloaded scripts from Steam Workshop (folders with Script.cs file)
-- LocalScripts/ - Local development scripts
+The script searches for plugins in the resolved plugin sources directory
+(see plugin_paths.py for resolution logic).
 
-Output is written to ScriptCodeIndex/ directory.
+Output is written to `Data/PluginCodeIndex/` within the skill directory,
+alongside the PluginHub-SE2 clone and PluginSources folder.
 """
 
 import csv
@@ -20,6 +20,7 @@ import json
 import random
 import re
 import sys
+import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from multiprocessing import Pool, cpu_count
 from pathlib import Path
@@ -28,11 +29,15 @@ from typing import Dict, List, Optional, Set, Tuple
 from tree_sitter import Language, Parser, Node
 from tree_sitter_c_sharp import language
 
+from plugin_paths import (
+    resolve_all_plugin_sources_dirs,
+    resolve_plugin_code_index_dir,
+    resolve_pluginhub_dir,
+)
+
 SCRIPT_DIR = Path(__file__).parent.resolve()
-STEAM_SCRIPTS_DIR = SCRIPT_DIR / "SteamScripts"
-LOCAL_SCRIPTS_DIR = SCRIPT_DIR / "LocalScripts"
-OUTPUT_DIR = SCRIPT_DIR / "ScriptCodeIndex"
-SCRIPT_LIST_FILE = OUTPUT_DIR / "scripts.json"
+OUTPUT_DIR = resolve_plugin_code_index_dir()
+PLUGIN_LIST_FILE = OUTPUT_DIR / "plugins.json"
 
 
 @dataclass
@@ -53,46 +58,22 @@ class IndexEntry:
     params: str = ""  # Parameter list for methods/constructors: (int x, string name)
 
     def to_csv_row(self) -> List[str]:
-        """Convert to CSV row format"""
         return [
-            self.namespace,
-            self.declaring_type,
-            self.method,
-            self.symbol_name,
-            self.entry_type,
-            self.file_path,
-            str(self.start_line),
-            str(self.end_line),
-            self.description,
-            self.access,
-            self.modifiers,
-            self.member_type,
-            self.params,
+            self.namespace, self.declaring_type, self.method, self.symbol_name,
+            self.entry_type, self.file_path, str(self.start_line), str(self.end_line),
+            self.description, self.access, self.modifiers, self.member_type, self.params
         ]
 
     @staticmethod
     def csv_header() -> List[str]:
-        """Return CSV header row"""
-        return [
-            'namespace',
-            'declaring_type',
-            'method',
-            'symbol_name',
-            'type',
-            'file_path',
-            'start_line',
-            'end_line',
-            'description',
-            'access',
-            'modifiers',
-            'member_type',
-            'params',
-        ]
+        return ['namespace', 'declaring_type', 'method', 'symbol_name', 'type',
+                'file_path', 'start_line', 'end_line', 'description',
+                'access', 'modifiers', 'member_type', 'params']
 
 
 @dataclass
 class SignatureEntry:
-    """Represents a method signature entry - different columns than IndexEntry"""
+    """Represents a method signature entry"""
     namespace: str
     declaring_type: str
     method_name: str
@@ -103,31 +84,15 @@ class SignatureEntry:
     description: str
 
     def to_csv_row(self) -> List[str]:
-        """Convert to CSV row format"""
         return [
-            self.namespace,
-            self.declaring_type,
-            self.method_name,
-            self.signature,
-            self.file_path,
-            str(self.start_line),
-            str(self.end_line),
-            self.description
+            self.namespace, self.declaring_type, self.method_name, self.signature,
+            self.file_path, str(self.start_line), str(self.end_line), self.description
         ]
 
     @staticmethod
     def csv_header() -> List[str]:
-        """Return CSV header row"""
-        return [
-            'namespace',
-            'declaring_type',
-            'method_name',
-            'signature',
-            'file_path',
-            'start_line',
-            'end_line',
-            'description'
-        ]
+        return ['namespace', 'declaring_type', 'method_name', 'signature',
+                'file_path', 'start_line', 'end_line', 'description']
 
 
 @dataclass
@@ -142,29 +107,15 @@ class ClassHierarchyEntry:
     end_line: int
 
     def to_csv_row(self) -> List[str]:
-        """Convert to CSV row format"""
         return [
-            self.child_namespace,
-            self.child_class,
-            self.parent_namespace,
-            self.parent_class,
-            self.file_path,
-            str(self.start_line),
-            str(self.end_line)
+            self.child_namespace, self.child_class, self.parent_namespace,
+            self.parent_class, self.file_path, str(self.start_line), str(self.end_line)
         ]
 
     @staticmethod
     def csv_header() -> List[str]:
-        """Return CSV header row"""
-        return [
-            'child_namespace',
-            'child_class',
-            'parent_namespace',
-            'parent_class',
-            'file_path',
-            'start_line',
-            'end_line'
-        ]
+        return ['child_namespace', 'child_class', 'parent_namespace',
+                'parent_class', 'file_path', 'start_line', 'end_line']
 
 
 @dataclass
@@ -179,29 +130,15 @@ class InterfaceHierarchyEntry:
     end_line: int
 
     def to_csv_row(self) -> List[str]:
-        """Convert to CSV row format"""
         return [
-            self.child_namespace,
-            self.child_interface,
-            self.parent_namespace,
-            self.parent_interface,
-            self.file_path,
-            str(self.start_line),
-            str(self.end_line)
+            self.child_namespace, self.child_interface, self.parent_namespace,
+            self.parent_interface, self.file_path, str(self.start_line), str(self.end_line)
         ]
 
     @staticmethod
     def csv_header() -> List[str]:
-        """Return CSV header row"""
-        return [
-            'child_namespace',
-            'child_interface',
-            'parent_namespace',
-            'parent_interface',
-            'file_path',
-            'start_line',
-            'end_line'
-        ]
+        return ['child_namespace', 'child_interface', 'parent_namespace',
+                'parent_interface', 'file_path', 'start_line', 'end_line']
 
 
 @dataclass
@@ -209,33 +146,21 @@ class InterfaceImplementationEntry:
     """Represents a class/struct implementing interfaces"""
     implementing_namespace: str
     implementing_type: str
-    interfaces: str  # Comma-separated list of fully-qualified interface names
+    interfaces: str
     file_path: str
     start_line: int
     end_line: int
 
     def to_csv_row(self) -> List[str]:
-        """Convert to CSV row format"""
         return [
-            self.implementing_namespace,
-            self.implementing_type,
-            self.interfaces,
-            self.file_path,
-            str(self.start_line),
-            str(self.end_line)
+            self.implementing_namespace, self.implementing_type, self.interfaces,
+            self.file_path, str(self.start_line), str(self.end_line)
         ]
 
     @staticmethod
     def csv_header() -> List[str]:
-        """Return CSV header row"""
-        return [
-            'implementing_namespace',
-            'implementing_type',
-            'interfaces',
-            'file_path',
-            'start_line',
-            'end_line'
-        ]
+        return ['implementing_namespace', 'implementing_type', 'interfaces',
+                'file_path', 'start_line', 'end_line']
 
 
 @dataclass
@@ -253,12 +178,10 @@ class FileProcessingResult:
     constructor_entries: List[IndexEntry] = field(default_factory=list)
     signature_entries: List[SignatureEntry] = field(default_factory=list)
 
-    # Hierarchy entries
     class_hierarchy_entries: List[ClassHierarchyEntry] = field(default_factory=list)
     interface_hierarchy_entries: List[InterfaceHierarchyEntry] = field(default_factory=list)
     interface_implementation_entries: List[InterfaceImplementationEntry] = field(default_factory=list)
 
-    # Declared names found in this file (for building shared state after pass 1)
     declared_namespaces: Set[str] = field(default_factory=set)
     declared_interfaces: Dict[str, Set[tuple]] = field(default_factory=dict)
     declared_classes: Dict[str, Set[tuple]] = field(default_factory=dict)
@@ -300,10 +223,10 @@ def _process_batch_worker(args: Tuple) -> List[FileProcessingResult]:
 
 
 class FileProcessor:
-    """Processes a single C# file - designed to be used in worker processes"""
+    """Processes a single C# file"""
 
     def __init__(self, root_path: str):
-        self.root_path = Path(root_path).resolve()
+        self.root_path = Path(root_path)
         self.parser = Parser()
         self.parser.language = Language(language())
 
@@ -318,7 +241,6 @@ class FileProcessor:
         self.declared_constructors: Dict[str, Set[tuple]] = {}
 
     def process_file(self, file_path: Path, collect_usages: bool) -> FileProcessingResult:
-        """Process a single C# file and return results"""
         result = FileProcessingResult()
 
         try:
@@ -334,20 +256,15 @@ class FileProcessor:
         source_lines = source_code.split('\n')
 
         context = {
-            'namespace': '',
-            'declaring_type': '',
-            'method': '',
-            'file_path': relative_path,
-            'source_lines': source_lines,
-            'collect_usages': collect_usages,
-            'result': result
+            'namespace': '', 'declaring_type': '', 'method': '',
+            'file_path': relative_path, 'source_lines': source_lines,
+            'collect_usages': collect_usages, 'result': result
         }
 
         self._traverse_tree(tree.root_node, context)
         return result
 
     def _traverse_tree(self, node: Node, context: Dict):
-        """Recursively traverse the syntax tree"""
         prev_namespace = context['namespace']
         prev_declaring_type = context['declaring_type']
         prev_method = context['method']
@@ -413,7 +330,6 @@ class FileProcessor:
         context['method'] = prev_method
 
     def _get_identifier_name(self, node: Node) -> Optional[str]:
-        """Extract identifier name from a node"""
         if node.type in ('method_declaration', 'constructor_declaration'):
             identifiers = []
             for child in node.children:
@@ -438,7 +354,6 @@ class FileProcessor:
 
     def _get_preceding_comment(self, node: Node, source_lines: List[str]) -> str:
         start_line = node.start_point[0]
-
         if start_line == 0:
             return ''
 
@@ -447,7 +362,6 @@ class FileProcessor:
 
         while current_line >= 0:
             line = source_lines[current_line].strip()
-
             if line.startswith('//'):
                 comment_lines.insert(0, line[2:].strip())
                 current_line -= 1
@@ -474,31 +388,15 @@ class FileProcessor:
     _ACCESS_KEYWORDS = frozenset({"public", "private", "protected", "internal"})
 
     # Other modifier keywords (non-access)
-    _MODIFIER_KEYWORDS = frozenset(
-        {
-            "static",
-            "readonly",
-            "const",
-            "volatile",
-            "virtual",
-            "override",
-            "abstract",
-            "sealed",
-            "async",
-            "extern",
-            "new",
-            "unsafe",
-            "partial",
-        }
-    )
+    _MODIFIER_KEYWORDS = frozenset({
+        "static", "readonly", "const", "volatile", "virtual", "override",
+        "abstract", "sealed", "async", "extern", "new", "unsafe", "partial",
+    })
 
     def _extract_modifiers(self, node: Node) -> tuple:
         """
         Extract access and other modifiers from a declaration node.
         Returns (access: str, modifiers: str).
-
-        Access is a single string like 'public', 'private', 'protected internal'.
-        Modifiers is a space-separated string of non-access modifiers like 'static readonly'.
         """
         access_parts = []
         modifier_parts = []
@@ -574,35 +472,17 @@ class FileProcessor:
     def _resolve_type_namespace(self, type_name: str, current_namespace: str) -> str:
         if '.' in type_name:
             return type_name
-
         full_name = f"{current_namespace}.{type_name}" if current_namespace else type_name
 
-        if type_name in self.declared_interfaces:
-            locations = self.declared_interfaces[type_name]
-            for ns, _ in locations:
-                if ns == current_namespace:
-                    return full_name
-            if locations:
-                ns, _ = next(iter(locations))
-                return f"{ns}.{type_name}" if ns else type_name
-
-        if type_name in self.declared_classes:
-            locations = self.declared_classes[type_name]
-            for ns, _ in locations:
-                if ns == current_namespace:
-                    return full_name
-            if locations:
-                ns, _ = next(iter(locations))
-                return f"{ns}.{type_name}" if ns else type_name
-
-        if type_name in self.declared_structs:
-            locations = self.declared_structs[type_name]
-            for ns, _ in locations:
-                if ns == current_namespace:
-                    return full_name
-            if locations:
-                ns, _ = next(iter(locations))
-                return f"{ns}.{type_name}" if ns else type_name
+        for declared in [self.declared_interfaces, self.declared_classes, self.declared_structs]:
+            if type_name in declared:
+                locations = declared[type_name]
+                for ns, _ in locations:
+                    if ns == current_namespace:
+                        return full_name
+                if locations:
+                    ns, _ = next(iter(locations))
+                    return f"{ns}.{type_name}" if ns else type_name
 
         return full_name
 
@@ -671,7 +551,6 @@ class FileProcessor:
         result.declared_namespaces.add(name)
 
         description = self._get_preceding_comment(node, context['source_lines'])
-
         entry = IndexEntry(
             namespace=name, declaring_type='', method='', symbol_name='',
             entry_type='declaration', file_path=context['file_path'],
@@ -690,7 +569,6 @@ class FileProcessor:
         result.declared_namespaces.add(full_namespace)
 
         description = self._get_preceding_comment(node, context['source_lines'])
-
         entry = IndexEntry(
             namespace=full_namespace, declaring_type='', method='', symbol_name='',
             entry_type='declaration', file_path=context['file_path'],
@@ -705,13 +583,11 @@ class FileProcessor:
             return
 
         context['declaring_type'] = name
-
         if name not in result.declared_interfaces:
             result.declared_interfaces[name] = set()
         result.declared_interfaces[name].add((context['namespace'], ''))
 
         description = self._get_preceding_comment(node, context['source_lines'])
-
         entry = IndexEntry(
             namespace=context['namespace'], declaring_type=name, method='', symbol_name='',
             entry_type='declaration', file_path=context['file_path'],
@@ -746,7 +622,6 @@ class FileProcessor:
             for parent_type in base_types:
                 parent_fqn = self._resolve_type_namespace(parent_type, context['namespace'])
                 parent_ns, parent_name = self._split_namespace_and_type(parent_fqn)
-
                 hier_entry = InterfaceHierarchyEntry(
                     child_namespace=context['namespace'], child_interface=name,
                     parent_namespace=parent_ns, parent_interface=parent_name,
@@ -815,13 +690,11 @@ class FileProcessor:
             return
 
         context['declaring_type'] = name
-
         if name not in result.declared_classes:
             result.declared_classes[name] = set()
         result.declared_classes[name].add((context['namespace'], ''))
 
         description = self._get_preceding_comment(node, context['source_lines'])
-
         entry = IndexEntry(
             namespace=context['namespace'], declaring_type=name, method='', symbol_name='',
             entry_type='declaration', file_path=context['file_path'],
@@ -839,13 +712,11 @@ class FileProcessor:
             return
 
         context['declaring_type'] = name
-
         if name not in result.declared_structs:
             result.declared_structs[name] = set()
         result.declared_structs[name].add((context['namespace'], ''))
 
         description = self._get_preceding_comment(node, context['source_lines'])
-
         entry = IndexEntry(
             namespace=context['namespace'], declaring_type=name, method='', symbol_name='',
             entry_type='declaration', file_path=context['file_path'],
@@ -863,13 +734,11 @@ class FileProcessor:
             return
 
         context['declaring_type'] = name
-
         if name not in result.declared_enums:
             result.declared_enums[name] = set()
         result.declared_enums[name].add((context['namespace'], ''))
 
         description = self._get_preceding_comment(node, context['source_lines'])
-
         entry = IndexEntry(
             namespace=context['namespace'], declaring_type=name, method='', symbol_name='',
             entry_type='declaration', file_path=context['file_path'],
@@ -886,7 +755,6 @@ class FileProcessor:
         is_constructor = node.type == "constructor_declaration"
 
         context['method'] = name
-
         if name not in result.declared_methods:
             result.declared_methods[name] = set()
         result.declared_methods[name].add((context['namespace'], context['declaring_type']))
@@ -899,7 +767,7 @@ class FileProcessor:
         access, modifiers = self._extract_modifiers(node)
         params_text = self._extract_params_text(node)
 
-        # Extract return type (methods only — constructors have no return type)
+        # Extract return type (methods only - constructors have no return type)
         return_type = ""
         if not is_constructor:
             found_type = False
@@ -913,14 +781,13 @@ class FileProcessor:
                     break
 
         description = self._get_preceding_comment(node, context['source_lines'])
-
         entry = IndexEntry(
             namespace=context['namespace'], declaring_type=context['declaring_type'],
             method=name, symbol_name='', entry_type='declaration',
             file_path=context['file_path'],
             start_line=node.start_point[0] + 1, end_line=node.end_point[0] + 1,
-            description=description,
-            access=access, modifiers=modifiers, member_type=return_type, params=params_text,
+            description=description, access=access, modifiers=modifiers,
+            member_type=return_type, params=params_text
         )
 
         if is_constructor:
@@ -957,8 +824,8 @@ class FileProcessor:
                                 method='', symbol_name=name, entry_type='declaration',
                                 file_path=context['file_path'],
                                 start_line=node.start_point[0] + 1, end_line=node.end_point[0] + 1,
-                                description=description,
-                                access=access, modifiers=modifiers, member_type=type_text,
+                                description=description, access=access, modifiers=modifiers,
+                                member_type=type_text
                             )
                             result.field_entries.append(entry)
 
@@ -973,25 +840,22 @@ class FileProcessor:
 
         access, modifiers = self._extract_modifiers(node)
 
-        # Property type is a direct child with field name [type]
+        # Property type is a direct child
         type_text = ""
         for child in node.children:
-            if child.type not in (
-                "modifier", "identifier", "accessor_list",
-                "arrow_expression_clause", "=", ";", "{", "}",
-            ):
+            if child.type not in ("modifier", "identifier", "accessor_list",
+                                  "arrow_expression_clause", "=", ";", "{", "}"):
                 type_text = self._extract_full_type_text(child)
                 break
 
         description = self._get_preceding_comment(node, context['source_lines'])
-
         entry = IndexEntry(
             namespace=context['namespace'], declaring_type=context['declaring_type'],
             method='', symbol_name=name, entry_type='declaration',
             file_path=context['file_path'],
             start_line=node.start_point[0] + 1, end_line=node.end_point[0] + 1,
-            description=description,
-            access=access, modifiers=modifiers, member_type=type_text,
+            description=description, access=access, modifiers=modifiers,
+            member_type=type_text
         )
         result.property_entries.append(entry)
 
@@ -1025,8 +889,8 @@ class FileProcessor:
                                     file_path=context['file_path'],
                                     start_line=node.start_point[0] + 1,
                                     end_line=node.end_point[0] + 1,
-                                    description=description,
-                                    access=access, modifiers=modifiers, member_type=type_text,
+                                    description=description, access=access,
+                                    modifiers=modifiers, member_type=type_text
                                 )
                                 result.event_entries.append(entry)
         else:
@@ -1041,18 +905,13 @@ class FileProcessor:
                 (context['namespace'], context['declaring_type'])
             )
 
-            # Find the type node (comes after 'event' keyword, before the identifier)
             type_text = ""
             found_event_keyword = False
             for child in node.children:
                 if child.type == "event":
                     found_event_keyword = True
-                elif (
-                    found_event_keyword
-                    and child.type != "identifier"
-                    and child.type != "accessor_list"
-                    and child.type != ";"
-                ):
+                elif (found_event_keyword and child.type != "identifier"
+                      and child.type != "accessor_list" and child.type != ";"):
                     type_text = self._extract_full_type_text(child)
                     break
             description = self._get_preceding_comment(node, context['source_lines'])
@@ -1064,8 +923,8 @@ class FileProcessor:
                 file_path=context['file_path'],
                 start_line=node.start_point[0] + 1,
                 end_line=node.end_point[0] + 1,
-                description=description,
-                access=access, modifiers=modifiers, member_type=type_text,
+                description=description, access=access,
+                modifiers=modifiers, member_type=type_text
             )
             result.event_entries.append(entry)
 
@@ -1214,48 +1073,89 @@ class FileProcessor:
             result.field_entries.append(entry)
 
 
-def find_steam_scripts(steam_scripts_dir: Path) -> List[Dict]:
-    """Find scripts in SteamScripts directory (folders with Script.cs file)"""
-    scripts = []
-    if not steam_scripts_dir.exists():
-        return scripts
+def find_local_plugins(plugin_sources_dir: Path) -> List[Dict]:
+    """Find plugins in the plugin sources directory"""
+    plugins = []
+    if not plugin_sources_dir.exists():
+        return plugins
 
-    for item in steam_scripts_dir.iterdir():
-        if item.is_dir():
-            script_file = item / "Script.cs"
-            if script_file.exists():
-                scripts.append({
-                    "id": item.name,
-                    "name": item.name,
-                    "source": "steam",
-                    "path": str(item.relative_to(SCRIPT_DIR))
-                })
-    return scripts
-
-
-def find_local_scripts(local_scripts_dir: Path) -> List[Dict]:
-    """Find scripts in LocalScripts directory"""
-    scripts = []
-    if not local_scripts_dir.exists():
-        return scripts
-
-    for item in local_scripts_dir.iterdir():
-        if item.is_dir():
+    plugins_dir = resolve_pluginhub_dir() / "Plugins"
+    for item in plugin_sources_dir.iterdir():
+        if item.is_dir() and not item.name.startswith('.'):
             if any(item.rglob("*.cs")):
-                scripts.append({
+                plugin_info = {
                     "id": item.name,
                     "name": item.name,
                     "source": "local",
-                    "path": str(item.relative_to(SCRIPT_DIR))
-                })
-    return scripts
+                    "path": str(item)
+                }
+
+                # Try to find matching PluginHub-SE2 entry
+                if plugins_dir.exists():
+                    for xml_file in plugins_dir.glob("*.xml"):
+                        try:
+                            tree = ET.parse(xml_file)
+                            root = tree.getroot()
+                            id_elem = root.find("Id")
+                            name_elem = root.find("FriendlyName")
+                            if id_elem is not None and id_elem.text:
+                                repo_name = id_elem.text.split("/")[-1]
+                                if repo_name == item.name:
+                                    plugin_info["id"] = id_elem.text
+                                    if name_elem is not None and name_elem.text:
+                                        plugin_info["name"] = name_elem.text
+                                    break
+                        except:
+                            pass
+
+                plugins.append(plugin_info)
+
+    return plugins
 
 
-class ScriptCodeIndexer:
-    """Indexes script C# source code using Tree-sitter with parallel processing"""
+def get_available_plugins() -> List[Dict]:
+    """Get all available plugins from PluginHub-SE2 (for reference)"""
+    available = []
+    plugins_dir = resolve_pluginhub_dir() / "Plugins"
+    if not plugins_dir.exists():
+        return available
 
-    def __init__(self):
-        self.root_path = SCRIPT_DIR
+    for xml_file in plugins_dir.glob("*.xml"):
+        try:
+            tree = ET.parse(xml_file)
+            root = tree.getroot()
+            plugin_info = {"id": "", "name": "", "description": ""}
+
+            id_elem = root.find("Id")
+            if id_elem is not None and id_elem.text:
+                plugin_info["id"] = id_elem.text.strip()
+
+            name_elem = root.find("FriendlyName")
+            if name_elem is not None and name_elem.text:
+                plugin_info["name"] = name_elem.text.strip()
+
+            desc_elem = root.find("Description")
+            if desc_elem is not None and desc_elem.text:
+                plugin_info["description"] = desc_elem.text.strip()
+            else:
+                tooltip_elem = root.find("Tooltip")
+                if tooltip_elem is not None and tooltip_elem.text:
+                    plugin_info["description"] = tooltip_elem.text.strip()
+
+            if plugin_info["id"]:
+                available.append(plugin_info)
+        except:
+            pass
+
+    return sorted(available, key=lambda p: p["name"].lower())
+
+
+class PluginCodeIndexer:
+    """Indexes plugin C# source code using Tree-sitter with parallel processing"""
+
+    def __init__(self, plugin_sources_dir: Path):
+        self.plugin_sources_dir = plugin_sources_dir
+        self.root_path = plugin_sources_dir
 
         self.namespace_index: List[IndexEntry] = []
         self.interface_index: List[IndexEntry] = []
@@ -1357,21 +1257,13 @@ class ScriptCodeIndexer:
 
     def collect_files(self) -> Tuple[List[Path], List[Dict]]:
         cs_files = []
-        all_scripts = []
+        local_plugins = find_local_plugins(self.plugin_sources_dir)
 
-        steam_scripts = find_steam_scripts(STEAM_SCRIPTS_DIR)
-        for script in steam_scripts:
-            script_path = SCRIPT_DIR / script["path"]
-            cs_files.extend(script_path.rglob("*.cs"))
-        all_scripts.extend(steam_scripts)
+        for plugin in local_plugins:
+            plugin_path = Path(plugin["path"])
+            cs_files.extend(plugin_path.rglob("*.cs"))
 
-        local_scripts = find_local_scripts(LOCAL_SCRIPTS_DIR)
-        for script in local_scripts:
-            script_path = SCRIPT_DIR / script["path"]
-            cs_files.extend(script_path.rglob("*.cs"))
-        all_scripts.extend(local_scripts)
-
-        return cs_files, all_scripts
+        return cs_files, local_plugins
 
     def index_files(self, cs_files: List[Path]):
         total_files = len(cs_files)
@@ -1421,12 +1313,18 @@ class ScriptCodeIndexer:
         self._merge_batch_results(pass2_results)
         print(f"Completed pass 2: {total_files} files.")
 
-    def write_indices(self, output_dir: Path, scripts: List[Dict]):
+    def write_indices(self, output_dir: Path, plugins: List[Dict]):
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        with open(SCRIPT_LIST_FILE, 'w', encoding='utf-8') as f:
-            json.dump({"scripts": scripts}, f, indent=2)
-        print(f"Written script list to {SCRIPT_LIST_FILE}")
+        # Also get available plugins from PluginHub-SE2
+        available = get_available_plugins()
+
+        with open(PLUGIN_LIST_FILE, 'w', encoding='utf-8') as f:
+            json.dump({
+                "indexed_plugins": plugins,
+                "available_plugins": available
+            }, f, indent=2)
+        print(f"Written plugin list to {PLUGIN_LIST_FILE}")
 
         def split_entries(entries):
             declarations = [e for e in entries if e.entry_type == 'declaration']
@@ -1559,23 +1457,50 @@ class ScriptCodeIndexer:
 def main():
     sys.setrecursionlimit(10000)
 
-    print("PB Script Code Indexer")
+    source_dirs = resolve_all_plugin_sources_dirs()
+
+    print("Plugin Code Indexer")
     print("=" * 50)
-    print(f"Steam scripts directory: {STEAM_SCRIPTS_DIR}")
-    print(f"Local scripts directory: {LOCAL_SCRIPTS_DIR}")
+
+    # Pick the best source directory: prefer one that has plugin subdirectories
+    plugin_sources_dir = None
+    for d in source_dirs:
+        if any(item.is_dir() and not item.name.startswith('.') for item in d.iterdir()):
+            plugin_sources_dir = d
+            break
+
+    if plugin_sources_dir is None and source_dirs:
+        plugin_sources_dir = source_dirs[0]
+
+    if plugin_sources_dir:
+        print(f"Plugin sources directory: {plugin_sources_dir}")
+    else:
+        print("Warning: No plugin source directories found.")
+        print("Download plugin sources with: uv run download_plugin_source.py <plugin_name>")
+        print("List available plugins with: uv run list_plugins.py")
     print(f"Output directory: {OUTPUT_DIR}")
     print()
 
-    indexer = ScriptCodeIndexer()
-    cs_files, scripts = indexer.collect_files()
+    indexer = PluginCodeIndexer(plugin_sources_dir if plugin_sources_dir else SCRIPT_DIR)
 
-    print(f"Found {len(scripts)} scripts:")
-    for script in scripts:
-        print(f"  - [{script['source']}] {script['name']}")
+    if plugin_sources_dir:
+        cs_files, plugins = indexer.collect_files()
+    else:
+        cs_files, plugins = [], []
+
+    print(f"Found {len(plugins)} plugins with source code:")
+    for plugin in plugins:
+        print(f"  - {plugin['name']} ({plugin['id']})")
     print()
 
+    if not plugins:
+        print("No plugins to index. Writing empty index files.")
+        print("  List available: uv run list_plugins.py")
+        print("  Download: uv run download_plugin_source.py <plugin_name>")
+        print()
+
     indexer.index_files(cs_files)
-    indexer.write_indices(OUTPUT_DIR, scripts)
+    indexer.write_indices(OUTPUT_DIR, plugins)
 
     print("\nIndexing complete!")
 

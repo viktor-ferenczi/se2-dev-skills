@@ -4,10 +4,17 @@ echo Verifying Python
 python --version
 if %ERRORLEVEL% EQU 0 goto has_python
 echo ERROR: Missing Python
-echo Please install Python 3.13 or newer. 
+echo Please install Python 3.13 or newer.
 echo Make sure python.exe is on PATH.
 goto failed
 :has_python
+
+if exist Data goto skip_data_link
+if not exist "%TEMP%\se2-dev-plugin" mkdir "%TEMP%\se2-dev-plugin"
+echo Creating Data junction to %TEMP%\se2-dev-plugin
+mklink /J Data "%TEMP%\se2-dev-plugin" >NUL
+if %ERRORLEVEL% NEQ 0 goto failed
+:skip_data_link
 
 uv -V 2>NUL
 if %ERRORLEVEL% EQU 0 goto skip_uv
@@ -28,14 +35,12 @@ powershell -Command "$ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest
 if %ERRORLEVEL% NEQ 0 goto failed
 :skip_busybox
 
-mkdir PluginSources 2>NUL
-
-echo Downloading PluginHub registry
+echo Downloading PluginHub-SE2 registry
 uv run download_pluginhub.py
 if %ERRORLEVEL% NEQ 0 goto failed
 
 echo Indexing plugin code (skipped if no sources downloaded yet)
-uv run index_plugins.py
+uv run index_plugin_code.py
 if %ERRORLEVEL% NEQ 0 goto failed
 
 echo DONE

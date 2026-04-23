@@ -62,7 +62,14 @@ Prepare.bat
 ## What Preparation Does
 
 The preparation script:
+- Creates the `Data\` directory used for all downloaded data
 - Sets up the Python virtual environment
 - Downloads and installs required tools (busybox.exe)
-- Downloads plugin sources for examples (to OS temp folder or configured location)
+- Clones (or ZIP-downloads, if `git` is missing) the PluginHub-SE2 registry
+  into `Data\PluginHub-SE2`
+- Records the cloned commit in `Data\plugins.json`
 - Verifies the environment is ready for use
+
+Individual plugin sources are downloaded on demand by
+`download_plugin_source.py` into `Data\PluginSources\` (or the override set via
+`SE_PLUGIN_DOWNLOAD_FOLDER` / `plugin_download_folder:`).
