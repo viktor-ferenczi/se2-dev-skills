@@ -8,7 +8,7 @@ Shared path resolution for plugin source downloads and the PluginHub-SE2 registr
         PluginHub-SE2/               # local clone of the plugin registry
         Sources/                     # downloaded plugin source repositories
             <RepoName>/              # per-plugin git clone
-        PluginCodeIndex/             # CSV indexes built from Sources/
+        CodeIndex/                   # CSV indexes built from Sources/
         plugins.json                 # registry of versions (see plugin_registry.py)
 
 `Sources/` can be relocated by configuration; `PluginHub-SE2/` and
@@ -25,7 +25,7 @@ SCRIPT_DIR = Path(__file__).parent.resolve()
 DATA_DIR_NAME = "Data"
 PLUGIN_SOURCES_SUBDIR = "Sources"
 PLUGINHUB_SUBDIR = "PluginHub-SE2"
-PLUGIN_CODE_INDEX_SUBDIR = "PluginCodeIndex"
+CODE_INDEX_SUBDIR = "CodeIndex"
 
 
 def _read_config_from_file(file_path: Path) -> str:
@@ -96,9 +96,9 @@ def resolve_registry_path() -> Path:
     return resolve_base_dir() / "plugins.json"
 
 
-def resolve_plugin_code_index_dir() -> Path:
+def resolve_code_index_dir() -> Path:
     """Return the directory that holds CSV index files produced by index_plugin_code.py."""
-    return resolve_base_dir() / PLUGIN_CODE_INDEX_SUBDIR
+    return resolve_base_dir() / CODE_INDEX_SUBDIR
 
 
 def resolve_all_plugin_sources_dirs() -> list:

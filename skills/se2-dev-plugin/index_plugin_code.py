@@ -11,12 +11,13 @@ Usage:
 The script searches for plugins in the resolved plugin sources directory
 (see plugin_paths.py for resolution logic).
 
-Output is written to `Data/PluginCodeIndex/` within the skill directory,
-alongside the PluginHub-SE2 clone and Sources folder.
+Output is written to `Data/CodeIndex/` within the skill directory, alongside
+the PluginHub-SE2 clone and Sources folder. The list of indexed plugins and
+the full PluginHub-SE2 catalog are stored in `Data/plugins.json` (see
+plugin_registry.py).
 """
 
 import csv
-import json
 import random
 import re
 import sys
@@ -31,13 +32,13 @@ from tree_sitter_c_sharp import language
 
 from plugin_paths import (
     resolve_all_plugin_sources_dirs,
-    resolve_plugin_code_index_dir,
+    resolve_code_index_dir,
     resolve_pluginhub_dir,
 )
+from plugin_registry import update_indexer_state
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-OUTPUT_DIR = resolve_plugin_code_index_dir()
-PLUGIN_LIST_FILE = OUTPUT_DIR / "plugins.json"
+OUTPUT_DIR = resolve_code_index_dir()
 
 
 @dataclass
@@ -1319,12 +1320,8 @@ class PluginCodeIndexer:
         # Also get available plugins from PluginHub-SE2
         available = get_available_plugins()
 
-        with open(PLUGIN_LIST_FILE, 'w', encoding='utf-8') as f:
-            json.dump({
-                "indexed_plugins": plugins,
-                "available_plugins": available
-            }, f, indent=2)
-        print(f"Written plugin list to {PLUGIN_LIST_FILE}")
+        update_indexer_state(indexed_plugins=plugins, available_plugins=available)
+        print("Updated indexed_plugins / available_plugins in plugins.json")
 
         def split_entries(entries):
             declarations = [e for e in entries if e.entry_type == 'declaration']

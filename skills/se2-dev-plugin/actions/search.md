@@ -130,20 +130,20 @@ uv run search_plugin_code.py -i class declaration config
 
 ## Plugin List
 
-Two files keep track of plugins:
+A single `Data\plugins.json` keeps track of plugins, with these top-level keys:
 
-- `Data\plugins.json` — the **version registry**, recording:
-  - `pluginhub` — the upstream commit currently cloned locally (so the copy
-    can be refreshed when the upstream repo changes).
-  - `downloaded_plugins.<repo>.registered_commit` — the commit the PluginHub XML currently
-    points at.
-  - `downloaded_plugins.<repo>.downloaded_commit` — the commit that is actually checked
-    out in `Sources/<PluginName>`. If the two differ, the local copy is out of
-    date and can be re-fetched with `download_plugin_source.py`.
-  - `downloaded_plugins.<repo>.method` — `git` (clone) or `zip` (snapshot).
-- `Data\PluginCodeIndex\plugins.json` — the **indexing companion file**, listing:
-  - `indexed_plugins` — plugins whose sources were found and indexed.
-  - `available_plugins` — everything PluginHub-SE2 knows about.
+- `pluginhub` — the upstream commit of the PluginHub-SE2 clone (so the copy can
+  be refreshed when the upstream repo changes).
+- `downloaded_plugins.<repo>` — for each cloned plugin:
+  - `registered_commit` — the commit the PluginHub XML currently points at.
+  - `downloaded_commit` — the commit actually checked out in
+    `Sources/<PluginName>`. If the two differ, the local copy is out of date and
+    can be re-fetched with `download_plugin_source.py`.
+  - `method` — `git` (clone) or `zip` (snapshot).
+- `indexed_plugins` — plugins whose sources were found and indexed by
+  `index_plugin_code.py`.
+- `available_plugins` — everything PluginHub-SE2 knows about (parsed from the
+  XML files in `Data\PluginHub-SE2\Plugins\`).
 
 ## Workflow
 

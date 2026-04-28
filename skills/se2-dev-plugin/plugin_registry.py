@@ -13,6 +13,9 @@ The registry lives next to the PluginHub-SE2 clone and the Sources folder
   The two may diverge if the XML was updated upstream after the local
   copy was fetched; comparing them tells the skill whether a local copy
   is out of date.
+* The plugins whose source code has been indexed by index_plugin_code.py
+  (`indexed_plugins`) and the full catalog of plugins available from the
+  PluginHub-SE2 XML files (`available_plugins`).
 
 The registry is intentionally JSON with stable keys so it is easy to
 inspect by hand and diff in version control if users commit it.
@@ -21,12 +24,12 @@ inspect by hand and diff in version control if users commit it.
 import datetime
 import json
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from plugin_paths import ensure_base_dir, resolve_registry_path
 
 
-REGISTRY_VERSION = 1
+REGISTRY_VERSION = 2
 
 
 def _now_iso() -> str:
@@ -46,6 +49,8 @@ def load_registry() -> dict:
     data.setdefault("version", REGISTRY_VERSION)
     data.setdefault("pluginhub", {})
     data.setdefault("downloaded_plugins", {})
+    data.setdefault("indexed_plugins", [])
+    data.setdefault("available_plugins", [])
     return data
 
 
@@ -58,7 +63,13 @@ def save_registry(registry: dict) -> None:
 
 
 def _empty_registry() -> dict:
-    return {"version": REGISTRY_VERSION, "pluginhub": {}, "downloaded_plugins": {}}
+    return {
+        "version": REGISTRY_VERSION,
+        "pluginhub": {},
+        "downloaded_plugins": {},
+        "indexed_plugins": [],
+        "available_plugins": [],
+    }
 
 
 def update_pluginhub(
@@ -108,3 +119,16 @@ def update_plugin(
 
 def get_plugin_entry(key: str) -> Optional[dict]:
     return load_registry()["downloaded_plugins"].get(key)
+
+
+def update_indexer_state(
+    *,
+    indexed_plugins: List[dict],
+    available_plugins: List[dict],
+) -> None:
+    """Record the latest indexer output (which plugins were indexed and the
+    full PluginHub-SE2 catalog) into the registry."""
+    registry = load_registry()
+    registry["indexed_plugins"] = list(indexed_plugins)
+    registry["available_plugins"] = list(available_plugins)
+    save_registry(registry)
