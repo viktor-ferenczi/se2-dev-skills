@@ -190,7 +190,7 @@ Keen.VRage.Core.Services.IUGCService
 
 **Note:** Interface implementations are NOT shown in tree files. Use hierarchy search commands instead.
 
-## Indexer Implementation (`index_game_code.py`)
+## Indexer Implementation (`index_code.py`)
 
 ### Data Structures
 
