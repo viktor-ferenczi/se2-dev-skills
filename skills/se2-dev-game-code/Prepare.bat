@@ -79,7 +79,7 @@ if %ERRORLEVEL% NEQ 0 goto failed
 :: UWP filesystem virtualization layer (Claude Code is a packaged app whose
 :: writes under %LOCALAPPDATA% would be silently redirected into its
 :: per-package LocalCache, hiding the data from regular tools).
-set "DATA_ROOT=%USERPROFILE%\.se2-dev-skills\se2-dev-game-code"
+set "DATA_ROOT=%USERPROFILE%\.se2-dev\game-code"
 echo Data Root: %DATA_ROOT%
 if not exist "%DATA_ROOT%" (
     echo Creating Data Root folder
@@ -199,7 +199,7 @@ rmdir /s /q Game2
 :: 14. Copy indexable content
 if exist Data\Content goto skip_content
 echo Copying indexable content
-uv run python -u copy_game_content.py "%SE2_GAME_ROOT%\GameData\Vanilla\Content"
+uv run python -u copy_content.py "%SE2_GAME_ROOT%\GameData\Vanilla\Content"
 if %ERRORLEVEL% NEQ 0 goto failed
 :skip_content
 
@@ -207,14 +207,14 @@ if %ERRORLEVEL% NEQ 0 goto failed
 if exist Data\CodeIndex\class_declarations.csv goto skip_code_index
 echo Indexing decompiled code
 mkdir Data\CodeIndex 2>NUL
-uv run python -OO -u index_game_code.py Data\Decompiled Data\CodeIndex
+uv run python -OO -u index_code.py Data\Decompiled Data\CodeIndex
 if %ERRORLEVEL% NEQ 0 goto failed
 :skip_code_index
 
 :: 16. Build the content index
 if exist Data\CodeIndex\content_index.csv goto skip_content_index
 echo Indexing content files
-uv run python -u index_game_content.py Data\Content Data\Decompiled Data\CodeIndex
+uv run python -u index_content.py Data\Content Data\Decompiled Data\CodeIndex
 if %ERRORLEVEL% NEQ 0 goto failed
 :skip_content_index
 

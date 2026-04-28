@@ -6,7 +6,7 @@ This script recursively indexes C# source files in a directory structure, creati
 with declarations and usages of namespaces, interfaces, classes, methods, and member variables.
 
 Usage:
-    python index_game_code.py <source_root_path> <output_directory>
+    python index_code.py <source_root_path> <output_directory>
 """
 
 import csv
@@ -1837,7 +1837,7 @@ class CSharpIndexer:
 
 def main():
     if len(sys.argv) != 3:
-        print("Usage: python index_game_code.py <source_root_path> <output_directory>")
+        print("Usage: python index_code.py <source_root_path> <output_directory>")
         sys.exit(1)
 
     source_root = sys.argv[1]

@@ -5,7 +5,7 @@ This skill provides access to decompiled C# source code from Space Engineers 2, 
 ## Overview
 
 The skill maintains the following data under the `Data` junction (which points
-to `%USERPROFILE%\.se2-dev-skills\se2-dev-game-code\`):
+to `%USERPROFILE%\.se2-dev\game-code\`):
 
 - **Data/Decompiled/** - Full decompiled C# source organized by assembly
 - **Data/Content/** - Game content files (definitions, translations)
@@ -107,7 +107,7 @@ namespace,declaring_type,method_name,signature,file_path,start_line,end_line,des
 
 The signature index includes all method types: abstract methods (no body), inline `=>` methods, and block `{...}` methods. Property getters/setters are NOT indexed as signatures; they appear in the field index.
 
-### Indexer: index_game_code.py
+### Indexer: index_code.py
 
 Builds the code index using Tree-sitter for C# parsing. Uses parallel processing with two passes:
 
@@ -116,7 +116,7 @@ Builds the code index using Tree-sitter for C# parsing. Uses parallel processing
 
 Usage:
 ```
-uv run index_game_code.py <source_root_path> <output_directory>
+uv run index_code.py <source_root_path> <output_directory>
 ```
 
 ## Code Search

@@ -2,7 +2,7 @@
 name: se2-dev-game-code
 description: Allows reading the decompiled C# code of Space Engineers 2
 license: MIT
-allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*test_search_game_code.bat*), Bash(*uv run search_game_code.py *), Bash(*uv run index_game_code.py *), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
+allowed-tools: Read, Bash(*Prepare.bat*), Bash(*Clean.bat*), Bash(*run_prepare.sh*), Bash(*test_search_game_code.bat*), Bash(*uv run search_game_code.py *), Bash(*uv run index_code.py *), Bash(*busybox* grep *), Bash(*busybox* find *), Bash(*busybox* cat *), Bash(*busybox* head *), Bash(*busybox* tail *), Bash(*busybox* ls*), Bash(*busybox* wc *), Bash(*busybox* sort *), Bash(*busybox* uniq *), Bash(*busybox* tree*)
 ---
 
 # SE2 Game Code Search Skill
@@ -55,7 +55,7 @@ After preparation the skill folder contains a `Data` junction. The actual data l
 
 ```
 skills/se2-dev-game-code/
-├── Data/                 (junction → %USERPROFILE%\.se2-dev-skills\se2-dev-game-code)
+├── Data/                 (junction → %USERPROFILE%\.se2-dev\game-code)
 │   ├── .git/             local Git repository tracking decompiled sources
 │   ├── .gitignore        ignores CodeIndex/, Content/, __pycache__, *.py[cod], *.bak, *.log
 │   ├── game_version.txt  recorded SE2 version label
@@ -66,7 +66,7 @@ skills/se2-dev-game-code/
 └── ...                   skill scripts and documentation
 ```
 
-The `Data` folder is a junction to `%USERPROFILE%\.se2-dev-skills\se2-dev-game-code\`. (`%USERPROFILE%` is used rather than `%LOCALAPPDATA%` so the data sits outside any per-app UWP filesystem virtualization.) Treat `Data/Decompiled`, `Data/Content` and `Data/CodeIndex` exactly as before.
+The `Data` folder is a junction to `%USERPROFILE%\.se2-dev\game-code\`. (`%USERPROFILE%` is used rather than `%LOCALAPPDATA%` so the data sits outside any per-app UWP filesystem virtualization.) Treat `Data/Decompiled`, `Data/Content` and `Data/CodeIndex` exactly as before.
 
 ## Local Versioning of Decompiled Sources
 
