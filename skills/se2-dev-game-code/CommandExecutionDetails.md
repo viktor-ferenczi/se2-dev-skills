@@ -205,7 +205,7 @@ uv run search_game_code.py class declaration CubeGridComponent (with workdir set
 
 **Step 5:** For UNIX commands, use busybox with forward slashes:
 ```bash
-busybox.exe grep -r "CubeGridComponent" C:/path/to/Decompiled
+busybox.exe grep -r "CubeGridComponent" C:/path/to/Data/Decompiled
 ```
 
 ## Troubleshooting Checklist
