@@ -7,13 +7,8 @@ A [skill](https://agentskills.io) library for Space Engineers 2 plugin developme
 ## Prerequisites
 
 - Space Engineers 2
-- `ilspycmd` installed as a global dotnet tool `*`
-- .NET 10 SDK
+- .NET 10 SDK (used to install `ilspycmd` as a global dotnet tool)
 - Python 3.13 or newer with `python.exe` on `PATH`
-
-`*` Currently, you must use a modified ILSpy build from [this branch](https://github.com/viktor-ferenczi/ILSpy/tree/error-bypass) so the `se2-dev-game-code` skill
-can decompile the game's code. Hopefully upstream ILSpy will eventually fix the issues I've bypassed.
-The bypass causes a few source files to be missing, but that's okay for general use of these skills.
 
 ## How to use
 

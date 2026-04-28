@@ -31,7 +31,7 @@ from pathlib import Path
 
 VERSION_FILE_NAME = "game_version.txt"
 GAME_DLL = "VRage.AI.dll"
-GAME_TYPE = "VRage.AI.CurrentBundle"
+GAME_TYPE = "CurrentBundle"
 
 
 def _decompile_type(game2: Path) -> str:

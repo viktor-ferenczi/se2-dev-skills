@@ -30,7 +30,18 @@ if [ -d "$OUT" ]; then
     rm -rf "$OUT"
 fi
 
-ilspycmd --project --nested-directories --referencepath Game2 --languageversion CSharp14_0 --disable-updatecheck -o "$OUT" "$2"
+# Workarounds for ilspycmd 10.0.1.8346 bugs against SE2 binaries:
+#   -ds Deconstruction=false : avoid IndexOutOfRangeException in
+#     TranslateDeconstructionDesignation on certain
+#     `using`+foreach-deconstruction patterns (e.g.
+#     Keen.VRage.Library.Definitions.DefinitionSet.ApplyDefinitionRemovals).
+#     Tuples are emitted as Item1/Item2 accesses instead of `var (a,b) = ...`.
+#   -ds AsyncAwait=false : avoid IndexOutOfRangeException in
+#     AsyncAwaitDecompiler.MatchTaskCreationPattern on certain async methods
+#     (e.g. Keen.VRage.Platform.Windows.Forms.ClipboardHelper.RunAsync).
+#     Async methods will appear as their underlying state machines.
+# Both losses are acceptable for read-only browsing/indexing.
+ilspycmd --project --nested-directories --referencepath Game2 --languageversion CSharp14_0 --disable-updatecheck -ds Deconstruction=false -ds AsyncAwait=false -o "$OUT" "$2"
 RC=$?
 if [ $RC -ne 0 ]; then
     echo "Failed during project decompilation (ilspycmd exit $RC)."
