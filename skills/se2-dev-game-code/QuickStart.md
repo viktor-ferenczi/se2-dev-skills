@@ -57,9 +57,9 @@ Output: `Keen.Game2.Simulation.WorldObjects.CubeGrids.CubeGridComponent:Keen.VRa
 Results show: `relative_path:line` or `relative_path:start-end`
 
 To read the actual code:
-- Results are relative to the `Decompiled/` folder
+- Results are relative to the `Data/Decompiled/` folder
 - Example: `VRage.Core/VRage/Core/Vector3D.cs:13-2293`
-- Read: `Decompiled/VRage.Core/VRage/Core/Vector3D.cs`
+- Read: `Data/Decompiled/VRage.Core/VRage/Core/Vector3D.cs`
 
 ## Next Steps
 

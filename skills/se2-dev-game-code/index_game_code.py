@@ -1835,38 +1835,6 @@ class CSharpIndexer:
         print(f"  - Interface implementations: {len(sorted_implementations)} entries")
 
 
-def extract_game_version(source_root: str, output_dir: str):
-    """Extract SE2 version from VRage.AI/CurrentBundle.cs and write game_version.txt"""
-    version_file = os.path.join(source_root, "VRage.AI", "CurrentBundle.cs")
-    if not os.path.isfile(version_file):
-        # Try nested path
-        for root, dirs, files in os.walk(os.path.join(source_root, "VRage.AI")):
-            if "CurrentBundle.cs" in files:
-                version_file = os.path.join(root, "CurrentBundle.cs")
-                break
-        else:
-            print(f"Warning: CurrentBundle.cs not found in VRage.AI assembly")
-            return
-
-    with open(version_file, "r", encoding="utf-8") as f:
-        content = f.read()
-
-    match = re.search(r'const\s+string\s+Version\s*=\s*"([^"]+)"', content)
-    if not match:
-        print(f"Warning: Could not find Version string in {version_file}")
-        return
-
-    version = match.group(1)
-
-    output_path = os.path.join(output_dir, "game_version.txt")
-    os.makedirs(output_dir, exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(f"VERSION={version}\n")
-
-    print(f"Game version file written: {output_path}")
-    print(f"  VERSION={version}")
-
-
 def main():
     if len(sys.argv) != 3:
         print("Usage: python index_game_code.py <source_root_path> <output_directory>")
@@ -1889,9 +1857,6 @@ def main():
     indexer = CSharpIndexer(source_root)
     indexer.index_directory()
     indexer.write_indices(Path(output_dir))
-
-    # Extract game version numbers
-    extract_game_version(source_root, output_dir)
 
     print("\nIndexing complete!")
 

@@ -5,6 +5,10 @@ LOG="Decompile.log"
 echo "Decompiling game assemblies..."
 echo "Decompiling game assemblies: " > "$LOG"
 
+# Make sure the destination folder under Data exists (Data is a junction
+# pointing to %USERPROFILE%/.se2-dev-skills/se2-dev-game-code/).
+mkdir -p Data/Decompiled
+
 # Helper function to run the decompile and handle errors
 run_decompile() {
     # Calls your previously converted script

@@ -3,13 +3,16 @@ import sys
 from pathlib import Path
 from typing import Set
 
+CONTENT_DST = Path('Data') / 'Content'
+
+
 def copy_content(content_root: Path, subdir: str, allowed_extensions: Set[str], exclude: Set[str] = ()):
     src_dir = content_root / subdir
     if not src_dir.exists():
         print(f"Skipping {subdir} (not found)")
         return
 
-    dst_dir = Path('Content') / subdir
+    dst_dir = CONTENT_DST / subdir
     dst_dir.mkdir(parents=True, exist_ok=True)
     count = 0
     for src_path in src_dir.glob('**/*'):
