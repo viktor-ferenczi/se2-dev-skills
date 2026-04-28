@@ -1,14 +1,17 @@
 """
 Shared path resolution for plugin source downloads and the PluginHub-SE2 registry.
 
-Layout (relative to the skill directory):
+`Data/` inside the skill folder is a junction to the user profile folder
+`%USERPROFILE%\\.se2-dev\\plugin\\` (created by Prepare.bat). Layout under it:
 
-    Data/                            # base directory
+    Data/                            # junction -> ~/.se2-dev/plugin/
         PluginHub-SE2/               # local clone of the plugin registry
-        PluginSources/               # downloaded plugin source repositories
+        Sources/                     # downloaded plugin source repositories
+            <RepoName>/              # per-plugin git clone
+        PluginCodeIndex/             # CSV indexes built from Sources/
         plugins.json                 # registry of versions (see plugin_registry.py)
 
-`PluginSources/` can be relocated by configuration; `PluginHub-SE2/` and
+`Sources/` can be relocated by configuration; `PluginHub-SE2/` and
 `plugins.json` always live next to each other in the base directory.
 """
 
@@ -20,7 +23,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).parent.resolve()
 
 DATA_DIR_NAME = "Data"
-PLUGIN_SOURCES_SUBDIR = "PluginSources"
+PLUGIN_SOURCES_SUBDIR = "Sources"
 PLUGINHUB_SUBDIR = "PluginHub-SE2"
 PLUGIN_CODE_INDEX_SUBDIR = "PluginCodeIndex"
 
@@ -61,7 +64,7 @@ def resolve_plugin_sources_dir() -> Path:
 
     1. Environment variable SE_PLUGIN_DOWNLOAD_FOLDER
     2. CLAUDE.md or AGENTS.md in the current working directory
-    3. `{base}/PluginSources/` (default)
+    3. `{base}/Sources/` (default)
     """
     env_folder = os.environ.get("SE_PLUGIN_DOWNLOAD_FOLDER", "").strip()
     if env_folder:
@@ -89,7 +92,7 @@ def resolve_pluginhub_dir() -> Path:
 
 
 def resolve_registry_path() -> Path:
-    """Return the path to `plugins.json` (sibling of PluginSources/ and PluginHub-SE2/)."""
+    """Return the path to `plugins.json` (sibling of Sources/ and PluginHub-SE2/)."""
     return resolve_base_dir() / "plugins.json"
 
 

@@ -111,10 +111,16 @@ that may help with your task, then index and search them.
 
 ### Storage layout
 
-Downloaded data lives under `Data\` within this skill directory:
+`Data\` inside this skill folder is a junction created by `Prepare.bat` that
+points to the user profile folder `%USERPROFILE%\.se2-dev\plugin\`. Everything
+downloaded by the skill is stored there so it survives across re-installs and
+`Clean.bat` runs.
 
-- `Data\PluginHub-SE2\` — the local clone of the PluginHub-SE2 registry
-- `Data\PluginSources\<RepoName>\` — downloaded plugin sources
+- `Data\PluginHub-SE2\` — `git clone` of the PluginHub-SE2 registry
+  (refreshed in place by `download_pluginhub.py` / `git pull`)
+- `Data\Sources\` — pre-created by `Prepare.bat`; contains a per-plugin
+  subfolder for every downloaded plugin
+- `Data\Sources\<PluginName>\` — git clone of the plugin's GitHub repository
   (overridable via `SE_PLUGIN_DOWNLOAD_FOLDER` or `plugin_download_folder:` in
   `CLAUDE.md`/`AGENTS.md`)
 - `Data\PluginCodeIndex\` — CSV indexes produced by
@@ -125,10 +131,10 @@ Downloaded data lives under `Data\` within this skill directory:
   checked out locally (`downloaded_commit`). Comparing them tells you whether a
   local copy is out of date.
 
-When `git` is available on PATH, `download_pluginhub.py` and
-`download_plugin_source.py` use `git clone` (and `git fetch`/`git checkout` on
-re-runs) so local copies can be updated incrementally; otherwise they fall back
-to ZIP downloads. Either way, the commit hashes above are recorded.
+`download_plugin_source.py` requires `git` on `PATH` and clones each plugin
+into its own `Data\Sources\<PluginName>\` directory. Re-running it does
+`git fetch` + `git checkout` so local copies can be updated incrementally with
+a `git pull`. The commit hashes above are recorded in `plugins.json`.
 
 See [search action](./actions/search.md) for complete documentation.
 

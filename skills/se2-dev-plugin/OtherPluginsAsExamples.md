@@ -59,19 +59,21 @@ then the `Id`) field will tell you the GitHub repository ID of the plugin.
 
 ## Plugin Storage
 
-Plugin sources are downloaded to `Data\PluginSources\` within the skill directory
-by default.
+Plugin sources are downloaded to `Data\Sources\<PluginName>\` by default.
+`Data\` is a junction created by `Prepare.bat` that points at the per-user
+profile folder `%USERPROFILE%\.se2-dev\plugin\`, so downloads persist across
+re-installs and `Clean.bat` runs.
 
-You can override this by:
+You can override the sources directory by:
 1. Setting the `SE_PLUGIN_DOWNLOAD_FOLDER` environment variable
 2. Adding `plugin_download_folder: /path/to/folder` to `CLAUDE.md` or `AGENTS.md` in your project
 
 The `download_plugin_source.py` script handles this automatically.
 
-When `git` is available on PATH, plugins are cloned with `git clone` at the commit
-recorded in the PluginHub XML, so they can be updated in place later. Otherwise the
-script falls back to a ZIP download of that commit. Both the listed and downloaded
-commit hashes are recorded in `Data\plugins.json` for later comparison.
+`Prepare.bat` requires `git` on `PATH`, so plugins are `git clone`d at the
+commit recorded in the PluginHub XML and can be updated in place later with
+`git pull`. Both the listed and downloaded commit hashes are recorded in
+`Data\plugins.json` for later comparison.
 
 ## Examples of Finding Plugins
 

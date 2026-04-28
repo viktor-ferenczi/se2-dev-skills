@@ -35,16 +35,17 @@ uv run download_plugin_source.py author-github-username/PluginName
 uv run download_plugin_source.py PluginName
 ```
 
-Plugin sources are downloaded to `Data\PluginSources\<RepoName>` within the
-skill directory. The destination can be overridden via the
-`SE_PLUGIN_DOWNLOAD_FOLDER` environment variable or a `plugin_download_folder:`
-entry in `CLAUDE.md` / `AGENTS.md` in the current working directory.
+Plugin sources are downloaded to `Data\Sources\<PluginName>` (where `Data\`
+is a junction to `%USERPROFILE%\.se2-dev\plugin\` set up by `Prepare.bat`).
+The destination can be overridden via the `SE_PLUGIN_DOWNLOAD_FOLDER`
+environment variable or a `plugin_download_folder:` entry in
+`CLAUDE.md` / `AGENTS.md` in the current working directory.
 
-When `git` is available on PATH each plugin is cloned with `git clone` at the
-commit recorded in its PluginHub XML, so the local copy can later be updated
-in place. Without `git`, the script falls back to downloading the commit's ZIP
-archive. Both the commit registered in PluginHub and the commit actually
-checked out locally are recorded in `plugins.json`.
+`Prepare.bat` requires `git` on `PATH`, so each plugin is `git clone`d at the
+commit recorded in its PluginHub XML and can later be updated in place with
+`git pull` (or by re-running `download_plugin_source.py`). Both the commit
+registered in PluginHub and the commit actually checked out locally are
+recorded in `plugins.json`.
 
 ### 4. Index Downloaded Plugins
 
@@ -137,7 +138,7 @@ Two files keep track of plugins:
   - `downloaded_plugins.<repo>.registered_commit` — the commit the PluginHub XML currently
     points at.
   - `downloaded_plugins.<repo>.downloaded_commit` — the commit that is actually checked
-    out in `PluginSources/<repo>`. If the two differ, the local copy is out of
+    out in `Sources/<PluginName>`. If the two differ, the local copy is out of
     date and can be re-fetched with `download_plugin_source.py`.
   - `downloaded_plugins.<repo>.method` — `git` (clone) or `zip` (snapshot).
 - `Data\PluginCodeIndex\plugins.json` — the **indexing companion file**, listing:
