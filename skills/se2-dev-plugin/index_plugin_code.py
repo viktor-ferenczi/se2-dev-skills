@@ -12,7 +12,7 @@ The script searches for plugins in the resolved plugin sources directory
 (see plugin_paths.py for resolution logic).
 
 Output is written to `Data/PluginCodeIndex/` within the skill directory,
-alongside the PluginHub-SE2 clone and PluginSources folder.
+alongside the PluginHub-SE2 clone and Sources folder.
 """
 
 import csv

@@ -7,12 +7,14 @@ Downloads the source code of a plugin from its GitHub repository.
 The download folder is determined by (in priority order):
 1. SE_PLUGIN_DOWNLOAD_FOLDER environment variable
 2. plugin_download_folder setting in CLAUDE.md or AGENTS.md (in CWD)
-3. Default: Data/PluginSources/ within the skill directory
+3. Default: Data/Sources/ inside the skill directory (a junction to
+   %USERPROFILE%\.se2-dev\plugin\Sources\ set up by Prepare.bat)
 
-When `git` is available on PATH the plugin is cloned with `git clone` and
-checked out at the commit recorded in the PluginHub-SE2 XML, so the local
-copy can later be updated in place. If `git` is not available, the script
-falls back to downloading a ZIP archive of that commit.
+Each plugin is cloned into its own Data/Sources/<PluginName>/ subdirectory
+with `git clone` and checked out at the commit recorded in the PluginHub-SE2
+XML, so the local copy can later be updated in place with `git pull` (or by
+re-running this script). If `git` is not available on PATH the script falls
+back to downloading a ZIP archive of that commit.
 
 Regardless of the method, the download is recorded in `Data/plugins.json`,
 with both the commit registered in PluginHub and the commit actually

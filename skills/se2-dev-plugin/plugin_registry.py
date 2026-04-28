@@ -1,14 +1,15 @@
 """
 Plugin registry — manages `Data/plugins.json` within the skill directory.
 
-The registry lives next to the PluginHub-SE2 clone and the PluginSources
-folder (see plugin_paths.resolve_registry_path) and records:
+The registry lives next to the PluginHub-SE2 clone and the Sources folder
+(see plugin_paths.resolve_registry_path) and records:
 
 * The PluginHub-SE2 repository version that was downloaded, so the local
   clone can be refreshed when the upstream repo changes.
 * Each plugin listed in PluginHub-SE2 along with both the commit hash
   registered in the PluginHub XML (`registered_commit`) and the commit
-  hash that was actually cloned/unzipped locally (`downloaded_commit`).
+  hash that was actually cloned (or, as a per-plugin fallback, unzipped)
+  locally (`downloaded_commit`).
   The two may diverge if the XML was updated upstream after the local
   copy was fetched; comparing them tells the skill whether a local copy
   is out of date.
