@@ -20,10 +20,10 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-from plugin_paths import resolve_plugin_code_index_dir
+from plugin_paths import resolve_code_index_dir
 
 SCRIPT_DIR = Path(__file__).parent.resolve()
-INDEX_DIR = resolve_plugin_code_index_dir()
+INDEX_DIR = resolve_code_index_dir()
 
 CATEGORY_FILES = {
     "class": ("class_declarations.csv", "class_usages.csv"),
@@ -325,7 +325,7 @@ def main():
     args = parse_args()
 
     if not INDEX_DIR.exists():
-        print("ERROR: PluginCodeIndex not found. Run index_plugin_code.py first.", file=sys.stderr)
+        print("ERROR: CodeIndex not found. Run index_plugin_code.py first.", file=sys.stderr)
         print("  List available plugins: uv run list_plugins.py", file=sys.stderr)
         print("  Download plugin source: uv run download_plugin_source.py <name>", file=sys.stderr)
         print("  Index plugins: uv run index_plugin_code.py", file=sys.stderr)

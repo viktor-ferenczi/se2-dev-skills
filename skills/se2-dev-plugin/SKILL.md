@@ -123,13 +123,13 @@ downloaded by the skill is stored there so it survives across re-installs and
 - `Data\Sources\<PluginName>\` — git clone of the plugin's GitHub repository
   (overridable via `SE_PLUGIN_DOWNLOAD_FOLDER` or `plugin_download_folder:` in
   `CLAUDE.md`/`AGENTS.md`)
-- `Data\PluginCodeIndex\` — CSV indexes produced by
+- `Data\CodeIndex\` — CSV indexes produced by
   `index_plugin_code.py` and consumed by `search_plugin_code.py`
-- `Data\plugins.json` — **version registry**: records the upstream
-  commit of the PluginHub clone plus, for each downloaded plugin, both the commit
-  registered in the PluginHub XML (`registered_commit`) and the commit actually
-  checked out locally (`downloaded_commit`). Comparing them tells you whether a
-  local copy is out of date.
+- `Data\plugins.json` — **registry**: records the upstream commit of the
+  PluginHub clone, the per-plugin download state (`downloaded_plugins` —
+  `registered_commit` vs `downloaded_commit`, so you can tell when a local copy
+  is out of date), the plugins that have been indexed (`indexed_plugins`),
+  and the full PluginHub-SE2 catalog (`available_plugins`).
 
 `download_plugin_source.py` requires `git` on `PATH` and clones each plugin
 into its own `Data\Sources\<PluginName>\` directory. Re-running it does
