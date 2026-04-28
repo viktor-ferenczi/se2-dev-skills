@@ -55,7 +55,7 @@ After preparation the skill folder contains a `Data` junction. The actual data l
 
 ```
 skills/se2-dev-game-code/
-├── Data/                 (junction → %USERPROFILE%\.se2-dev-skills\se2-dev-game-code)
+├── Data/                 (junction → %USERPROFILE%\.se2-dev-game-code)
 │   ├── .git/             local Git repository tracking decompiled sources
 │   ├── .gitignore        ignores CodeIndex/, Content/, __pycache__, *.py[cod], *.bak, *.log
 │   ├── game_version.txt  recorded SE2 version label
@@ -66,7 +66,7 @@ skills/se2-dev-game-code/
 └── ...                   skill scripts and documentation
 ```
 
-The `Data` folder is a junction to `%USERPROFILE%\.se2-dev-skills\se2-dev-game-code\`. (`%USERPROFILE%` is used rather than `%LOCALAPPDATA%` so the data sits outside any per-app UWP filesystem virtualization.) Treat `Data/Decompiled`, `Data/Content` and `Data/CodeIndex` exactly as before.
+The `Data` folder is a junction to `%USERPROFILE%\.se2-dev-game-code\`. (`%USERPROFILE%` is used rather than `%LOCALAPPDATA%` so the data sits outside any per-app UWP filesystem virtualization.) Treat `Data/Decompiled`, `Data/Content` and `Data/CodeIndex` exactly as before.
 
 ## Local Versioning of Decompiled Sources
 

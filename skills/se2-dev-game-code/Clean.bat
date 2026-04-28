@@ -1,8 +1,8 @@
 @echo off
 :: Clean.bat - removes everything that Prepare.bat creates inside the skill
-:: folder. The Data folder (a junction to %USERPROFILE%\.se2-dev-skills\
-:: se2-dev-game-code) is preserved: only the junction itself is removed so the
-:: actual contents (Decompiled, CodeIndex, Content, .git) survive across runs.
+:: folder. The Data folder (a junction to %USERPROFILE%\.se2-dev-game-code)
+:: is preserved: only the junction itself is removed so the actual contents
+:: (Decompiled, CodeIndex, Content, .git) survive across runs.
 
 :: Remove the Data junction (NOT its contents - rmdir without /s deletes only
 :: the junction reparse point and leaves the target folder intact).
