@@ -3,13 +3,13 @@
 This guide was made for human plugin developers.
 
 ## Start with a template
-Choose one of these templates and click on the green "Use this template" button on GitHub to make your own repo, then clone that repo.
+Click on the green "Use this template" button on GitHub to make your own repo, then clone that repo.
 
 - Client plugin template: https://github.com/CometWorks/client2-plugin-template
 
-**Please follow the `README` after cloning your plugin project locally.**
+**Please follow the `README` after cloning your plugin project locally.** It starts with running `setup.py`, which renames the project to your plugin's name and detects your game installation.
 
-*The server template is more complex, it also includes a client template with shared code for all targets. You need the server template only if your client plugin must have a server side companion plugin (like MGP) or is a server-only plugin.*
+*There is no server plugin template for SE2 yet, since the dedicated server is not available.*
 
 *Good luck!*
 ### Channels
@@ -22,12 +22,12 @@ Choose one of these templates and click on the green "Use this template" button 
 ## Build, run and debug your plugin locally
 There are two ways to build and debug your client plugin locally:
 
-- **Build from the IDE** and use the `Deploy.bat` which is run by the build process to **copy the DLL** into the `%AppData%\Pulsar\Legacy\Local` folder. You can set up run configs to start `%AppData%\Pulsar\Legacy.exe` with debugging right from your IDE, which allows you to debug your plugin code and most of the game's code. If you plan to debug, then make sure to make a `Debug` build of your plugin. It is recommended to pass the `-skipintro` option to Pulsar for a faster startup and use the `Instant Exit` plugin for a faster and cleaner shutdown.
+- **Build from the IDE**. The `DeployPlugin` MSBuild target runs after each successful build and **copies the DLL** into the `%AppData%\Pulsar\Modern\Local` folder. You can set up run configs to start `%AppData%\Pulsar\Modern.exe` with debugging right from your IDE, which allows you to debug your plugin code and most of the game's code. The template ships such run configs in its `.run` folder. If you plan to debug, then make sure to make a `Debug` build of your plugin. It is recommended to pass the `-skipintro` option to Pulsar for a faster startup.
 
-- **Set up a "dev" folder in Pulsar's Sources dialog** for the plugin. You must pass the `-sources` option to Pulsar to access this dialog. This setup is essential for pre-release testing to make sure Pulsar can also build your plugin, because it may happen that the IDE can build it, but Pulsar fails with an error. You can make Debug or Release builds inside a plugin dev folder. A Debug build should allow your IDE to connect the debugger to the `Legacy.exe` process (the game running in Pulsar). A Release build allows for testing the exact same build which players will have on their machines when they install your plugin. Once a dev folder is added in the Sources dialog, you can add that dev folder to the regular plugin list (and save in profiles). Make sure to assign the plugin's XML "info" file in the dialog you open by double clicking on your dev folder added to the Plugins list. *(BUG: Currently this association is not saved. There is a PR to fix this.)*
+- **Set up a "dev" folder in Pulsar's Sources dialog** for the plugin. You must pass the `-sources` option to Pulsar to access this dialog. This setup is essential for pre-release testing to make sure Pulsar can also build your plugin, because it may happen that the IDE can build it, but Pulsar fails with an error. You can make Debug or Release builds inside a plugin dev folder. A Debug build should allow your IDE to connect the debugger to the game process started by Pulsar. A Release build allows for testing the exact same build which players will have on their machines when they install your plugin. Once a dev folder is added in the Sources dialog, you can add that dev folder to the regular plugin list (and save in profiles). Make sure to assign the plugin's XML "info" file in the dialog you open by double clicking on your dev folder added to the Plugins list. *(BUG: Currently this association is not saved. There is a PR to fix this.)*
 
 ## Release your plugin
-- Fill in the fields of the `YourPluginName.xml` file you can find in your project's folder.  (This file came with the plugin template. If you haven't used the template, then you can find one in the [PluginHub-SE2](https://github.com/StarCpt/PluginHub-SE2/) repository.)
+- Fill in the fields of the `YourPluginName.xml` file you can find in your project's folder.  (This file came with the plugin template as `ClientPluginTemplate.xml` and was renamed by `setup.py`. If you haven't used the template, then you can find one in the [PluginHub-SE2](https://github.com/StarCpt/PluginHub-SE2/) repository.)
 - Fork the [PluginHub-SE2](https://github.com/StarCpt/PluginHub-SE2/) repository and make a PR adding your XML file to the `Plugins` folder, where all the plugins are defined.
 - Wait for the PR to be merged. It will involve a human reviewing the source code of your plugin, so please be patient.
 
@@ -63,9 +63,9 @@ You can add your usual plugins made by other developers to all the saved profile
 
 ## FAQ
 - *Which C# versions are supported?*
-Up to C# 13 is known to work, in general use at least C# 7.3 for plugins. (Mods are limited to C# 7.3, PB scripts are limited to C# 6.0, because they are compiled by the game.)
+The template sets `LangVersion` to `latestmajor`, so the C# version follows the installed .NET SDK (C# 14 with .NET 10).
 - *Can I use NuGet packages?*
-Yes. They must support `.net standard 2.0` or `.net framework 4.8`. (If you want your plugin usable with `Interim.exe` (.NET 10), then `.net standard 2.0` it is.)
+Yes. They must be compatible with `net10.0`, which the plugin targets. Declare them in the `NuGetReferences` element of your PluginHub-SE2 registration XML as well, otherwise Pulsar cannot build your plugin on the player's machine.
 - *Can I use additional data files?*
 Bring them as asset files. Implement the `LoadAssets` method in your `Plugin` class.
 - *Where can I find example source code to learn from?*
